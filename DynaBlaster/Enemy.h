@@ -9,7 +9,8 @@ public:
 	Enemy(int xPos, int yPosm, EnemyType enemyType);
 	uint16_t getX() { return m_xPosition; }
 	uint16_t getY() { return m_yPosition; }
-
+	void enemyMovement(Enemy& enemy);
+	int getEnemyPoints(EnemyType enemy);
 private:
 	uint16_t m_xPosition;
 	uint16_t m_yPosition;
