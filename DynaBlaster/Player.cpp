@@ -2,6 +2,7 @@
 
 Player::Player()
 {
+	m_playerSymbol = 'P';
 	m_lives = 2;
 	m_speed = 1;
 	m_score = 0;
@@ -83,17 +84,6 @@ bool Player::GetPowerUp(PowerUps powerUp) const
 	return false;
 }
 
-bool Player::Die()
-{
-	if (m_lives == 0)
-	{
-		return true;
-	}
-	--m_lives;
-	m_powerUps = { false };
-	return false;
-}
-
 void Player::SetPowerUp(PowerUps powerUp)
 {
 	switch (powerUp)
@@ -127,3 +117,73 @@ void Player::SetPowerUp(PowerUps powerUp)
 	}
 }
 
+bool Player::Die()
+{
+	if (m_lives == 0)
+	{
+		return true;
+	}
+	--m_lives;
+	m_powerUps = { false };
+	return false;
+}
+
+void Player::Move(PlayerMovementType playerMovement)
+{
+	const auto& [line, column] = m_playerPosition;
+	switch (playerMovement)
+	{
+	case Player::PlayerMovementType::Up:
+		if (line == 1)
+		{
+			break;
+		}
+		if (m_map[line - 1][column] != ' ')
+		{
+			break;
+		}
+		m_map[line - 1][column] = m_playerSymbol;
+		m_playerPosition = std::make_pair(line - 1, column);
+		break;
+	case Player::PlayerMovementType::Down:
+		if (line == m_linesNumber - 2)
+		{
+			break;
+		}
+		if (m_map[line + 1][column] != ' ')
+		{
+			break;
+		}
+		m_map[line + 1][column] = m_playerSymbol;
+		m_playerPosition = std::make_pair(line + 1, column);
+		break;
+	case Player::PlayerMovementType::Left:
+		if (column == 2)
+		{
+			break;
+		}
+		if (m_map[line][column - 1] != ' ')
+		{
+			break;
+		}
+		m_map[line][column - 1] = m_playerSymbol;
+		m_playerPosition = std::make_pair(line, column - 1);
+		break;
+	case Player::PlayerMovementType::Right:
+		if (column == m_columnsNumber - 3)
+		{
+			break;
+		}
+		if (m_map[line][column + 1] != ' ')
+		{
+			break;
+		}
+		m_map[line][column + 1] = m_playerSymbol;
+		m_playerPosition = std::make_pair(line, column + 1);
+		break;
+	case Player::PlayerMovementType::None:
+		break;
+	default:
+		break;
+	}
+}
