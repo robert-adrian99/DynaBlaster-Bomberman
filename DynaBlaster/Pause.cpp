@@ -12,12 +12,28 @@ void Pause::displayClock()
 	std::cout << std::setw(2) << m_minutes << " : " << std::setfill('0') << std::setw(2) << m_seconds << std::endl;
 }
 
+void Pause::pauseTimer()
+{
+	switch (_getch())
+	{
+	case 112:
+		m_ok = true;
+		break;
+	case 114:
+		m_ok = false;
+		break;
+	case 101:
+		exit(0);
+		break;
+	default:
+		break;
+	}
+}
+
 void Pause::timer()
 {
-	while (true)
+	while (!_kbhit() && m_ok == false)
 	{
-		displayClock();
-		Sleep(1000);
 		if (m_seconds == 00) {
 
 			m_minutes--;
@@ -26,5 +42,9 @@ void Pause::timer()
 		m_seconds--;
 		if (m_minutes == 00 && m_seconds == 00)
 			break;
+		displayClock();
+		Sleep(1000);
 	}
+	pauseTimer();
+
 }
