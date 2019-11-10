@@ -126,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUps.h" />
   </ItemGroup>
