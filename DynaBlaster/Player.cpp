@@ -10,6 +10,8 @@ Player::Player()
 	m_explosionRange = 1;
 	m_numberOfBombs = 1;
 	m_powerUps = { false };
+	m_bombPosition.first = NULL;
+	m_bombPosition.second = NULL;
 }
 
 uint8_t Player::GetLives() const
@@ -90,12 +92,15 @@ void Player::SetPowerUp(PowerUps powerUp)
 	{
 	case PowerUps::Flame:
 		m_powerUps[firstPowerUp] = true;
+		++m_explosionRange;
 		break;
 	case PowerUps::Bomb:
 		m_powerUps[firstPowerUp + 1] = true;
+		++m_numberOfBombs;
 		break;
 	case PowerUps::RollerSkates:
 		m_powerUps[firstPowerUp + 2] = true;
+		++m_speed;
 		break;
 	case PowerUps::RemoteControl:
 		m_powerUps[firstPowerUp + 3] = true;
@@ -105,6 +110,7 @@ void Player::SetPowerUp(PowerUps powerUp)
 		break;
 	case PowerUps::Character:
 		m_powerUps[firstPowerUp + 5] = true;
+		++m_lives;
 		break;
 	case PowerUps::PaintedWall:
 		m_powerUps[firstPowerUp + 6] = true;
@@ -128,55 +134,122 @@ bool Player::Die()
 	return false;
 }
 
-void Player::Move(PlayerMovementType playerMovement)
+bool Player::Move(PlayerMovementType playerMovement)
 {
+	if (m_bombPosition.first && m_bombPosition.second)
+	{
+		auto& [line, column] = m_bombPosition;
+		m_map[line][column] = 'O';
+		line = NULL;
+		column = NULL;
+	}
 	const auto& [line, column] = m_playerPosition;
 	switch (playerMovement)
 	{
 	case Player::PlayerMovementType::Up:
-		if (line == 1)
+		if (m_map[line - 1][column] == 219 || m_map[line - 1][column] == 254)
 		{
 			break;
 		}
-		if (m_map[line - 1][column] != ' ')
+		if (GetPowerUp(PowerUps::PaintedWall) == false)
 		{
-			break;
+			if (m_map[line - 1][column] == 175)
+			{
+				break;
+			}
+		}
+		if (GetPowerUp(PowerUps::PaintedBomb) == false)
+		{
+			if (m_map[line - 1][column] == 'O')
+			{
+				break;
+			}
+		}
+		if (m_map[line - 1][column] == 'X')
+		{
+			m_map[line][column] = ' ';
+			return false;
 		}
 		m_map[line - 1][column] = m_playerSymbol;
 		m_playerPosition = std::make_pair(line - 1, column);
 		break;
 	case Player::PlayerMovementType::Down:
-		if (line == m_linesNumber - 2)
+		if (m_map[line + 1][column] == 219 || m_map[line + 1][column] == 254)
 		{
 			break;
 		}
-		if (m_map[line + 1][column] != ' ')
+		if (GetPowerUp(PowerUps::PaintedWall) == false)
 		{
-			break;
+			if (m_map[line + 1][column] == 176)
+			{
+				break;
+			}
+		}
+		if (GetPowerUp(PowerUps::PaintedBomb) == false)
+		{
+			if (m_map[line + 1][column] == 'O')
+			{
+				break;
+			}
+		}
+		if (m_map[line + 1][column] == 'X')
+		{
+			m_map[line][column] = ' ';
+			return false;
 		}
 		m_map[line + 1][column] = m_playerSymbol;
 		m_playerPosition = std::make_pair(line + 1, column);
 		break;
 	case Player::PlayerMovementType::Left:
-		if (column == 2)
+		if (m_map[line][column - 1] == 219 || m_map[line][column - 1] == 254)
 		{
 			break;
 		}
-		if (m_map[line][column - 1] != ' ')
+		if (GetPowerUp(PowerUps::PaintedWall) == false)
 		{
-			break;
+			if (m_map[line][column - 1] == 176)
+			{
+				break;
+			}
+		}
+		if (GetPowerUp(PowerUps::PaintedBomb) == false)
+		{
+			if (m_map[line][column - 1] == 'O')
+			{
+				break;
+			}
+		}
+		if (m_map[line][column - 1] == 'X')
+		{
+			m_map[line][column] = ' ';
+			return false;
 		}
 		m_map[line][column - 1] = m_playerSymbol;
 		m_playerPosition = std::make_pair(line, column - 1);
 		break;
 	case Player::PlayerMovementType::Right:
-		if (column == m_columnsNumber - 3)
+		if (m_map[line][column + 1] == 219 || m_map[line][column + 1] == 254)
 		{
 			break;
 		}
-		if (m_map[line][column + 1] != ' ')
+		if (GetPowerUp(PowerUps::PaintedWall) == false)
 		{
-			break;
+			if (m_map[line][column + 1] == 176)
+			{
+				break;
+			}
+		}
+		if (GetPowerUp(PowerUps::PaintedBomb) == false)
+		{
+			if (m_map[line][column + 1] == 'O')
+			{
+				break;
+			}
+		}
+		if (m_map[line][column + 1] == 'X')
+		{
+			m_map[line][column] = ' ';
+			return false;
 		}
 		m_map[line][column + 1] = m_playerSymbol;
 		m_playerPosition = std::make_pair(line, column + 1);
@@ -186,4 +259,10 @@ void Player::Move(PlayerMovementType playerMovement)
 	default:
 		break;
 	}
+	return true;
+}
+
+void Player::PlaceBomb()
+{
+	m_bombPosition = m_playerPosition;
 }
