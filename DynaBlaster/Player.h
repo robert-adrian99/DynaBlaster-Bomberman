@@ -30,7 +30,8 @@ public:
 	bool GetPowerUp(PowerUps powerUp) const;
 	void SetPowerUp(PowerUps powerUp);
 	bool Die();
-	void Move(PlayerMovementType playerMovement);
+	bool Move(PlayerMovementType playerMovement);
+	void PlaceBomb();
 
 private:
 	char m_playerSymbol;
@@ -43,5 +44,6 @@ private:
 	std::array<bool, 8> m_powerUps;
 	static const uint8_t firstPowerUp = 0;
 	Position m_playerPosition;
+	Position m_bombPosition;
 };
 
