@@ -1,12 +1,11 @@
 #include <iostream>
 #include "Map.h"
 #include "PowerUps.h"
+#include "Grass.h"
 
+void GrassGraphics();
 int main()
 {
-	Map map;
-	std::cout << map;
-	map.VerifyRewardUnderWall();
-	std::cout << map;
+	GrassGraphics();
 	return 0;
 }

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyType.h" />
+    <ClInclude Include="Grass.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pause.h" />
