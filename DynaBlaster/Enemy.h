@@ -7,6 +7,9 @@
 class Enemy : Map
 {
 public:
+	using Position = std::pair<uint16_t, uint16_t>;
+
+public:
 	Enemy(int xPosision, int yPosision, EnemyType enemyType);
 	Position GetEnemyPosition() const;
 	uint16_t GetX() const;

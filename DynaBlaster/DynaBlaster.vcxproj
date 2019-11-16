@@ -147,6 +147,7 @@
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUps.h" />
+    <ClInclude Include="UndestructibleWall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

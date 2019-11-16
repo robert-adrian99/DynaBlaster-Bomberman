@@ -56,5 +56,8 @@
     <ClInclude Include="Grass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UndestructibleWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
