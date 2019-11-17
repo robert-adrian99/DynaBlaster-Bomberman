@@ -27,11 +27,6 @@ uint16_t Enemy::GetY() const
 	return yPosition;
 }
 
-EnemyType Enemy::GeyEnemyType() const
-{
-	return m_enemyType;
-}
-
 int Enemy::RandomMovement(int number)
 {
 	std::random_device dev;
