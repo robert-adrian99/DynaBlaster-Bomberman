@@ -7,11 +7,8 @@ Player::Player()
 	m_speed = 1;
 	m_score = 0;
 	m_highScore = 0;
-	m_explosionRange = 1;
 	m_numberOfBombs = 1;
 	m_powerUps = { false };
-	m_bombPosition.first = NULL;
-	m_bombPosition.second = NULL;
 }
 
 uint8_t Player::GetLives() const
@@ -32,11 +29,6 @@ uint32_t Player::GetScore() const
 uint32_t Player::GetHighScore() const
 {
 	return m_highScore;
-}
-
-uint8_t Player::GetExplosionRange() const
-{
-	return m_explosionRange;
 }
 
 uint8_t Player::GetNumberOfBombs() const
@@ -92,7 +84,6 @@ void Player::SetPowerUp(PowerUps powerUp)
 	{
 	case PowerUps::Flame:
 		m_powerUps[firstPowerUp] = true;
-		++m_explosionRange;
 		break;
 	case PowerUps::Bomb:
 		m_powerUps[firstPowerUp + 1] = true;
@@ -136,13 +127,6 @@ bool Player::Die()
 
 bool Player::Move(PlayerMovementType playerMovement)
 {
-	if (m_bombPosition.first && m_bombPosition.second)
-	{
-		auto& [line, column] = m_bombPosition;
-		m_map[line][column] = 'O';
-		line = NULL;
-		column = NULL;
-	}
 	const auto& [line, column] = m_playerPosition;
 	switch (playerMovement)
 	{
@@ -260,9 +244,4 @@ bool Player::Move(PlayerMovementType playerMovement)
 		break;
 	}
 	return true;
-}
-
-void Player::PlaceBomb()
-{
-	m_bombPosition = m_playerPosition;
 }

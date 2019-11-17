@@ -25,13 +25,11 @@ public:
 	uint8_t GetSpeed() const;
 	uint32_t GetScore() const;
 	uint32_t GetHighScore() const;
-	uint8_t GetExplosionRange() const;
 	uint8_t GetNumberOfBombs() const;
 	bool GetPowerUp(PowerUps powerUp) const;
 	void SetPowerUp(PowerUps powerUp);
 	bool Die();
 	bool Move(PlayerMovementType playerMovement);
-	void PlaceBomb();
 
 private:
 	char m_playerSymbol;
@@ -39,11 +37,9 @@ private:
 	uint8_t m_speed;
 	uint32_t m_score;
 	uint32_t m_highScore;
-	uint8_t m_explosionRange;
 	uint8_t m_numberOfBombs;
 	std::array<bool, 8> m_powerUps;
 	static const uint8_t firstPowerUp = 0;
 	Position m_playerPosition;
-	Position m_bombPosition;
 };
 
