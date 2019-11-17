@@ -27,12 +27,28 @@ int Map::RandomLine(int random)
 	std::uniform_int_distribution<std::mt19937::result_type> rrandomLine(1, random - 2);
 	return rrandomLine(rng);
 }
-void Map::VerifyRewardUnderWall()
+
+std::vector<Map::Position> Map::InitializePowerUps(int level)
 {
-	for (auto& element : positionForRewards)
-		for (auto& elem : positionForWalls)
-			if (element == elem)
-				m_map[elem.first][elem.second] = '+';
+	for (int number = 0; number < 10; ++number)
+	{
+		uint16_t linePowerUp = 0;
+		uint16_t columnPowerUp = 0;
+		do {
+			linePowerUp = RandomLine(m_linesNumber);
+			columnPowerUp = RandomColumn(m_columnsNumber);
+		} while (linePowerUp % 2 == 0 && columnPowerUp % 2 != 0 || m_map[linePowerUp][columnPowerUp] == ' ' || (linePowerUp == 2 && columnPowerUp == 2) || (linePowerUp == 2 && columnPowerUp == 3) || (linePowerUp == 3 && columnPowerUp == 2));
+		positionsForPowerUps.push_back(std::make_pair(linePowerUp, columnPowerUp));
+	}
+	return positionsForPowerUps;
+}
+
+bool Map::IsPowerUpUnderWall(Map::Position wallPosition)
+{
+	for (auto& position : positionsForPowerUps)
+		if (position == wallPosition)
+			return true;
+	return false;
 }
 Map::Map(uint16_t linesNumber, uint16_t columnsNumber)
 {
@@ -89,23 +105,31 @@ Map::Map(uint16_t linesNumber, uint16_t columnsNumber)
 			m_yPosition = RandomColumn(m_columnsNumber);
 		} while (m_xPosition % 2 == 0 && m_yPosition % 2 != 0 || (m_xPosition == 2 && m_yPosition == 2) || (m_xPosition == 2 && m_yPosition == 3) || (m_xPosition == 3 && m_yPosition == 2));
 		m_map[m_xPosition][m_yPosition] = 176;
-		positionForWalls.push_back(std::make_pair(m_xPosition, m_yPosition));
+		positionsForWalls.push_back(std::make_pair(m_xPosition, m_yPosition));
 	}
+	int level;
+	//InitializePowerUps(level);
 
-	for (int number = 0; number < 10; ++number)
+}
+
+char& Map::operator[](const Position& position)
+{
+	const auto& [line, column] = position;
+	if (line < 0 || line >= m_linesNumber || column < 0 || column >= m_columnsNumber)
 	{
-		int m_xPosition1 = 0, m_yPosition1 = 0;
-		do {
-			m_xPosition1 = RandomLine(m_linesNumber);
-			m_yPosition1 = RandomColumn(m_columnsNumber);
-		} while (m_xPosition1 % 2 == 0 && m_yPosition1 % 2 != 0 || m_map[m_xPosition1][m_yPosition1] == ' ' || (m_xPosition1 == 2 && m_yPosition1 == 2) || (m_xPosition1 == 2 && m_yPosition1 == 3) || (m_xPosition1 == 3 && m_yPosition1 == 2));
-		//m_map[m_xPosition][m_yPosition] = '+';
-		std::cout << m_xPosition1 << "-" << m_yPosition1 << std::endl;
-		positionForRewards.push_back(std::make_pair(m_xPosition1, m_yPosition1));
+		throw std::out_of_range("Column or line is out of range! ");
 	}
-	m_map[1][2] = 'P';
+	return m_map[line][column];
+}
 
-
+const char& Map::operator[](const Position& position) const
+{
+	const auto& [line, column] = position;
+	if (line < 0 || line >= m_linesNumber || column < 0 || column >= m_columnsNumber)
+	{
+		throw std::out_of_range("Column or line is out of range! ");
+	}
+	return m_map[line][column];
 }
 
 uint16_t Map::GetLinesNumber() const
