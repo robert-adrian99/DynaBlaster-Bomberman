@@ -7,6 +7,11 @@ public:
 
 public:
 	Bomb();
+
+	Bomb(const Bomb& other);
+	Bomb& operator=(const Bomb& other);
+	~Bomb();
+
 	uint8_t GetExplosionRange() const;
 	void PlaceBomb(Position position);
 
