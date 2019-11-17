@@ -14,6 +14,7 @@ public:
 	Position GetEnemyPosition() const;
 	uint16_t GetX() const;
 	uint16_t GetY() const;
+	EnemyType GeyEnemyType() const;
 	void Move();
 	uint32_t Die();
 

@@ -4,12 +4,15 @@
 #include <SFML/Graphics.hpp>
 #include "Grass.h"
 #include "UndestructibleWall.h"
-
-void GrassGraphics();
-void UndestructibleWallGraphic();
+#include "EnemyGraphics.h"
+#include "Enemy.h"
+#include "EnemyType.h"
+//void UndestructibleWallGraphic();
 
 int main()
 {
-	UndestructibleWallGraphic();
+	Enemy enemy(1, 1, EnemyType::Barom);
+	EnemyGraphics(enemy);
+	//UndestructibleWallGraphic();
 	return 0;
 }
