@@ -9,7 +9,9 @@ public:
 	Bomb();
 
 	Bomb(const Bomb& other);
+	Bomb(Bomb&& other);
 	Bomb& operator=(const Bomb& other);
+	Bomb& operator=(Bomb&& other);
 	~Bomb();
 
 	uint8_t GetExplosionRange() const;
