@@ -14,8 +14,11 @@ public:
 	Position GetEnemyPosition() const;
 	uint16_t GetX() const;
 	uint16_t GetY() const;
-	void Move();
+	void Move(Enemy &enemy);
 	uint32_t Die();
+	EnemyType GetEnemyType();
+private:
+	void basicMovement(Enemy &enemy);
 
 private:
 	int RandomMovement(int number);

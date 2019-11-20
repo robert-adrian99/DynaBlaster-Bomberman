@@ -7,7 +7,7 @@ void EnemyGraphics(Enemy enemy)
 	sf::RenderWindow window(sf::VideoMode(720, 720), "Enemy");
 	sf::Texture enemyTexture;
 	sf::Sprite sprite;
-	if(enemy.GeyEnemyType() == EnemyType::Barom)
+	if(enemy.GetEnemyType() == EnemyType::Barom)
 		if (!enemyTexture.loadFromFile("Barom.jpg"))
 			return;
 	enemyTexture.setSmooth(true);

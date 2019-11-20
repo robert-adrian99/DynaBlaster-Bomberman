@@ -34,74 +34,52 @@ int Enemy::RandomMovement(int number)
 	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, number);
 	return rrandom(rng);
 }
-
-void Enemy::Move()
+void Enemy::basicMovement(Enemy& enemy)
 {
-	auto [xPosition, yPosition] = m_enemyPosition;
+	auto [xPosition, yPosition] = enemy.m_enemyPosition;
+
+	char N = enemy.m_map[xPosition - 1][yPosition];
+	char S = enemy.m_map[xPosition + 1][yPosition];
+	char E = enemy.m_map[xPosition][yPosition + 1];
+	char V = enemy.m_map[xPosition][yPosition - 1];
+	std::vector<char> posiblePos;
+	if (N == ' ') posiblePos.push_back(N);
+	if (S == ' ') posiblePos.push_back(S);
+	if (E == ' ') posiblePos.push_back(E);
+	if (V == ' ') posiblePos.push_back(V);
+	int move = RandomMovement(posiblePos.size());
+	switch (move)
+	{
+	case 0:
+		--xPosition;
+		break;
+	case 1:
+		++xPosition;
+		break;
+	case 2:
+		++yPosition;
+		break;
+	case 3:
+		--yPosition;
+		break;
+	default:
+		break;
+	}
+	enemy.m_enemyPosition = std::make_pair(xPosition, yPosition);
+}
+void Enemy::Move(Enemy& enemy)
+{
+	auto [xPosition, yPosition] = enemy.m_enemyPosition;
 	switch (m_enemyType)
 	{
 	case EnemyType::Barom:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		basicMovement(enemy);
 		break;
 	}
 	case EnemyType::Shashakin:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		basicMovement(enemy);
 		break;
 	}
 	case EnemyType::Nagacham:
@@ -336,3 +314,10 @@ uint32_t Enemy::Die()
 		break;
 	}
 }
+
+EnemyType Enemy::GetEnemyType()
+{
+	return m_enemyType;
+}
+
+
