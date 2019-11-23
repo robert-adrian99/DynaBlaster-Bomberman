@@ -18,7 +18,11 @@ public:
 	uint32_t Die();
 	EnemyType GetEnemyType();
 private:
-	void basicMovement(Enemy &enemy);
+	void basicCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos);
+	void basicMovement(Enemy& enemy);
+	void noWallCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos);
+	void noWallMovement(Enemy& enemy);
+
 
 private:
 	int RandomMovement(int number);

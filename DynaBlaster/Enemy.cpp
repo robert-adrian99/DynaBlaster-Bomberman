@@ -34,7 +34,7 @@ int Enemy::RandomMovement(int number)
 	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, number);
 	return rrandom(rng);
 }
-void Enemy::basicMovement(Enemy& enemy)
+void Enemy::basicCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos)
 {
 	auto [xPosition, yPosition] = enemy.m_enemyPosition;
 
@@ -42,11 +42,59 @@ void Enemy::basicMovement(Enemy& enemy)
 	char S = enemy.m_map[xPosition + 1][yPosition];
 	char E = enemy.m_map[xPosition][yPosition + 1];
 	char V = enemy.m_map[xPosition][yPosition - 1];
-	std::vector<char> posiblePos;
+
 	if (N == ' ') posiblePos.push_back(N);
 	if (S == ' ') posiblePos.push_back(S);
 	if (E == ' ') posiblePos.push_back(E);
 	if (V == ' ') posiblePos.push_back(V);
+}
+void Enemy::basicMovement(Enemy& enemy)
+{
+
+	auto [xPosition, yPosition] = enemy.m_enemyPosition;
+	std::vector<char> posiblePos;
+	basicCoordinatesPossible(enemy, posiblePos);
+
+	int move = RandomMovement(posiblePos.size());
+	switch (move)
+	{
+	case 0:
+		--xPosition;
+		break;
+	case 1:
+		++xPosition;
+		break;
+	case 2:
+		++yPosition;
+		break;
+	case 3:
+		--yPosition;
+		break;
+	default:
+		break;
+	}
+	enemy.m_enemyPosition = std::make_pair(xPosition, yPosition);
+}
+void Enemy::noWallCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos)
+{
+	auto [xPosition, yPosition] = enemy.m_enemyPosition;
+
+	char N = enemy.m_map[xPosition - 1][yPosition];
+	char S = enemy.m_map[xPosition + 1][yPosition];
+	char E = enemy.m_map[xPosition][yPosition + 1];
+	char V = enemy.m_map[xPosition][yPosition - 1];
+
+	if (N != (char)219 && N != 'O') posiblePos.push_back(N);
+	if (S != (char)219 && N != 'O') posiblePos.push_back(S);
+	if (E != (char)219 && N != 'O') posiblePos.push_back(E);
+	if (V != (char)219 && N != 'O') posiblePos.push_back(V);
+}
+void Enemy::noWallMovement(Enemy& enemy)
+{
+	auto [xPosition, yPosition] = enemy.m_enemyPosition;
+	std::vector<char> posiblePos;
+	noWallCoordinatesPossible(enemy, posiblePos);
+
 	int move = RandomMovement(posiblePos.size());
 	switch (move)
 	{
@@ -84,162 +132,27 @@ void Enemy::Move(Enemy& enemy)
 	}
 	case EnemyType::Nagacham:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		basicMovement(enemy);
 		break;
 	}
 	case EnemyType::Ojin:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		noWallMovement(enemy);
 		break;
 	}
 	case EnemyType::Pontan:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		noWallMovement(enemy);
 		break;
 	}
 	case EnemyType::Boyon:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		noWallMovement(enemy);
 		break;
 	}
 	case EnemyType::Telpio:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N != (char)'254') posiblePos.push_back(N);
-		if (S != (char)'254') posiblePos.push_back(S);
-		if (E != (char)'254') posiblePos.push_back(E);
-		if (V != (char)'254') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		noWallMovement(enemy);
 		break;
 	}
 	case EnemyType::Parce:
