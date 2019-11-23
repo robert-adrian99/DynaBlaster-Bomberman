@@ -115,6 +115,54 @@ void Enemy::noWallMovement(Enemy& enemy)
 	}
 	enemy.m_enemyPosition = std::make_pair(xPosition, yPosition);
 }
+
+void Enemy::smartMovement(Map& map)
+{
+	const auto& [xPosition, yPosition] = m_enemyPosition;
+	std::array<int, 4> posiblePosition;
+	basicCoordinatesPossible(map, posiblePosition);
+
+	Player player;
+	const auto& [xPlayerPosition, yPlayerPosition] = player.GetPlayerPosition();
+
+	int xMinPosition = 0;
+	int yMinPosition = 0;
+	int min = map.GetColumnsNumber() + map.GetLinesNumber();
+
+	for (auto& iterator : posiblePosition)
+	{
+		if (iterator == 'N')
+			if (((xPosition - 1 + yPosition) - (xPlayerPosition + yPlayerPosition)) < min)
+			{
+				min = ((xPosition - 1 + yPosition) - (xPlayerPosition + yPlayerPosition));
+				xMinPosition = xPosition - 1;
+				yMinPosition = yPosition;
+			}
+			else if (iterator == 'S')
+				if (((xPosition + 1 + yPosition) - (xPlayerPosition + yPlayerPosition)) < min)
+				{
+					min = ((xPosition + 1 + yPosition) - (xPlayerPosition + yPlayerPosition));
+					xMinPosition = xPosition + 1;
+					yMinPosition = yPosition;
+				}
+				else if (iterator == 'E')
+					if (((xPosition + yPosition + 1) - (xPlayerPosition + yPlayerPosition)) < min)
+					{
+						min = ((xPosition + yPosition + 1) - (xPlayerPosition + yPlayerPosition));
+						xMinPosition = xPosition;
+						yMinPosition = yPosition + 1;
+					}
+					else if (iterator == 'V')
+						if (((xPosition + yPosition - 1) - (xPlayerPosition + yPlayerPosition)) < min)
+						{
+							min = ((xPosition + yPosition - 1) - (xPlayerPosition + yPlayerPosition));
+							xMinPosition = xPosition;
+							yMinPosition = yPosition - 1;
+						}
+	}
+	m_enemyPosition = std::make_pair(xMinPosition, yMinPosition);
+}
+
 void Enemy::Move(Enemy& enemy)
 {
 	auto [xPosition, yPosition] = enemy.m_enemyPosition;

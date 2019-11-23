@@ -22,7 +22,7 @@ private:
 	void basicMovement(Enemy& enemy);
 	void noWallCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos);
 	void noWallMovement(Enemy& enemy);
-
+	void smartMovement(Map& map);
 
 private:
 	int RandomMovement(int number);
