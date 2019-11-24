@@ -71,5 +71,8 @@
     <ClInclude Include="PlayerGraphics.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="BombGraphics.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
