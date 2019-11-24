@@ -4,24 +4,25 @@
 #include "Map.h"
 #include "EnemyType.h"
 
-class Enemy : Map
+class Enemy
 {
 public:
 	using Position = std::pair<uint16_t, uint16_t>;
 
 public:
-	Enemy(int xPosision, int yPosision, EnemyType enemyType);
+	Enemy(int xPosision, int yPosision, EnemyType enemyType, Map& map);
+	Enemy(Map& map);
 	Position GetEnemyPosition() const;
 	uint16_t GetX() const;
 	uint16_t GetY() const;
-	void Move(Enemy &enemy);
-	uint32_t Die();
-	EnemyType GetEnemyType();
+	void Move(Map& map);
+	uint32_t Die(Map& map);
+	EnemyType GetEnemyType() const;
 private:
-	void basicCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos);
-	void basicMovement(Enemy& enemy);
-	void noWallCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos);
-	void noWallMovement(Enemy& enemy);
+	void basicCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition);
+	void basicMovement(Map& map);
+	void noWallCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition);
+	void noWallMovement(Map& map);
 	void smartMovement(Map& map);
 
 private:
@@ -30,5 +31,8 @@ private:
 private:
 	Position m_enemyPosition;
 	EnemyType m_enemyType;
+	Map m_map;
+	Position m_lastEnemyPosition;
+	char m_enemySign;
 };
 

@@ -26,6 +26,7 @@ public:
 	uint32_t GetScore() const;
 	uint32_t GetHighScore() const;
 	uint8_t GetNumberOfBombs() const;
+	Position GetPlayerPosition() const;
 	bool GetPowerUp(PowerUps powerUp) const;
 	void SetPowerUp(PowerUps powerUp);
 	bool Die();

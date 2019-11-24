@@ -125,6 +125,12 @@ bool Player::Die()
 	return false;
 }
 
+
+Map::Position Player::GetPlayerPosition() const
+{
+	return m_playerPosition;
+}
+
 bool Player::Move(PlayerMovementType playerMovement)
 {
 	const auto& [line, column] = m_playerPosition;

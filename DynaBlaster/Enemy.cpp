@@ -1,13 +1,59 @@
 #include "Enemy.h"
 #include <random>
 #include <vector>
+#include "Player.h"
+#include <array>
 
 
-Enemy::Enemy(int xPosision, int yPosision, EnemyType enemyType)
+Enemy::Enemy(int xPosision, int yPosision, EnemyType enemyType, Map& map)
 {
-	m_map[xPosision][yPosision] = 'X';
+
 	m_enemyPosition = std::make_pair(xPosision, yPosision);
+	switch (enemyType)
+	{
+	case EnemyType::Barom:
+		m_enemySign = 'B';
+		break;
+	case EnemyType::Shashakin:
+		m_enemySign = 'S';
+		break;
+	case EnemyType::Nagacham:
+		m_enemySign = 'N';
+		break;
+	case EnemyType::Ojin:
+		m_enemySign = 'O';
+		break;
+	case EnemyType::Pontan:
+		m_enemySign = 'P';
+		break;
+	case EnemyType::Boyon:
+		m_enemySign = 'B';
+		break;
+	case EnemyType::Telpio:
+		m_enemySign = 'T';
+		break;
+	case EnemyType::Parce:
+		m_enemySign = 'P';
+		break;
+	case EnemyType::BigBoss:
+		break;
+	case EnemyType::Arion:
+		break;
+	}
+	map[m_enemyPosition] = m_enemySign;
 	m_enemyType = enemyType;
+	m_map = map;
+	m_lastEnemyPosition = m_enemyPosition;
+}
+
+Enemy::Enemy(Map& map)
+{
+	m_enemyPosition = std::make_pair(3, 3);
+	m_enemyType = EnemyType::Barom;
+	m_map = map;
+	m_lastEnemyPosition = m_enemyPosition;
+	m_enemySign = 'B';
+	map[m_enemyPosition] = m_enemySign;
 }
 
 Enemy::Position Enemy::GetEnemyPosition() const
@@ -34,28 +80,98 @@ int Enemy::RandomMovement(int number)
 	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, number);
 	return rrandom(rng);
 }
-void Enemy::basicCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos)
+void Enemy::basicCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition)
 {
-	auto [xPosition, yPosition] = enemy.m_enemyPosition;
+	auto& [xPosition, yPosition] = m_enemyPosition;
 
-	char N = enemy.m_map[xPosition - 1][yPosition];
-	char S = enemy.m_map[xPosition + 1][yPosition];
-	char E = enemy.m_map[xPosition][yPosition + 1];
-	char V = enemy.m_map[xPosition][yPosition - 1];
+	Position enemyPositionN = std::make_pair(xPosition - 1, yPosition);
+	Position enemyPositionS = std::make_pair(xPosition + 1, yPosition);
+	Position enemyPositionE = std::make_pair(xPosition, yPosition + 1);
+	Position enemyPositionV = std::make_pair(xPosition, yPosition - 1);
 
-	if (N == ' ') posiblePos.push_back(N);
-	if (S == ' ') posiblePos.push_back(S);
-	if (E == ' ') posiblePos.push_back(E);
-	if (V == ' ') posiblePos.push_back(V);
+	char N = map[enemyPositionN];
+	char S = map[enemyPositionS];
+	char E = map[enemyPositionE];
+	char V = map[enemyPositionV];
+
+	if (N == ' ') posiblePosition[0] = 1;
+	else posiblePosition[0] = 0;
+	if (S == ' ') posiblePosition[1] = 1;
+	else posiblePosition[1] = 0;
+	if (E == ' ') posiblePosition[2] = 1;
+	else posiblePosition[2] = 0;
+	if (V == ' ') posiblePosition[3] = 1;
+	else posiblePosition[3] = 0;
 }
-void Enemy::basicMovement(Enemy& enemy)
+void Enemy::basicMovement(Map& map)
 {
 
-	auto [xPosition, yPosition] = enemy.m_enemyPosition;
-	std::vector<char> posiblePos;
-	basicCoordinatesPossible(enemy, posiblePos);
+	auto& [xPosition, yPosition] = m_enemyPosition;
+	std::array<int, 4> posiblePosition;
+	basicCoordinatesPossible(map, posiblePosition);
+	int move = NULL;
+	move = RandomMovement(posiblePosition.size() - 1);
+	while (posiblePosition[move] != 1)
+		move = RandomMovement(posiblePosition.size() - 1);
+	map[m_enemyPosition] = ' ';
+	switch (move)
+	{
+	case 0:
+		--xPosition;
+		break;
+	case 1:
+		++xPosition;
+		break;
+	case 2:
+		++yPosition;
+		break;
+	case 3:
+		--yPosition;
+	default:
+		break;
+	}
 
-	int move = RandomMovement(posiblePos.size());
+	m_enemyPosition = std::make_pair(xPosition, yPosition);
+	map[m_enemyPosition] = m_enemySign;
+}
+void Enemy::noWallCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition)
+{
+	auto& [xPosition, yPosition] = m_enemyPosition;
+	for (int index = 0; index < 4; index++)
+		posiblePosition[index] = 0;
+
+	Position enemyPositionN = std::make_pair(xPosition - 1, yPosition);
+	Position enemyPositionS = std::make_pair(xPosition + 1, yPosition);
+	Position enemyPositionE = std::make_pair(xPosition, yPosition + 1);
+	Position enemyPositionV = std::make_pair(xPosition, yPosition - 1);
+
+	char N = map[enemyPositionN];
+	char S = map[enemyPositionS];
+	char E = map[enemyPositionE];
+	char V = map[enemyPositionV];
+
+	if (N != (char)219 && N != 'O' && N != (char)254) posiblePosition[0] = 1;
+	if (S != (char)219 && S != 'O' && S != (char)254) posiblePosition[1] = 1;
+	if (E != (char)219 && E != 'O' && E != (char)254) posiblePosition[2] = 1;
+	if (V != (char)219 && V != 'O' && V != (char)254) posiblePosition[3] = 1;
+}
+
+void Enemy::noWallMovement(Map& map)
+{
+	auto& [xPosition, yPosition] = m_enemyPosition;
+
+	m_lastEnemyPosition = m_enemyPosition;
+
+	std::array<int, 4> posiblePosition;
+	noWallCoordinatesPossible(map, posiblePosition);
+	map[m_enemyPosition] = ' ';
+	int move = NULL;
+	move = RandomMovement(posiblePosition.size() - 1);
+	while (posiblePosition[move] != 1)
+		move = RandomMovement(posiblePosition.size() - 1);
+
+	map[m_enemyPosition] = ' ';
+
 	switch (move)
 	{
 	case 0:
@@ -73,54 +189,17 @@ void Enemy::basicMovement(Enemy& enemy)
 	default:
 		break;
 	}
-	enemy.m_enemyPosition = std::make_pair(xPosition, yPosition);
+	m_enemyPosition = std::make_pair(xPosition, yPosition);
+	map[m_enemyPosition] = m_enemySign;
+	if (m_enemyPosition != m_lastEnemyPosition)
+		if (m_map[m_lastEnemyPosition] == (char)176)
+			map[m_lastEnemyPosition] = (char)176;
 }
-void Enemy::noWallCoordinatesPossible(const Enemy& enemy, std::vector<char> posiblePos)
-{
-	auto [xPosition, yPosition] = enemy.m_enemyPosition;
-
-	char N = enemy.m_map[xPosition - 1][yPosition];
-	char S = enemy.m_map[xPosition + 1][yPosition];
-	char E = enemy.m_map[xPosition][yPosition + 1];
-	char V = enemy.m_map[xPosition][yPosition - 1];
-
-	if (N != (char)219 && N != 'O') posiblePos.push_back(N);
-	if (S != (char)219 && N != 'O') posiblePos.push_back(S);
-	if (E != (char)219 && N != 'O') posiblePos.push_back(E);
-	if (V != (char)219 && N != 'O') posiblePos.push_back(V);
-}
-void Enemy::noWallMovement(Enemy& enemy)
-{
-	auto [xPosition, yPosition] = enemy.m_enemyPosition;
-	std::vector<char> posiblePos;
-	noWallCoordinatesPossible(enemy, posiblePos);
-
-	int move = RandomMovement(posiblePos.size());
-	switch (move)
-	{
-	case 0:
-		--xPosition;
-		break;
-	case 1:
-		++xPosition;
-		break;
-	case 2:
-		++yPosition;
-		break;
-	case 3:
-		--yPosition;
-		break;
-	default:
-		break;
-	}
-	enemy.m_enemyPosition = std::make_pair(xPosition, yPosition);
-}
-
 void Enemy::smartMovement(Map& map)
 {
 	const auto& [xPosition, yPosition] = m_enemyPosition;
 	std::array<int, 4> posiblePosition;
-	basicCoordinatesPossible(map, posiblePosition);
+	//basicCoordinatesPossible(map,posiblePosition);
 
 	Player player;
 	const auto& [xPlayerPosition, yPlayerPosition] = player.GetPlayerPosition();
@@ -162,77 +241,48 @@ void Enemy::smartMovement(Map& map)
 	}
 	m_enemyPosition = std::make_pair(xMinPosition, yMinPosition);
 }
-
-void Enemy::Move(Enemy& enemy)
+void Enemy::Move(Map& map)
 {
-	auto [xPosition, yPosition] = enemy.m_enemyPosition;
 	switch (m_enemyType)
 	{
 	case EnemyType::Barom:
 	{
-		basicMovement(enemy);
+		basicMovement(map);
 		break;
 	}
 	case EnemyType::Shashakin:
 	{
-		basicMovement(enemy);
+		basicMovement(map);
 		break;
 	}
 	case EnemyType::Nagacham:
 	{
-		basicMovement(enemy);
+		basicMovement(map);
 		break;
 	}
 	case EnemyType::Ojin:
 	{
-		noWallMovement(enemy);
+		noWallMovement(map);
 		break;
 	}
 	case EnemyType::Pontan:
 	{
-		noWallMovement(enemy);
+		noWallMovement(map);
 		break;
 	}
 	case EnemyType::Boyon:
 	{
-		noWallMovement(enemy);
+		noWallMovement(map);
 		break;
 	}
 	case EnemyType::Telpio:
 	{
-		noWallMovement(enemy);
+		noWallMovement(map);
 		break;
 	}
 	case EnemyType::Parce:
 	{
-		char N = m_map[xPosition - 1][yPosition];
-		char S = m_map[xPosition + 1][yPosition];
-		char E = m_map[xPosition][yPosition + 1];
-		char V = m_map[xPosition][yPosition - 1];
-		std::vector<char> posiblePos;
-		if (N == ' ') posiblePos.push_back(N);
-		if (S == ' ') posiblePos.push_back(S);
-		if (E == ' ') posiblePos.push_back(E);
-		if (V == ' ') posiblePos.push_back(V);
-		int move = RandomMovement(posiblePos.size());
-		switch (move)
-		{
-		case 0:
-			--xPosition;
-			break;
-		case 1:
-			++xPosition;
-			break;
-		case 2:
-			++yPosition;
-			break;
-		case 3:
-			--yPosition;
-			break;
-		default:
-			break;
-		}
-		m_enemyPosition = std::make_pair(xPosition, yPosition);
+		smartMovement(map);
 		break;
 	}
 	case EnemyType::BigBoss:
@@ -244,10 +294,10 @@ void Enemy::Move(Enemy& enemy)
 	}
 }
 
-uint32_t Enemy::Die()
+uint32_t Enemy::Die(Map& map)
 {
 	m_enemyPosition = std::make_pair(0, 0);
-	m_map[0][0] = (char)219;
+	//map[m_enemyPosition] = (char)219;
 
 	switch (m_enemyType)
 	{
@@ -276,7 +326,7 @@ uint32_t Enemy::Die()
 	}
 }
 
-EnemyType Enemy::GetEnemyType()
+EnemyType Enemy::GetEnemyType() const
 {
 	return m_enemyType;
 }
