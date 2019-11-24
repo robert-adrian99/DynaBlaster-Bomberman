@@ -78,7 +78,13 @@ void StartWindow()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
-					std::cout << "Help button was pressed" << "\n";
+					std::cout << "The players use the following controls:" << std::endl;
+					std::cout << "ARROW KEYS - Press to move Bomberman left,right,up and down." << std::endl;
+					std::cout << "SPACE BUTTON - Press to place bombs." << std::endl;
+					std::cout << "'d' KEY - Press to explode a bomb WHEN you have a detonator." << std::endl;
+					std::cout << "'p' KEY - Press to pause the game. " << std::endl;
+					std::cout << "'r' KEY - Press to resume the level." << std::endl;
+					std::cout << "Play BUTTON - Press to start the game." << std::endl;
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
