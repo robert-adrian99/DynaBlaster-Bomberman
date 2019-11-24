@@ -68,5 +68,8 @@
     <ClInclude Include="EnemyGraphics.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerGraphics.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
