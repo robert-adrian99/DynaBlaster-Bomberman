@@ -92,6 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Facultate-anul2sem1\Standard to Modern C++\dyna-blaster-bomberman\ThirdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +125,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Facultate-anul2sem1\Standard to Modern C++\dyna-blaster-bomberman\ThirdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,17 +140,22 @@
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StartPage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattleButton.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BombGraphics.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGraphics.h" />
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="Grass.h" />
+    <ClInclude Include="HelpButton.h" />
     <ClInclude Include="HelpMenu.h" />
+    <ClInclude Include="LevelsButton.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PowerUps.h" />
