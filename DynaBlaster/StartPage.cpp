@@ -3,6 +3,7 @@
 #include "PlayButton.h"
 #include "LevelsButton.h"
 #include "BattleButton.h"
+#include "Map.h"
 
 void StartWindow()
 {
@@ -74,6 +75,26 @@ void StartWindow()
 				{
 					battle.SetBgColor(sf::Color::Transparent);
 				}
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
+				{
+					std::cout << "Help button was pressed" << "\n";
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
+				{
+					std::cout << "Play button was pressed" << "\n";
+					Map map;
+					std::cout << map;
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
+				{
+					std::cout << "Levels button was pressed" << "\n";
+				}
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(startWindow))
+				{
+					std::cout << "Battle button was pressed" << "\n";
+				}
+
 			}
 			startWindow.clear();
 			startWindow.draw(sprite);
