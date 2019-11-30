@@ -3,9 +3,10 @@
 #include "PlayButton.h"
 #include "LevelsButton.h"
 #include "BattleButton.h"
-#include "Map.h"
+#include "BackButton.h"
 
 void PlayWindow();
+void HelpMenuWindow();
 
 void StartWindow()
 {
@@ -80,19 +81,11 @@ void StartWindow()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
-					std::cout << "The players use the following controls:" << std::endl;
-					std::cout << "ARROW KEYS - Press to move Bomberman left,right,up and down." << std::endl;
-					std::cout << "SPACE BUTTON - Press to place bombs." << std::endl;
-					std::cout << "'d' KEY - Press to explode a bomb WHEN you have a detonator." << std::endl;
-					std::cout << "'p' KEY - Press to pause the game. " << std::endl;
-					std::cout << "'r' KEY - Press to resume the level." << std::endl;
-					std::cout << "Play BUTTON - Press to start the game." << std::endl;
+					startWindow.close();
+					HelpMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
-					std::cout << "Play button was pressed" << "\n";
-					Map map;
-					std::cout << map;
 					startWindow.close();
 					PlayWindow();
 				}
@@ -120,6 +113,13 @@ void PlayWindow()
 {
 	sf::RenderWindow playWindow(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 
+	sf::Font arial;
+	arial.loadFromFile("arial.ttf");
+
+	BackButton back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	back.SetPosition({ 50,638 });
+	back.SetFont(arial);
+
 	while (playWindow.isOpen())
 	{
 		sf::Event event;
@@ -135,10 +135,78 @@ void PlayWindow()
 			case sf::Event::Closed:
 				playWindow.close();
 				break;
+			case sf::Event::MouseMoved:
+				if (back.IsMouseOver(playWindow))
+				{
+					back.SetBgColor(sf::Color::Blue);
+				}
+				else
+				{
+					back.SetBgColor(sf::Color::Transparent);
+				}
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(playWindow))
+				{
+					playWindow.close();
+					StartWindow();
+				}
 			}
 			playWindow.clear();
 			playWindow.draw(sprite);
+			back.DrawTo(playWindow);
 			playWindow.display();
+		}
+	}
+}
+
+
+void HelpMenuWindow()
+{
+	sf::RenderWindow helpWindow(sf::VideoMode(850, 700), "Help Menu", sf::Style::Close | sf::Style::Titlebar);
+
+	sf::Font arial;
+	arial.loadFromFile("arial.ttf");
+
+	BackButton back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	back.SetPosition({ 50,638 });
+	back.SetFont(arial);
+
+	while (helpWindow.isOpen())
+	{
+		sf::Event event;
+		sf::Texture HelpImage;
+		HelpImage.loadFromFile("HelpMenu v1.png");
+
+		sf::Sprite sprite(HelpImage);
+
+		while (helpWindow.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				helpWindow.close();
+				break;
+			case sf::Event::MouseMoved:
+				if (back.IsMouseOver(helpWindow))
+				{
+					back.SetBgColor(sf::Color::Blue);
+				}
+				else
+				{
+					back.SetBgColor(sf::Color::Transparent);
+				}
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(helpWindow))
+				{
+					helpWindow.close();
+					StartWindow();
+				}
+			}
+
+			helpWindow.clear();
+			helpWindow.draw(sprite);
+			back.DrawTo(helpWindow);
+			helpWindow.display();
 		}
 	}
 }

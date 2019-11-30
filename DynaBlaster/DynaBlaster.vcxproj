@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackButton.cpp" />
     <ClCompile Include="BattleButton.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="StartPage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackButton.h" />
     <ClInclude Include="BattleButton.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BombGraphics.h" />

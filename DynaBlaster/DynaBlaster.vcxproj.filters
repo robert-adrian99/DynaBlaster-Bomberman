@@ -48,6 +48,9 @@
     <ClCompile Include="PlayButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BackButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="UndestructibleWallGraphics.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BackButton.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
