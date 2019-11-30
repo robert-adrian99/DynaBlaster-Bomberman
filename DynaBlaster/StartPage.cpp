@@ -5,6 +5,8 @@
 #include "BattleButton.h"
 #include "Map.h"
 
+void PlayWindow();
+
 void StartWindow()
 {
 	sf::RenderWindow startWindow(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
@@ -91,6 +93,8 @@ void StartWindow()
 					std::cout << "Play button was pressed" << "\n";
 					Map map;
 					std::cout << map;
+					startWindow.close();
+					PlayWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
@@ -109,6 +113,32 @@ void StartWindow()
 			level.DrawTo(startWindow);
 			battle.DrawTo(startWindow);
 			startWindow.display();
+		}
+	}
+}
+void PlayWindow()
+{
+	sf::RenderWindow playWindow(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+
+	while (playWindow.isOpen())
+	{
+		sf::Event event;
+		sf::Texture barom;
+		barom.loadFromFile("Barom.jpg");
+
+		sf::Sprite sprite(barom);
+
+		while (playWindow.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				playWindow.close();
+				break;
+			}
+			playWindow.clear();
+			playWindow.draw(sprite);
+			playWindow.display();
 		}
 	}
 }
