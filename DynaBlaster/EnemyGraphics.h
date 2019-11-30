@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
 #include "EnemyType.h"
+
 void EnemyGraphics(Enemy enemy)
 {
 	sf::RenderWindow window(sf::VideoMode(720, 720), "Enemy");

@@ -134,10 +134,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BattleButton.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="HelpButton.cpp" />
+    <ClCompile Include="LevelsButton.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StartPage.cpp" />
@@ -146,10 +150,11 @@
     <ClInclude Include="BattleButton.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BombGraphics.h" />
+    <ClInclude Include="DestructibleWallGraphics.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGraphics.h" />
     <ClInclude Include="EnemyType.h" />
-    <ClInclude Include="Grass.h" />
+    <ClInclude Include="GrassGraphics.h" />
     <ClInclude Include="HelpButton.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="LevelsButton.h" />
@@ -159,7 +164,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PowerUps.h" />
-    <ClInclude Include="UndestructibleWall.h" />
+    <ClInclude Include="UndestructibleWallGraphics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

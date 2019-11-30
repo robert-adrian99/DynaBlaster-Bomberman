@@ -40,7 +40,8 @@ private:
 	uint32_t m_highScore;
 	uint8_t m_numberOfBombs;
 	std::array<bool, 8> m_powerUps;
-	static const uint8_t firstPowerUp = 0;
 	Position m_playerPosition;
+	
+	static const uint8_t firstPowerUp = 0;
 };
 

@@ -36,6 +36,18 @@
     <ClCompile Include="StartPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BattleButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelsButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -58,12 +70,6 @@
     </ClInclude>
     <ClInclude Include="HelpMenu.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UndestructibleWall.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bomb.h">
       <Filter>Header Files</Filter>
@@ -88,6 +94,15 @@
     </ClInclude>
     <ClInclude Include="BattleButton.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DestructibleWallGraphics.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GrassGraphics.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UndestructibleWallGraphics.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

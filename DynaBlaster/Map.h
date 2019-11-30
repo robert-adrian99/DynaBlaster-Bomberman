@@ -23,7 +23,8 @@ private:
 	std::vector<Position> InitializePowerUps(int level);
 
 protected:
-	uint16_t m_linesNumber, m_columnsNumber;
+	uint16_t m_linesNumber;
+	uint16_t m_columnsNumber;
 	std::vector<std::vector<char>> m_map;
 	std::vector<Position> positionsForPowerUps;
 	std::vector<Position> positionsForWalls;

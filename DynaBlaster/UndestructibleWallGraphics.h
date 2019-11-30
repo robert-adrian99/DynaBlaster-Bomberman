@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-void UndestructibleWallGraphic()
+void UndestructibleWallGraphics()
 {
 	sf::RenderWindow window(sf::VideoMode(512, 256), "UndestructibleWall");
 	sf::Texture texture;

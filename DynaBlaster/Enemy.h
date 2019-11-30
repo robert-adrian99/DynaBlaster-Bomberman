@@ -18,14 +18,13 @@ public:
 	void Move(Map& map);
 	uint32_t Die(Map& map);
 	EnemyType GetEnemyType() const;
+
 private:
 	void basicCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition);
 	void basicMovement(Map& map);
 	void noWallCoordinatesPossible(Map& map, std::array<int, 4>& posiblePosition);
 	void noWallMovement(Map& map);
 	void smartMovement(Map& map);
-
-private:
 	int RandomMovement(int number);
 
 private:

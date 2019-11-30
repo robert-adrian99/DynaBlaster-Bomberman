@@ -13,7 +13,8 @@ public:
 	void timer();
 	void pauseTimer();
 private:
-	int m_minutes = 3, m_seconds = 0;
+	int m_minutes = 3;
+	int m_seconds = 0;
 	bool m_ok = false;
 };
 

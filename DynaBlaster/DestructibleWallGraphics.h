@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-void DestructibleWallGraphic()
+void DestructibleWallGraphics()
 {
 	sf::RenderWindow window(sf::VideoMode(512, 256), "DestructibleWall");
 	sf::Texture texture;
