@@ -30,6 +30,15 @@ public:
 		line_iterator operator ++(int);
 	};
 
+	class column_iterator : public base_iterator
+	{
+	public:
+		using base_iterator::base_iterator;
+
+		column_iterator& operator ++();
+		column_iterator operator ++(int);
+	};
+
 public:
 	Map(uint16_t linesNumber = 13, uint16_t columnsNumber = 17);
 	friend std::ostream& operator <<(std::ostream& out, const Map& map);

@@ -26,6 +26,19 @@ Map::line_iterator Map::line_iterator::operator++(int)
 	return copy;
 }
 
+Map::column_iterator& Map::column_iterator::operator++()
+{
+	++m_currentPosition.second;
+	return *this;
+}
+
+Map::column_iterator Map::column_iterator::operator++(int)
+{
+	auto copy = *this;
+	++(*this);
+	return copy;
+}
+
 std::ostream& operator<<(std::ostream& out, const Map& map)
 {
 	for (auto& line : map.m_map)
