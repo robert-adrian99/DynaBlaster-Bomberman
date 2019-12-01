@@ -15,9 +15,42 @@ PlayButton::PlayButton(std::string buttonText, sf::Vector2f size, int charSize, 
 	m_playButton.setFillColor(bgColor);
 }
 
+std::string PlayButton::GetText() const
+{
+	return m_text.getString;
+}
+
+sf::Color PlayButton::GetTextColor() const
+{
+	return m_text.getFillColor;
+}
+
+int PlayButton::GetTextCharacterSize() const
+{
+	return m_text.getCharacterSize;
+}
+
+sf::Color PlayButton::GetPlayButtonBgColor() const
+{
+	return m_playButton.getFillColor;
+}
 void PlayButton::SetFont(sf::Font& font)
 {
 	m_text.setFont(font);
+}
+
+sf::Font PlayButton::GetTextFont() const
+{
+	return m_text.getFont;
+}
+sf::Color PlayButton::GetBgColor() const
+{
+	return m_playButton.getFillColor;
+}
+
+sf::Text PlayButton::GetPosition() const
+{
+	return m_text.getPosition;
 }
 
 void PlayButton::SetBgColor(sf::Color color)
