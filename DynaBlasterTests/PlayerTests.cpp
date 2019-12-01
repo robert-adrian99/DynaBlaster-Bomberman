@@ -19,5 +19,47 @@ namespace DynaBlasterTests
 			Assert::IsTrue(player.GetHighScore() == 0);
 			Assert::IsTrue(player.GetNumberOfBombs() == 1);
 		}
+
+		TEST_METHOD(GetPowerUp)
+		{
+			Player player;
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Flame) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Bomb) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::RollerSkates) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::RemoteControl) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::PaintedBomb) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Character) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::PaintedWall) == false);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Jacket) == false);
+		}
+
+		TEST_METHOD(SetPowerUp)
+		{
+			Player player;
+			player.SetPowerUp(PowerUps::Flame);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Flame) == true);
+			player.SetPowerUp(PowerUps::Bomb);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Bomb) == true);
+			player.SetPowerUp(PowerUps::RollerSkates);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::RollerSkates) == true);
+			player.SetPowerUp(PowerUps::RemoteControl);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::RemoteControl) == true);
+			player.SetPowerUp(PowerUps::PaintedBomb);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::PaintedBomb) == true);
+			player.SetPowerUp(PowerUps::Character);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Character) == true);
+			player.SetPowerUp(PowerUps::PaintedWall);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::PaintedWall) == true);
+			player.SetPowerUp(PowerUps::Jacket);
+			Assert::IsTrue(player.GetPowerUp(PowerUps::Jacket) == true);
+		}
+
+		TEST_METHOD(Die)
+		{
+			Player player;
+			Assert::IsFalse(player.Die());
+			Assert::IsFalse(player.Die());
+			Assert::IsTrue(player.Die());
+		}
 	};
 }
