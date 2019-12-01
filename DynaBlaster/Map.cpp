@@ -2,6 +2,17 @@
 #include "Player.h"
 #include <iostream>
 
+Map::base_iterator::base_iterator(const Map& map, const Map::Position& initialPositions) :
+	m_map(map), m_currentPosition(initialPositions)
+{
+	// empty
+}
+
+bool Map::base_iterator::operator!=(const base_iterator& other)
+{
+	return m_currentPosition != other.m_currentPosition;
+}
+
 std::ostream& operator<<(std::ostream& out, const Map& map)
 {
 	for (auto& line : map.m_map)
