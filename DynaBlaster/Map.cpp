@@ -13,6 +13,19 @@ bool Map::base_iterator::operator!=(const base_iterator& other)
 	return m_currentPosition != other.m_currentPosition;
 }
 
+Map::line_iterator& Map::line_iterator::operator++()
+{
+	++m_currentPosition.first;
+	return *this;
+}
+
+Map::line_iterator Map::line_iterator::operator++(int)
+{
+	auto copy = *this;
+	++(*this);
+	return copy;
+}
+
 std::ostream& operator<<(std::ostream& out, const Map& map)
 {
 	for (auto& line : map.m_map)
