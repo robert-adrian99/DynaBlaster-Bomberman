@@ -2,14 +2,14 @@
 #include "Map.h"
 #include "PowerUps.h"
 #include <SFML/Graphics.hpp>
-#include "Grass.h"
-#include "UndestructibleWall.h"
+#include "GrassGraphics.h"
+#include "UndestructibleWallGraphics.h"
 
 void GrassGraphics();
-void UndestructibleWallGraphic();
+void UndestructibleWallGraphics();
 
 int main()
 {
-	UndestructibleWallGraphic();
+	UndestructibleWallGraphics();
 	return 0;
 }
