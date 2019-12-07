@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="TestingSFML">
+      <UniqueIdentifier>{2e86f038-9918-4abc-9c10-d9441f855153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Map.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainTest.cpp">
+      <Filter>TestingSFML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="TileMap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainTest.h">
+      <Filter>TestingSFML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

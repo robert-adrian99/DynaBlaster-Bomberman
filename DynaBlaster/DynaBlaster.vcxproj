@@ -140,6 +140,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HelpButton.cpp" />
     <ClCompile Include="LevelsButton.cpp" />
+    <ClCompile Include="MainTest.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="PlayButton.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="HelpButton.h" />
     <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="LevelsButton.h" />
+    <ClInclude Include="MainTest.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="PlayButton.h" />
