@@ -146,6 +146,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StartPage.cpp" />
+    <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackButton.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PowerUps.h" />
+    <ClInclude Include="TileMap.h" />
     <ClInclude Include="UndestructibleWallGraphics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
