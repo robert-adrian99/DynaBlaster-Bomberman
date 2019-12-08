@@ -137,6 +137,7 @@
     <ClCompile Include="BackButton.cpp" />
     <ClCompile Include="BattleButton.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HelpButton.cpp" />
     <ClCompile Include="LevelsButton.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="BattleButton.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BombGraphics.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="DestructibleWallGraphics.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGraphics.h" />

@@ -60,6 +60,9 @@
     <ClCompile Include="MainTest.cpp">
       <Filter>TestingSFML</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="MainTest.h">
       <Filter>TestingSFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

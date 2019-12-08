@@ -5,9 +5,12 @@
 #include "LevelsButton.h"
 #include "BattleButton.h"
 #include "BackButton.h"
+#include "Button.h"
 #include "../Logging/Logger.h"
 
 void HelpMenuWindow();
+
+void LevelsMenuWindow();
 
 void Map();
 
@@ -104,12 +107,14 @@ void StartWindow()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
 					logger.Log("Levels button was pressed.", Logger::Level::Info);
-					std::cout << "Levels button was pressed" << "\n";
+					startWindow.close();
+					LevelsMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(startWindow))
 				{
 					logger.Log("Battle button was pressed.", Logger::Level::Info);
-					std::cout << "Battle button was pressed" << "\n";
+					startWindow.close();
+					Map();
 				}
 
 			}
@@ -179,6 +184,91 @@ void HelpMenuWindow()
 			helpWindow.draw(sprite);
 			back.DrawTo(helpWindow);
 			helpWindow.display();
+		}
+	}
+}
+
+void LevelsMenuWindow()
+{
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
+	sf::RenderWindow levelsWindow(sf::VideoMode(564, 286), "Levels Menu", sf::Style::Close | sf::Style::Titlebar);
+
+	logger.Log("Levels window was rendered", Logger::Level::Info);
+
+	sf::Font colleged;
+	colleged.loadFromFile("colleged.ttf");
+
+	std::vector<Button> levelButtons;
+
+	int nrLevel = 1;
+
+	for (auto line = 0; line < 4; line++)
+	{
+		for (auto column = 0; column < 4; column++)
+		{
+			char chrLvl = nrLevel + '0';
+			std::string levelString = "Level ";
+			levelString += chrLvl;
+			Button levelButton(levelString, { 200,40 }, 20, sf::Color::Transparent, sf::Color::Red);
+			int positionX = 200 * line + 100;
+			int positionY = 50 * column + 30;
+			sf::Vector2f position(positionX, positionY);
+			levelButton.SetPosition(position);
+			levelButton.SetFont(colleged);
+			levelButtons.push_back(levelButton);
+			++nrLevel;
+		}
+	}
+
+	logger.Log("Displayed the levels of the game.", Logger::Level::Info);
+
+	while (levelsWindow.isOpen())
+	{
+		sf::Event event;
+		sf::Texture HelpImage;
+		HelpImage.loadFromFile("levels.png");
+
+		sf::Sprite sprite(HelpImage);
+
+		while (levelsWindow.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				levelsWindow.close();
+				break;
+			case sf::Event::MouseMoved:
+				for (int index = 0; index < 8; index++)
+				{
+					if (levelButtons[index].IsMouseOver(levelsWindow))
+					{
+						levelButtons[index].SetBgColor(sf::Color::Blue);
+					}
+					else
+					{
+						levelButtons[index].SetBgColor(sf::Color::Transparent);
+					}
+				}
+			case sf::Event::MouseButtonPressed:
+				for (int index = 0; index < 8; index++)
+				{
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && levelButtons[index].IsMouseOver(levelsWindow))
+					{
+						logger.Log("Level button was pressed. Going back to start page.", Logger::Level::Info);
+						levelsWindow.close();
+						Map();
+					}
+				}
+			}
+			levelsWindow.clear();
+			levelsWindow.draw(sprite);
+			for (int index = 0; index < 8; index++)
+			{
+				levelButtons[index].DrawTo(levelsWindow);
+			}
+			levelsWindow.display();
 		}
 	}
 }
