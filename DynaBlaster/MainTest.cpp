@@ -6,6 +6,38 @@
 
 void MainTest::Execute()
 {
+	class Wall
+	{
+	public:
+		sf::RectangleShape rect;
+	private:
+		sf::Texture wallTexture;
+		sf::Sprite wallImage;
+		float bottom, top, right, left;
+	public:
+		Wall()
+		{
+			if (!wallTexture.loadFromFile("tileset.png", sf::IntRect(1 * 32, 0, 32, 32)))
+				std::cout << "Error" << std::endl;
+			wallImage.setTexture(wallTexture);
+			rect.setTexture(wallImage.getTexture());
+			rect.setSize({ 32,32 });
+			rect.setFillColor(sf::Color::White);
+			rect.setPosition(64, 64);
+			rect.setOutlineThickness(1.0f);
+			top = rect.getPosition().y;
+			left = rect.getPosition().x;
+			bottom = rect.getPosition().y + 32;
+			right = rect.getPosition().x + 32;
+			std::cout << "TLBR: " << " " << top << " " << left << " " << bottom << " " << right << "\n\n\n";
+		}
+		float GetBottom() { return bottom; }
+		float GetLeft() { return left; }
+		float GetRight() { return right; }
+		float GetTop() { return top; }
+	};
+
+
 	class Player
 	{
 	private:
@@ -71,8 +103,22 @@ void MainTest::Execute()
 			bottom = rect.getPosition().y + 32;
 			right = rect.getPosition().x + 32;
 		}
+
+		bool Collision(Wall wall)
+		{
+			if (right > wall.GetLeft() && left < wall.GetRight() && top < wall.GetBottom() && bottom > wall.GetTop())
+			{
+				std::cout << "WALL: RLBT " << wall.GetRight() << " " << wall.GetLeft() << " " << wall.GetBottom() << " " << wall.GetTop();
+				std::cout << std::endl;
+				std::cout << "Player: RLBT " << right << " " << left << " " << bottom << " " << top << std::endl;
+				return true;
+			}
+			return false;
+		}
+
 	};
 	Player player;
+	Wall wall;
 	sf::RenderWindow Window;
 	Window.create(sf::VideoMode(800, 600), "Test SFML");
 	Window.setKeyRepeatEnabled(true);
@@ -115,9 +161,13 @@ void MainTest::Execute()
 				break;
 			}
 		}
+		player.Update();
+		if (player.Collision(wall))
+			std::cout << "Collision! " << std::endl << std::endl;
 		player.Movement();
 		Window.draw(map);
 		Window.draw(player.rect);
+		Window.draw(wall.rect);
 		Window.display();
 		Window.clear();
 	}
