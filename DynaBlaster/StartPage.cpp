@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include "HelpButton.h"
 #include "PlayButton.h"
 #include "LevelsButton.h"
 #include "BattleButton.h"
 #include "BackButton.h"
-
+#include "../Logging/Logger.h"
 
 void HelpMenuWindow();
 
@@ -12,7 +13,12 @@ void Map();
 
 void StartWindow()
 {
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
 	sf::RenderWindow startWindow(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+
+	logger.Log("Start window was rendered.", Logger::Level::Info);
 
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
@@ -32,6 +38,8 @@ void StartWindow()
 	BattleButton battle("Battle", { 225,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	battle.SetPosition({ 295,550 });
 	battle.SetFont(colleged);
+
+	logger.Log("Buttons added to the window.", Logger::Level::Info);
 
 	while (startWindow.isOpen())
 	{
@@ -83,20 +91,24 @@ void StartWindow()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
+					logger.Log("Help button was pressed.", Logger::Level::Info);
 					startWindow.close();
 					HelpMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
+					logger.Log("Play button was pressed.", Logger::Level::Info);
 					startWindow.close();
 					Map();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
+					logger.Log("Levels button was pressed.", Logger::Level::Info);
 					std::cout << "Levels button was pressed" << "\n";
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(startWindow))
 				{
+					logger.Log("Battle button was pressed.", Logger::Level::Info);
 					std::cout << "Battle button was pressed" << "\n";
 				}
 
@@ -114,7 +126,12 @@ void StartWindow()
 
 void HelpMenuWindow()
 {
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
 	sf::RenderWindow helpWindow(sf::VideoMode(850, 700), "Help Menu", sf::Style::Close | sf::Style::Titlebar);
+
+	logger.Log("Help window was rendered.", Logger::Level::Info);
 
 	sf::Font arial;
 	arial.loadFromFile("arial.ttf");
@@ -122,6 +139,8 @@ void HelpMenuWindow()
 	BackButton back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	back.SetPosition({ 50,638 });
 	back.SetFont(arial);
+
+	logger.Log("Displayed the information about the game.", Logger::Level::Info);
 
 	while (helpWindow.isOpen())
 	{
@@ -150,6 +169,7 @@ void HelpMenuWindow()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(helpWindow))
 				{
+					logger.Log("Back button was pressed. Going back to the start page.", Logger::Level::Info);
 					helpWindow.close();
 					StartWindow();
 				}

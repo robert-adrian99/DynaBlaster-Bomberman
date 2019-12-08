@@ -7,15 +7,15 @@
 #include "UndestructibleWallGraphics.h"
 #include "../Logging/Logger.h"
 
-void GrassGraphics();
-void UndestructibleWallGraphics();
+void StartWindow();
 
 int main()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
-	logger.Log("Start Application", Logger::Level::Info);
+	logger.Log("Start Application.", Logger::Level::Info);
 
-	UndestructibleWallGraphics();
+	StartWindow();
+
 	return 0;
 }

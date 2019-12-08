@@ -1,4 +1,6 @@
+#pragma warning(disable: 4996)
 #include "Logger.h"
+#include <iomanip>
 
 Logger::Logger(std::ostream& out, Level minLogLevel) :
 	m_out(out), m_minLogLevel(minLogLevel)
@@ -29,6 +31,9 @@ void Logger::Log(const std::string& message, Level level)
 	default:
 		break;
 	}
+	std::time_t time_now = std::time(nullptr);
+	std::tm tm = *std::localtime(&time_now);
+	m_out << "<" << std::put_time(&tm, "%c") << "> ";
 	m_out << message << "\n";
 	m_out.flush();
 }

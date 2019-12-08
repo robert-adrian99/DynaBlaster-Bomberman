@@ -1,12 +1,19 @@
 #include "TileMap.h"
 #include "BackButton.h"
 #include <vector>
+#include <fstream>
+#include "../Logging/Logger.h"
 
 void StartWindow();
 
 void Map()
 {
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
 	sf::RenderWindow window(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman");
+
+	logger.Log("Tilemap window was rendered.", Logger::Level::Info);
 
 	// define the level with an array of tile indices
 	std::vector<int> level =
@@ -43,6 +50,8 @@ void Map()
 	if (!map.load("tileset.png", sf::Vector2u(32, 32), level, 15, 13))
 		return;
 
+	logger.Log("Map was loaded.", Logger::Level::Info);
+
 	sf::Font arial;
 	arial.loadFromFile("arial.ttf");
 
@@ -74,6 +83,7 @@ void Map()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
 				{
+					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
 					window.close();
 					StartWindow();
 				}
