@@ -1,14 +1,15 @@
 #include "TileMap.h"
 #include "BackButton.h"
+#include <vector>
 
 void StartWindow();
 
-void Test()
+void Map()
 {
 	sf::RenderWindow window(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman");
 
 	// define the level with an array of tile indices
-	const int level[] =
+	std::vector<int> level =
 	{
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 		3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
@@ -24,6 +25,19 @@ void Test()
 		3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
 	};
+
+	int NoWall = 32;
+	srand(time(NULL)); //initialize the random seed
+	int RandIndex = rand() % level.size(); //generates a random number between 0 and 3
+	for (int index = 0; index < level.size(); index++)
+	{
+		RandIndex = rand() % level.size();
+		if (level[RandIndex] == 0 && NoWall != 0)
+		{
+			level[RandIndex] = 2;
+			--NoWall;
+		}
+	}
 	// create the tilemap from the level definition
 	TileMap map;
 	if (!map.load("tileset.png", sf::Vector2u(32, 32), level, 15, 13))

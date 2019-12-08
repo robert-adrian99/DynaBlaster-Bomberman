@@ -77,7 +77,7 @@ void MainTest::Execute()
 	Window.create(sf::VideoMode(800, 600), "Test SFML");
 	Window.setKeyRepeatEnabled(true);
 
-	const int level[] =
+	std::vector<int> level =
 	{
 		3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 		3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,

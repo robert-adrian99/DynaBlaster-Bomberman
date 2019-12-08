@@ -8,7 +8,7 @@
 
 void HelpMenuWindow();
 
-void Test();
+void Map();
 
 void StartWindow()
 {
@@ -89,7 +89,7 @@ void StartWindow()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
 					startWindow.close();
-					Test();
+					Map();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
