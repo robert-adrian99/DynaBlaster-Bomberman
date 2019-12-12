@@ -3,6 +3,23 @@
 #include <string>
 #include <iostream>
 #include "TileMap.h"
+#include <random>
+#include <math.h>
+
+int GetXRandom()
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rrandomColumn(2, 13);
+	return rrandomColumn(rng);
+}
+int GetYRandom()
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rrandomColumn(2, 11);
+	return rrandomColumn(rng);
+}
 
 void MainTest::Execute()
 {
@@ -15,7 +32,7 @@ void MainTest::Execute()
 		sf::Sprite wallImage;
 		float bottom, top, right, left;
 	public:
-		Wall()
+		Wall(int x, int y)
 		{
 			if (!wallTexture.loadFromFile("tileset.png", sf::IntRect(1 * 32, 0, 32, 32)))
 				std::cout << "Error" << std::endl;
@@ -23,7 +40,7 @@ void MainTest::Execute()
 			rect.setTexture(wallImage.getTexture());
 			rect.setSize({ 32,32 });
 			rect.setFillColor(sf::Color::White);
-			rect.setPosition(64, 64);
+			rect.setPosition(x, y);
 			rect.setOutlineThickness(1.0f);
 			top = rect.getPosition().y;
 			left = rect.getPosition().x;
@@ -51,14 +68,16 @@ void MainTest::Execute()
 		sf::RectangleShape rect;
 		Player()
 		{
-			if (!pTexture.loadFromFile("TestPlayer.png", { 1 * 64,64,64,64 }))
+			if (!pTexture.loadFromFile("TestPlayer.png", { 1 * 64,10 * 64,64,64 }))
 				std::cout << "Error" << std::endl;
 			playerImage.setTexture(pTexture);
 			rect.setTexture(playerImage.getTexture());
 			rect.setSize({ 32,32 });
+			rect.setPosition({ 32,32 });
 			rect.setFillColor(sf::Color::White);
 			rect.setOutlineColor(sf::Color::Black);
 			rect.setOutlineThickness(1.0f);
+			rect.setScale({ 0.8,0.8 });
 			top = rect.getPosition().y;
 			left = rect.getPosition().x;
 			bottom = rect.getPosition().y + 64;
@@ -69,23 +88,35 @@ void MainTest::Execute()
 		{
 			float speed = 0.2;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				source.y = Up;
-				rect.move(0, -speed);
+				if (rect.getPosition().y > 1 * 32)
+				{
+					source.y = Up;
+					rect.move(0, -speed);
+				}
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			{
-				source.y = Down;
-				rect.move(0, speed);
+				if (rect.getPosition().y < 11 * 32)
+				{
+					source.y = Down;
+					rect.move(0, speed);
+				}
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			{
-				source.y = Right;
-				rect.move(speed, 0);
+				if (rect.getPosition().x < 13 * 32)
+				{
+					source.y = Right;
+					rect.move(speed, 0);
+				}
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			{
-				source.y = Left;
-				rect.move(-speed, 0);
+				if (rect.getPosition().x > 1 * 32)
+				{
+					source.y = Left;
+					rect.move(-speed, 0);
+				}
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 			{
@@ -100,8 +131,8 @@ void MainTest::Execute()
 		{
 			top = rect.getPosition().y;
 			left = rect.getPosition().x;
-			bottom = rect.getPosition().y + 32;
-			right = rect.getPosition().x + 32;
+			bottom = rect.getPosition().y + rect.getScale().y * rect.getSize().y;
+			right = rect.getPosition().x + rect.getScale().x * rect.getSize().x;
 		}
 
 		bool Collision(Wall wall)
@@ -117,8 +148,6 @@ void MainTest::Execute()
 		}
 
 	};
-	Player player;
-	Wall wall;
 	sf::RenderWindow Window;
 	Window.create(sf::VideoMode(800, 600), "Test SFML");
 	Window.setKeyRepeatEnabled(true);
@@ -143,7 +172,18 @@ void MainTest::Execute()
 	TileMap map;
 	if (!map.load("tileset.png", sf::Vector2u(32, 32), level, 15, 13))
 		std::cout << "Error" << std::endl;
+	Player player;
+	std::vector<Wall> walls;
+	for (int index = 0; index < 30; index++)
+	{
+		int x = 0, y = 0;
+		while (x % 2 == 0)
+			x = GetXRandom();
+		y = GetYRandom();
 
+		walls.emplace_back(x * 32, y * 32);
+
+	}
 
 	while (Window.isOpen())
 	{
@@ -162,12 +202,16 @@ void MainTest::Execute()
 			}
 		}
 		player.Update();
-		if (player.Collision(wall))
-			std::cout << "Collision! " << std::endl << std::endl;
+		for ( auto wall : walls)
+			if (player.Collision(wall))
+			{
+				std::cout << "Collision! " << std::endl << std::endl;
+			}
 		player.Movement();
 		Window.draw(map);
 		Window.draw(player.rect);
-		Window.draw(wall.rect);
+		for (const auto& wall : walls)
+			Window.draw(wall.rect);
 		Window.display();
 		Window.clear();
 	}
