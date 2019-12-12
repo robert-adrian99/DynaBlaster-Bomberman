@@ -138,6 +138,7 @@
     <ClCompile Include="BattleButton.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="DynaBlasterGame.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HelpButton.cpp" />
     <ClCompile Include="LevelsButton.cpp" />
@@ -147,7 +148,6 @@
     <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="StartPage.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +157,7 @@
     <ClInclude Include="BombGraphics.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="DestructibleWallGraphics.h" />
+    <ClInclude Include="DynaBlasterGame.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGraphics.h" />
     <ClInclude Include="EnemyType.h" />

@@ -4,14 +4,60 @@
 #include <fstream>
 #include "../Logging/Logger.h"
 
-void StartWindow();
+bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height)
+{
+	// load the tileset texture
+	if (!m_tileset.loadFromFile(tileset))
+		return false;
 
-void Map()
+	// resize the vertex array to fit the level size
+	m_vertices.setPrimitiveType(sf::Quads);
+	m_vertices.resize(width * height * 4);
+
+	// populate the vertex array, with one quad per tile
+	for (unsigned int i = 0; i < width; ++i)
+		for (unsigned int j = 0; j < height; ++j)
+		{
+			// get the current tile number
+			int tileNumber = tiles[i + j * width];
+
+			// find its position in the tileset texture
+			int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
+			int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+
+			// get a pointer to the current tile's quad
+			sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
+
+			// define its 4 corners
+			quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
+			quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
+			quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
+			quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+
+			// define its 4 texture coordinates
+			quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
+			quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
+			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
+			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+		}
+
+	return true;
+}
+void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+		// apply the transform
+		states.transform *= getTransform();
+
+		// apply the tileset texture
+		states.texture = &m_tileset;
+
+		// draw the vertex array
+		target.draw(m_vertices, states);
+}
+void TileMap::Map()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
-
-	sf::RenderWindow window(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman");
 
 	logger.Log("Tilemap window was rendered.", Logger::Level::Info);
 
@@ -46,53 +92,10 @@ void Map()
 		}
 	}
 	// create the tilemap from the level definition
-	TileMap map;
-	if (!map.load("tileset.png", sf::Vector2u(32, 32), level, 15, 13))
+	if (load("tileset.png", sf::Vector2u(32, 32), level, 15, 13))
 		return;
 
 	logger.Log("Map was loaded.", Logger::Level::Info);
 
-	sf::Font arial;
-	arial.loadFromFile("arial.ttf");
-
-	BackButton back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
-	back.SetPosition({ 50,638 });
-	back.SetFont(arial);
-
-	// run the main loop
-	while (window.isOpen())
-	{
-		// handle events
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			switch (event.type)
-			{
-			case sf::Event::Closed:
-				window.close();
-				break;
-			case sf::Event::MouseMoved:
-				if (back.IsMouseOver(window))
-				{
-					back.SetBgColor(sf::Color::Green);
-				}
-				else
-				{
-					back.SetBgColor(sf::Color::Blue);
-				}
-			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
-				{
-					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
-					window.close();
-					StartWindow();
-				}
-			}
-
-			// draw the map
-			window.clear();
-			window.draw(map);
-			window.display();
-		}
-	}
+	
 }

@@ -6,16 +6,17 @@
 #include "GrassGraphics.h"
 #include "UndestructibleWallGraphics.h"
 #include "../Logging/Logger.h"
-
-void StartWindow();
+#include "DynaBlasterGame.h"
 
 int main()
 {
+	DynaBlasterGame dyna;
+
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 	logger.Log("Start Application.", Logger::Level::Info);
 
-	StartWindow();
+	dyna.Run();
 
 	return 0;
 }
