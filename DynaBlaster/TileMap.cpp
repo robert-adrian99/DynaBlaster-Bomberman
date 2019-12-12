@@ -2,6 +2,7 @@
 #include "BackButton.h"
 #include <vector>
 #include <fstream>
+#include <random>
 #include "../Logging/Logger.h"
 
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height)
@@ -43,6 +44,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 
 	return true;
 }
+
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 		// apply the transform
@@ -54,30 +56,58 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		// draw the vertex array
 		target.draw(m_vertices, states);
 }
+
+int TileMap::RandomColumn(int random)
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rrandomColumn(2, random - 3);
+	return rrandomColumn(rng);
+}
+
+int TileMap::RandomLine(int random)
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rrandomLine(1, random - 2);
+	return rrandomLine(rng);
+}
+
 void TileMap::Map()
 {
+	uint16_t linesNumber = 13;
+	uint16_t columnsNumber = 15;
+
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
 	logger.Log("Tilemap window was rendered.", Logger::Level::Info);
 
+	sf::Font colleged;
+	colleged.loadFromFile("colleged.ttf");
+
+	BackButton back("Back", { 100,35 }, 20, sf::Color::Green, sf::Color::Black);
+	back.SetPosition({ 50,638 });
+	back.SetFont(colleged);
+
 	// define the level with an array of tile indices
-	std::vector<int> level =
+	std::vector<int> level;
+	for (size_t line = 0; line < linesNumber; ++line)
 	{
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-	};
+		for (size_t column = 0; column < columnsNumber; ++column)
+		{
+			if (line == 0 || line == linesNumber - 1 || column == 0 || column == columnsNumber - 1)
+			{
+				level.push_back(1);
+			}
+			else if (line % 2 == 0 && column % 2 == 0)
+			{
+				level.push_back(1);
+			}
+			else
+				level.push_back(0);
+		}
+	}
 
 	int NoWall = 32;
 	srand(time(NULL)); //initialize the random seed
