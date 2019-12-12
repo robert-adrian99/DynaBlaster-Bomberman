@@ -1,5 +1,6 @@
 #include "DynaBlasterGame.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <fstream>
 #include "HelpButton.h"
 #include "PlayButton.h"
@@ -183,6 +184,15 @@ void DynaBlasterGame::StartWindow()
 
 	logger.Log("Buttons added to the window.", Logger::Level::Info);
 
+
+	sf::SoundBuffer startSong;
+	sf::Sound sound;
+	if (!startSong.loadFromFile("StartSong.ogg"))
+		logger.Log("Couldn't play the song.", Logger::Level::Error);
+	sound.setBuffer(startSong);
+	sound.play();
+	sound.setLoop(true);
+
 	while (startWindow.isOpen())
 	{
 		sf::Event event;
@@ -234,28 +244,31 @@ void DynaBlasterGame::StartWindow()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
 					logger.Log("Help button was pressed.", Logger::Level::Info);
+					sound.pause();
 					startWindow.close();
 					HelpMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
 					logger.Log("Play button was pressed.", Logger::Level::Info);
+					sound.pause();
 					startWindow.close();
 					GameWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
 					logger.Log("Levels button was pressed.", Logger::Level::Info);
+					sound.pause();
 					startWindow.close();
 					LevelsMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(startWindow))
 				{
 					logger.Log("Battle button was pressed.", Logger::Level::Info);
+					sound.pause();
 					startWindow.close();
 					GameWindow();
 				}
-
 			}
 		}
 		startWindow.clear();
@@ -278,6 +291,14 @@ void DynaBlasterGame::GameWindow()
 	BackButton back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(arial);
 	back.SetPosition({ 50,638 });
+
+	sf::SoundBuffer mapSong;
+	sf::Sound soundMap;
+	mapSong.loadFromFile("MapDisplay.ogg");
+	/*if (!mapSong.loadFromFile("MapDisplay.ogg"))
+		logger.Log("Couldn't play the song.", Logger::Level::Error);*/
+	soundMap.setBuffer(mapSong);
+	soundMap.play();
 
 	while (window.isOpen())
 	{

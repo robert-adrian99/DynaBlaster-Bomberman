@@ -4,6 +4,7 @@
 #include <fstream>
 #include <random>
 #include "../Logging/Logger.h"
+#include <SFML/Audio.hpp>
 
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height)
 {
@@ -90,6 +91,7 @@ void TileMap::Map()
 	back.SetPosition({ 50,638 });
 	back.SetFont(colleged);
 
+	
 	// define the level with an array of tile indices
 	std::vector<int> level;
 	for (size_t line = 0; line < linesNumber; ++line)
