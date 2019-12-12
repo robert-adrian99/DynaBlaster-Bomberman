@@ -6,12 +6,12 @@ class BattleButton
 {
 public:
 	BattleButton();
-	BattleButton(std::string t, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor);
-	void SetFont(sf::Font& font);
-	void SetBgColor(sf::Color color);
-	void SetPosition(sf::Vector2f pos);
+	BattleButton(const std::string& t, const sf::Vector2f& size, const int charSize, const sf::Color& bgColor, const sf::Color& textColor);
+	void SetFont(const sf::Font& font);
+	void SetBgColor(const sf::Color& color);
+	void SetPosition(const sf::Vector2f& pos);
 	void DrawTo(sf::RenderWindow& window);
-	bool IsMouseOver(sf::RenderWindow& window);
+	bool IsMouseOver(const sf::RenderWindow& window);
 
 private:
 	sf::RectangleShape m_battleButton;

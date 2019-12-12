@@ -5,7 +5,7 @@ Button::Button()
 	// Empty
 }
 
-Button::Button(std::string buttonText, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor)
+Button::Button(const std::string& buttonText, const sf::Vector2f& size, const int charSize, const sf::Color& bgColor, const sf::Color& textColor)
 {
 	m_text.setString(buttonText);
 	m_text.setFillColor(textColor);
@@ -15,17 +15,17 @@ Button::Button(std::string buttonText, sf::Vector2f size, int charSize, sf::Colo
 	m_button.setFillColor(bgColor);
 }
 
-void Button::SetFont(sf::Font& font)
+void Button::SetFont(const sf::Font& font)
 {
 	m_text.setFont(font);
 }
 
-void Button::SetBgColor(sf::Color color)
+void Button::SetBgColor(const sf::Color& color)
 {
 	m_button.setFillColor(color);
 }
 
-void Button::SetPosition(sf::Vector2f position)
+void Button::SetPosition(const sf::Vector2f& position)
 {
 	m_button.setPosition(position);
 	float xPosition = (position.x + m_button.getGlobalBounds().width / 4) - (m_text.getGlobalBounds().width / 2);
@@ -39,7 +39,7 @@ void Button::DrawTo(sf::RenderWindow& window)
 	window.draw(m_text);
 }
 
-bool Button::IsMouseOver(sf::RenderWindow& window)
+bool Button::IsMouseOver(const sf::RenderWindow& window)
 {
 	float mouseX = sf::Mouse::getPosition(window).x;
 	float mouseY = sf::Mouse::getPosition(window).y;

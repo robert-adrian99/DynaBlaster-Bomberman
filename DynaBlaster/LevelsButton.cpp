@@ -5,7 +5,7 @@ LevelsButton::LevelsButton()
 	// Empty
 }
 
-LevelsButton::LevelsButton(std::string buttonText, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor)
+LevelsButton::LevelsButton(const std::string& buttonText, const  sf::Vector2f& size, const int charSize, const  sf::Color& bgColor, const sf::Color& textColor)
 {
 	m_text.setString(buttonText);
 	m_text.setFillColor(textColor);
@@ -15,17 +15,17 @@ LevelsButton::LevelsButton(std::string buttonText, sf::Vector2f size, int charSi
 	m_levelsButton.setFillColor(bgColor);
 }
 
-void LevelsButton::SetFont(sf::Font& font)
+void LevelsButton::SetFont(const sf::Font& font)
 {
 	m_text.setFont(font);
 }
 
-void LevelsButton::SetBgColor(sf::Color color)
+void LevelsButton::SetBgColor(const sf::Color& color)
 {
 	m_levelsButton.setFillColor(color);
 }
 
-void LevelsButton::SetPosition(sf::Vector2f position)
+void LevelsButton::SetPosition(const sf::Vector2f& position)
 {
 	m_levelsButton.setPosition(position);
 	float xPos = (position.x + m_levelsButton.getGlobalBounds().width / 4) - (m_text.getGlobalBounds().width / 2);
@@ -39,7 +39,7 @@ void LevelsButton::DrawTo(sf::RenderWindow& window)
 	window.draw(m_text);
 }
 
-bool LevelsButton::IsMouseOver(sf::RenderWindow& window)
+bool LevelsButton::IsMouseOver(const sf::RenderWindow& window)
 {
 	float mouseX = sf::Mouse::getPosition(window).x;
 	float mouseY = sf::Mouse::getPosition(window).y;

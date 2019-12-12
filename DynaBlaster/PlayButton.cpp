@@ -5,7 +5,7 @@ PlayButton::PlayButton()
 	// Empty
 }
 
-PlayButton::PlayButton(std::string buttonText, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor)
+PlayButton::PlayButton(const std::string& buttonText, const sf::Vector2f& size, const int charSize, const sf::Color& bgColor, const sf::Color& textColor)
 {
 	m_text.setString(buttonText);
 	m_text.setFillColor(textColor);
@@ -34,7 +34,7 @@ sf::Color PlayButton::GetPlayButtonBgColor() const
 {
 	return m_playButton.getFillColor;
 }*/
-void PlayButton::SetFont(sf::Font& font)
+void PlayButton::SetFont(const sf::Font& font)
 {
 	m_text.setFont(font);
 }
@@ -53,12 +53,12 @@ sf::Color PlayButton::GetBgColor() const
 	return m_text.getPosition;
 }*/
 
-void PlayButton::SetBgColor(sf::Color color)
+void PlayButton::SetBgColor(const sf::Color& color)
 {
 	m_playButton.setFillColor(color);
 }
 
-void PlayButton::SetPosition(sf::Vector2f position)
+void PlayButton::SetPosition(const sf::Vector2f& position)
 {
 	m_playButton.setPosition(position);
 	float xPos = (position.x + m_playButton.getGlobalBounds().width / 3) - (m_text.getGlobalBounds().width / 2);
@@ -72,7 +72,7 @@ void PlayButton::DrawTo(sf::RenderWindow& window)
 	window.draw(m_text);
 }
 
-bool PlayButton::IsMouseOver(sf::RenderWindow& window)
+bool PlayButton::IsMouseOver(const sf::RenderWindow& window)
 {
 	float mouseX = sf::Mouse::getPosition(window).x;
 	float mouseY = sf::Mouse::getPosition(window).y;

@@ -5,7 +5,7 @@ BackButton::BackButton()
 	// Empty
 }
 
-BackButton::BackButton(std::string buttonText, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor)
+BackButton::BackButton(const std::string& buttonText, const sf::Vector2f& size, const int charSize, const sf::Color& bgColor, const sf::Color& textColor)
 {
 	m_text.setString(buttonText);
 	m_text.setFillColor(textColor);
@@ -15,17 +15,17 @@ BackButton::BackButton(std::string buttonText, sf::Vector2f size, int charSize, 
 	m_backButton.setFillColor(bgColor);
 }
 
-void BackButton::SetFont(sf::Font& font)
+void BackButton::SetFont(const sf::Font& font)
 {
 	m_text.setFont(font);
 }
 
-void BackButton::SetBgColor(sf::Color color)
+void BackButton::SetBgColor(const sf::Color& color)
 {
 	m_backButton.setFillColor(color);
 }
 
-void BackButton::SetPosition(sf::Vector2f position)
+void BackButton::SetPosition(const sf::Vector2f& position)
 {
 	m_backButton.setPosition(position);
 	float xPosition = (position.x + m_backButton.getGlobalBounds().width / 4) - (m_text.getGlobalBounds().width / 2);
@@ -39,7 +39,7 @@ void BackButton::DrawTo(sf::RenderWindow& window)
 	window.draw(m_text);
 }
 
-bool BackButton::IsMouseOver(sf::RenderWindow& window)
+bool BackButton::IsMouseOver(const sf::RenderWindow& window)
 {
 	float mouseX = sf::Mouse::getPosition(window).x;
 	float mouseY = sf::Mouse::getPosition(window).y;

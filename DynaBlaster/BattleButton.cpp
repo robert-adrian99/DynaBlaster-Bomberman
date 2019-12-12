@@ -5,7 +5,7 @@ BattleButton::BattleButton()
 	// Empty
 }
 
-BattleButton::BattleButton(std::string buttonText, sf::Vector2f size, int charSize, sf::Color bgColor, sf::Color textColor)
+BattleButton::BattleButton(const std::string& buttonText, const sf::Vector2f& size, const int charSize, const sf::Color& bgColor, const sf::Color& textColor)
 {
 	m_text.setString(buttonText);
 	m_text.setFillColor(textColor);
@@ -15,17 +15,17 @@ BattleButton::BattleButton(std::string buttonText, sf::Vector2f size, int charSi
 	m_battleButton.setFillColor(bgColor);
 }
 
-void BattleButton::SetFont(sf::Font& font)
+void BattleButton::SetFont(const sf::Font& font)
 {
 	m_text.setFont(font);
 }
 
-void BattleButton::SetBgColor(sf::Color color)
+void BattleButton::SetBgColor(const sf::Color& color)
 {
 	m_battleButton.setFillColor(color);
 }
 
-void BattleButton::SetPosition(sf::Vector2f position)
+void BattleButton::SetPosition(const sf::Vector2f& position)
 {
 	m_battleButton.setPosition(position);
 	float xPosition = (position.x + m_battleButton.getGlobalBounds().width / 4) - (m_text.getGlobalBounds().width / 2);
@@ -39,7 +39,7 @@ void BattleButton::DrawTo(sf::RenderWindow& window)
 	window.draw(m_text);
 }
 
-bool BattleButton::IsMouseOver(sf::RenderWindow& window)
+bool BattleButton::IsMouseOver(const sf::RenderWindow& window)
 {
 	float mouseX = sf::Mouse::getPosition(window).x;
 	float mouseY = sf::Mouse::getPosition(window).y;

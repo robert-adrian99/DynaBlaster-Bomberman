@@ -1,5 +1,13 @@
 #include "DynaBlasterGame.h"
-
+#include <SFML/Graphics.hpp>
+#include <fstream>
+#include "HelpButton.h"
+#include "PlayButton.h"
+#include "LevelsButton.h"
+#include "BattleButton.h"
+#include "BackButton.h"
+#include "Button.h"
+#include "../Logging/Logger.h"
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -41,10 +49,10 @@ void DynaBlasterGame::LevelsMenuWindow()
 	while (levelsWindow.isOpen())
 	{
 		sf::Event event;
-		sf::Texture HelpImage;
-		HelpImage.loadFromFile("levels.png");
+		sf::Texture LevelsImage;
+		LevelsImage.loadFromFile("levels.png");
 
-		sf::Sprite sprite(HelpImage);
+		sf::Sprite sprite(LevelsImage);
 
 		while (levelsWindow.pollEvent(event))
 		{
@@ -76,14 +84,14 @@ void DynaBlasterGame::LevelsMenuWindow()
 					}
 				}
 			}
-			levelsWindow.clear();
-			levelsWindow.draw(sprite);
-			for (int index = 0; index < 8; index++)
-			{
-				levelButtons[index].DrawTo(levelsWindow);
-			}
-			levelsWindow.display();
 		}
+		levelsWindow.clear();
+		levelsWindow.draw(sprite);
+		for (int index = 0; index < 8; index++)
+		{
+			levelButtons[index].DrawTo(levelsWindow);
+		}
+		levelsWindow.display();
 	}
 }
 
@@ -137,18 +145,16 @@ void DynaBlasterGame::HelpMenuWindow()
 					StartWindow();
 				}
 			}
-
-			helpWindow.clear();
-			helpWindow.draw(sprite);
-			back.DrawTo(helpWindow);
-			helpWindow.display();
 		}
+		helpWindow.clear();
+		helpWindow.draw(sprite);
+		back.DrawTo(helpWindow);
+		helpWindow.display();
 	}
 }
 
 void DynaBlasterGame::StartWindow()
 {
-	
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
@@ -251,32 +257,30 @@ void DynaBlasterGame::StartWindow()
 				}
 
 			}
-			startWindow.clear();
-			startWindow.draw(sprite);
-			help.DrawTo(startWindow);
-			play.DrawTo(startWindow);
-			level.DrawTo(startWindow);
-			battle.DrawTo(startWindow);
-			startWindow.display();
 		}
+		startWindow.clear();
+		startWindow.draw(sprite);
+		help.DrawTo(startWindow);
+		play.DrawTo(startWindow);
+		level.DrawTo(startWindow);
+		battle.DrawTo(startWindow);
+		startWindow.display();
 	}
 }
 
 void DynaBlasterGame::GameWindow()
 {
-	sf::RenderWindow window(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman");
+	sf::RenderWindow window(sf::VideoMode(720, 624), "Dyna Blaster - Bomberman");
 	map.Map();
 	sf::Font arial;
 	arial.loadFromFile("arial.ttf");
-	// run the main loop
-	
+
 	BackButton back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(arial);
 	back.SetPosition({ 50,638 });
 
 	while (window.isOpen())
 	{
-		// handle events
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -302,12 +306,11 @@ void DynaBlasterGame::GameWindow()
 					StartWindow();
 				}
 			}
-
-			// draw the map
-			window.clear();
-			window.draw(map);
-			window.display();
 		}
+		// draw the map
+		window.clear();
+		window.draw(map);
+		window.display();
 	}
 }
 
