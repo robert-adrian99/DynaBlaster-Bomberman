@@ -118,7 +118,7 @@ void DynaBlasterGame::HelpMenuWindow()
 	{
 		sf::Event event;
 		sf::Texture HelpImage;
-		HelpImage.loadFromFile("HelpMenu v1.png");
+		HelpImage.loadFromFile("HelpMenu.png");
 
 		sf::Sprite sprite(HelpImage);
 
@@ -185,14 +185,12 @@ void DynaBlasterGame::StartWindow()
 	logger.Log("Buttons added to the window.", Logger::Level::Info);
 
 
-	sf::SoundBuffer startSong;
-	sf::Sound sound;
-	if (!startSong.loadFromFile("StartSong.ogg"))
+	sf::Music startSong;
+	if (!startSong.openFromFile("StartSong.ogg"))
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
-	sound.setBuffer(startSong);
-	sound.play();
-	sound.setLoop(true);
-
+	startSong.play();
+	startSong.setLoop(true);
+	int contor = 0;
 	while (startWindow.isOpen())
 	{
 		sf::Event event;
@@ -244,30 +242,40 @@ void DynaBlasterGame::StartWindow()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
 					logger.Log("Help button was pressed.", Logger::Level::Info);
-					sound.pause();
+					startSong.pause();
 					startWindow.close();
 					HelpMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(startWindow))
 				{
 					logger.Log("Play button was pressed.", Logger::Level::Info);
-					sound.pause();
+					startSong.pause();
 					startWindow.close();
 					GameWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(startWindow))
 				{
 					logger.Log("Levels button was pressed.", Logger::Level::Info);
-					sound.pause();
+					startSong.pause();
 					startWindow.close();
 					LevelsMenuWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(startWindow))
 				{
 					logger.Log("Battle button was pressed.", Logger::Level::Info);
-					sound.pause();
+					startSong.pause();
 					startWindow.close();
 					GameWindow();
+				}
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::M)
+				{
+					contor++;
+					if (contor % 2 == 1)
+						startSong.stop();
+					else
+						startSong.play();
+
 				}
 			}
 		}
@@ -292,14 +300,13 @@ void DynaBlasterGame::GameWindow()
 	back.SetFont(arial);
 	back.SetPosition({ 50,638 });
 
-	sf::SoundBuffer mapSong;
-	sf::Sound soundMap;
-	mapSong.loadFromFile("MapDisplay.ogg");
-	/*if (!mapSong.loadFromFile("MapDisplay.ogg"))
-		logger.Log("Couldn't play the song.", Logger::Level::Error);*/
-	soundMap.setBuffer(mapSong);
-	soundMap.play();
-
+	sf::Music mapSong;
+	mapSong.openFromFile("MapDisplay.ogg");
+	/*if (!mapSong.openFromFile("MapDisplay.ogg"))
+		//logger.Log("Couldn't play the song.", Logger::Level::Error);*/
+	mapSong.play();
+	mapSong.setLoop(true);
+	int contor = 0;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -326,6 +333,18 @@ void DynaBlasterGame::GameWindow()
 					window.close();
 					StartWindow();
 				}
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::M)
+				{
+					contor++;
+					if (contor % 2 == 1)
+						mapSong.stop();	
+					else
+						mapSong.play();
+						
+				}
+				
+					
 			}
 		}
 		// draw the map
