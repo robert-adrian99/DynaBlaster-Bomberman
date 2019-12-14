@@ -147,6 +147,7 @@
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerSFML.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
+    <ClInclude Include="PlayerSFML.h" />
     <ClInclude Include="PowerUps.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="UndestructibleWallGraphics.h" />
