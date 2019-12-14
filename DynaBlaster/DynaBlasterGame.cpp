@@ -9,6 +9,7 @@
 #include "BackButton.h"
 #include "Button.h"
 #include "../Logging/Logger.h"
+#include "PlayerSFML.h"
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -292,10 +293,11 @@ void DynaBlasterGame::StartWindow()
 void DynaBlasterGame::GameWindow()
 {
 	sf::RenderWindow window(sf::VideoMode(720, 624), "Dyna Blaster - Bomberman");
+	window.setKeyRepeatEnabled(true);
 	map.Map();
 	sf::Font arial;
 	arial.loadFromFile("arial.ttf");
-
+	PlayerSFML player;
 	BackButton back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(arial);
 	back.SetPosition({ 50,638 });
@@ -343,14 +345,20 @@ void DynaBlasterGame::GameWindow()
 						mapSong.play();
 						
 				}
-				
+				if (event.key.code == sf::Keyboard::Escape)
+					window.close();
+				break;
 					
 			}
 		}
 		// draw the map
+		player.Update();
+		player.Movement();
 		window.clear();
 		window.draw(map);
+		window.draw(player.rect);
 		window.display();
+		window.clear();
 	}
 }
 

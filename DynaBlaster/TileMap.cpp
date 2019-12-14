@@ -110,7 +110,6 @@ void TileMap::Map()
 				level.push_back(0);
 		}
 	}
-	level[columnsNumber + 1] = 3;
 	int NoWall = 32;
 	srand(time(NULL)); //initialize the random seed
 	int RandIndex = rand() % level.size(); //generates a random number between 0 and 3
