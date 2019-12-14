@@ -21,7 +21,12 @@ PlayerSFML::PlayerSFML()
 void PlayerSFML::Movement()
 {
 	float speed = 0.2;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		if (!pTexture.loadFromFile("TestBack.png", { 0 * 48 , 0 * 48, 48, 48 }))
+			std::cout << "Error" << std::endl;
+		playerImage.setTexture(pTexture);
+		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().y > 1 * 48)
 		{
 			source.y = Up;
@@ -30,6 +35,10 @@ void PlayerSFML::Movement()
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
+		if (!pTexture.loadFromFile("PlayerSFML.png", { 0 * 48, 0 * 48, 48 , 48 }))
+			std::cout << "Error" << std::endl;
+		playerImage.setTexture(pTexture);
+		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().y < 11 * 48)
 		{
 			source.y = Down;
@@ -38,6 +47,10 @@ void PlayerSFML::Movement()
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
+		if (!pTexture.loadFromFile("TestRight.png", { 0 * 48 , 0 * 48, 48, 48 }))
+			std::cout << "Error" << std::endl;
+		playerImage.setTexture(pTexture);
+		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().x < 13 * 48)
 		{
 			source.y = Right;
@@ -46,6 +59,10 @@ void PlayerSFML::Movement()
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
+		if (!pTexture.loadFromFile("TestLeft.png", { 0 * 48 , 0 * 48, 48, 48 }))
+			std::cout << "Error" << std::endl;
+		playerImage.setTexture(pTexture);
+		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().x > 1 * 48)
 		{
 			source.y = Left;
