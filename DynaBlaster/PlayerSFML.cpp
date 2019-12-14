@@ -11,7 +11,6 @@ PlayerSFML::PlayerSFML()
 	rect.setFillColor(sf::Color::White);
 	rect.setOutlineColor(sf::Color::Black);
 	rect.setOutlineThickness(1.0f);
-	rect.setScale({ 0.8,0.8 });
 	top = rect.getPosition().y;
 	left = rect.getPosition().x;
 	bottom = rect.getPosition().y + 48;

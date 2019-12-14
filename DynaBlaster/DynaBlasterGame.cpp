@@ -273,10 +273,13 @@ void DynaBlasterGame::StartWindow()
 				{
 					contor++;
 					if (contor % 2 == 1)
-						startSong.stop();
+					{
+						startSong.pause();
+					}
 					else
+					{
 						startSong.play();
-
+					}
 				}
 			}
 		}
@@ -340,10 +343,13 @@ void DynaBlasterGame::GameWindow()
 				{
 					contor++;
 					if (contor % 2 == 1)
-						mapSong.stop();	
+					{
+						mapSong.pause();
+					}
 					else
+					{
 						mapSong.play();
-						
+					}
 				}
 				if (event.key.code == sf::Keyboard::Escape)
 					window.close();
