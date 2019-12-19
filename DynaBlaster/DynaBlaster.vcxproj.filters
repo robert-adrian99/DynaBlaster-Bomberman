@@ -36,21 +36,6 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BattleButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HelpButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelsButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BackButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,18 +86,6 @@
     <ClInclude Include="BombGraphics.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="HelpButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelsButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DestructibleWallGraphics.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -121,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="UndestructibleWallGraphics.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BackButton.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TileMap.h">
       <Filter>Header Files</Filter>

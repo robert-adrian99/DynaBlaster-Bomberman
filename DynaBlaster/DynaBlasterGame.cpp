@@ -2,11 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <fstream>
-#include "HelpButton.h"
-#include "PlayButton.h"
-#include "LevelsButton.h"
-#include "BattleButton.h"
-#include "BackButton.h"
 #include "Button.h"
 #include "../Logging/Logger.h"
 #include "PlayerSFML.h"
@@ -106,12 +101,12 @@ void DynaBlasterGame::HelpMenuWindow()
 
 	logger.Log("Help window was rendered.", Logger::Level::Info);
 
-	sf::Font arial;
-	arial.loadFromFile("arial.ttf");
+	sf::Font colleged;
+	colleged.loadFromFile("colleged.ttf");
 
-	BackButton back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	back.SetPosition({ 50,638 });
-	back.SetFont(arial);
+	back.SetFont(colleged);
 
 	logger.Log("Displayed the information about the game.", Logger::Level::Info);
 
@@ -133,11 +128,11 @@ void DynaBlasterGame::HelpMenuWindow()
 			case sf::Event::MouseMoved:
 				if (back.IsMouseOver(helpWindow))
 				{
-					back.SetBgColor(sf::Color::Blue);
+					back.SetFontSize(23);
 				}
 				else
 				{
-					back.SetBgColor(sf::Color::Transparent);
+					back.SetFontSize(20);
 				}
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(helpWindow))
@@ -167,19 +162,19 @@ void DynaBlasterGame::StartWindow()
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
 
-	HelpButton help("Help", { 200,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	Button help("Help", { 200,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	help.SetPosition({ 315,638 });
 	help.SetFont(colleged);
 
-	PlayButton play("Play", { 265,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	Button play("Play", { 265,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	play.SetPosition({ 280,500 });
 	play.SetFont(colleged);
 
-	LevelsButton level("Levels", { 170,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	Button level("Levels", { 170,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	level.SetPosition({ 300,590 });
 	level.SetFont(colleged);
 
-	BattleButton battle("Battle", { 225,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	Button battle("Battle", { 225,35 }, 20, sf::Color::Transparent, sf::Color::Black);
 	battle.SetPosition({ 295,550 });
 	battle.SetFont(colleged);
 
@@ -209,35 +204,35 @@ void DynaBlasterGame::StartWindow()
 			case::sf::Event::MouseMoved:
 				if (help.IsMouseOver(startWindow))
 				{
-					help.SetBgColor(sf::Color::Blue);
+					help.SetFontSize(23);
 				}
 				else
 				{
-					help.SetBgColor(sf::Color::Transparent);
+					help.SetFontSize(20);
 				}
 				if (play.IsMouseOver(startWindow))
 				{
-					play.SetBgColor(sf::Color::Blue);
+					play.SetFontSize(23);
 				}
 				else
 				{
-					play.SetBgColor(sf::Color::Transparent);
+					play.SetFontSize(20);
 				}
 				if (level.IsMouseOver(startWindow))
 				{
-					level.SetBgColor(sf::Color::Blue);
+					level.SetFontSize(23);
 				}
 				else
 				{
-					level.SetBgColor(sf::Color::Transparent);
+					level.SetFontSize(20);
 				}
 				if (battle.IsMouseOver(startWindow))
 				{
-					battle.SetBgColor(sf::Color::Blue);
+					battle.SetFontSize(23);
 				}
 				else
 				{
-					battle.SetBgColor(sf::Color::Transparent);
+					battle.SetFontSize(20);
 				}
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
@@ -301,14 +296,14 @@ void DynaBlasterGame::GameWindow()
 	sf::Font arial;
 	arial.loadFromFile("arial.ttf");
 	PlayerSFML player;
-	BackButton back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
+	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(arial);
 	back.SetPosition({ 50,638 });
 
 	sf::Music mapSong;
 	mapSong.openFromFile("MapDisplay.ogg");
 	/*if (!mapSong.openFromFile("MapDisplay.ogg"))
-		//logger.Log("Couldn't play the song.", Logger::Level::Error);*/
+		logger.Log("Couldn't play the song.", Logger::Level::Error);*/
 	mapSong.play();
 	mapSong.setLoop(true);
 	int contor = 0;

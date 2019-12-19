@@ -20,6 +20,11 @@ void Button::SetFont(const sf::Font& font)
 	m_text.setFont(font);
 }
 
+void Button::SetFontSize(const int charSize)
+{
+	m_text.setCharacterSize(charSize);
+}
+
 void Button::SetBgColor(const sf::Color& color)
 {
 	m_button.setFillColor(color);
