@@ -1,5 +1,5 @@
 #include "TileMap.h"
-#include "BackButton.h"
+#include "Button.h"
 #include <vector>
 #include <fstream>
 #include <random>
@@ -107,7 +107,7 @@ void TileMap::Map()
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
 
-	BackButton back("Back", { 100,35 }, 20, sf::Color::Green, sf::Color::Black);
+	Button back("Back", { 100,35 }, 20, sf::Color::Green, sf::Color::Black);
 	back.SetPosition({ 50,638 });
 	back.SetFont(colleged);
 

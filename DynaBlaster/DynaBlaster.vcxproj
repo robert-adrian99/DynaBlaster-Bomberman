@@ -134,26 +134,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BackButton.cpp" />
-    <ClCompile Include="BattleButton.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DynaBlasterGame.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="HelpButton.cpp" />
-    <ClCompile Include="LevelsButton.cpp" />
     <ClCompile Include="MainTest.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pause.cpp" />
-    <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSFML.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BackButton.h" />
-    <ClInclude Include="BattleButton.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BombGraphics.h" />
     <ClInclude Include="Button.h" />
@@ -163,13 +156,10 @@
     <ClInclude Include="EnemyGraphics.h" />
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="GrassGraphics.h" />
-    <ClInclude Include="HelpButton.h" />
     <ClInclude Include="HelpMenu.h" />
-    <ClInclude Include="LevelsButton.h" />
     <ClInclude Include="MainTest.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pause.h" />
-    <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PlayerSFML.h" />
