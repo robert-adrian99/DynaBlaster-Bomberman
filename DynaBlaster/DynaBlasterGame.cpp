@@ -331,6 +331,7 @@ void DynaBlasterGame::GameWindow()
 				{
 					back.SetBgColor(sf::Color::Blue);
 				}
+				break;
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
 				{
@@ -338,6 +339,7 @@ void DynaBlasterGame::GameWindow()
 					window.close();
 					StartWindow();
 				}
+				break;
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::M)
 				{

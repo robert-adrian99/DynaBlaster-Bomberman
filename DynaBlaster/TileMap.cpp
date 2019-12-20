@@ -41,9 +41,24 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 			quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
 			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
 			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+			
+			if (tileNumber == 1 || tileNumber == 2)
+			{
+				sf::RectangleShape rect;
+				rect.setPosition(quad[0].position);
+				rect.setFillColor(sf::Color::Transparent);
+				rect.setSize({ 48,48 });
+				rect.setOutlineColor(sf::Color::Red);
+				rectVec.push_back(rect);
+			}
 		}
 
 	return true;
+}
+
+std::vector<sf::RectangleShape> TileMap::GetRectVec() const
+{
+	return rectVec;
 }
 
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -56,6 +71,11 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 		// draw the vertex array
 		target.draw(m_vertices, states);
+
+		for (const auto& rect : rectVec)
+		{
+			target.draw(rect);
+		}
 }
 
 int TileMap::RandomColumn(int random)
