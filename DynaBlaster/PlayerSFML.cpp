@@ -103,3 +103,8 @@ void PlayerSFML::Update()
 	right = rect.getPosition().x + rect.getScale().x * rect.getSize().x;
 }
 
+sf::Vector2f PlayerSFML::GetPosition()
+{
+	return rect.getPosition();
+}
+

@@ -21,6 +21,7 @@ public:
 	PlayerSFML();
 	void Movement();
 	void Update();
+	sf::Vector2f GetPosition();
 
 public:
 	sf::RectangleShape rect;

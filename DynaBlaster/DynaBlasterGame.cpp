@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "../Logging/Logger.h"
 #include "PlayerSFML.h"
+#include <chrono>
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -70,6 +71,7 @@ void DynaBlasterGame::LevelsMenuWindow()
 						levelButtons[index].SetBgColor(sf::Color::Transparent);
 					}
 				}
+				break;
 			case sf::Event::MouseButtonPressed:
 				for (int index = 0; index < 8; index++)
 				{
@@ -80,6 +82,7 @@ void DynaBlasterGame::LevelsMenuWindow()
 						GameWindow();
 					}
 				}
+				break;
 			}
 		}
 		levelsWindow.clear();
@@ -134,6 +137,7 @@ void DynaBlasterGame::HelpMenuWindow()
 				{
 					back.SetFontSize(20);
 				}
+				break;
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(helpWindow))
 				{
@@ -141,6 +145,7 @@ void DynaBlasterGame::HelpMenuWindow()
 					helpWindow.close();
 					StartWindow();
 				}
+				break;
 			}
 		}
 		helpWindow.clear();
@@ -234,6 +239,7 @@ void DynaBlasterGame::StartWindow()
 				{
 					battle.SetFontSize(20);
 				}
+				break;
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(startWindow))
 				{
@@ -263,6 +269,7 @@ void DynaBlasterGame::StartWindow()
 					startWindow.close();
 					GameWindow();
 				}
+				break;
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::M)
 				{
@@ -276,6 +283,7 @@ void DynaBlasterGame::StartWindow()
 						startSong.play();
 					}
 				}
+				break;
 			}
 		}
 		startWindow.clear();
@@ -306,10 +314,17 @@ void DynaBlasterGame::GameWindow()
 		logger.Log("Couldn't play the song.", Logger::Level::Error);*/
 	mapSong.play();
 	mapSong.setLoop(true);
+
 	int contor = 0;
+	bool spacePressed = false;
+	sf::Vector2f pPosition;
+	std::chrono::steady_clock::time_point tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
+
 	while (window.isOpen())
 	{
 		sf::Event event;
+		sf::RectangleShape bombRect;
+
 		while (window.pollEvent(event))
 		{
 			switch (event.type)
@@ -350,15 +365,29 @@ void DynaBlasterGame::GameWindow()
 				}
 				if (event.key.code == sf::Keyboard::Escape)
 					window.close();
+				if (event.key.code == sf::Keyboard::Space)
+				{
+					pPosition = player.GetPosition();
+					spacePressed = true;
+				}
 				break;
 					
 			}
 		}
 		// draw the map
+		window.draw(map);
 		player.Update();
 		player.Movement();
-		window.clear();
-		window.draw(map);
+		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
+		{
+			sf::Texture bombTexture;
+			if (!bombTexture.loadFromFile("Bomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
+				std::cout << "Error" << std::endl;
+			bombRect.setSize({ 48,48 });
+			bombRect.setTexture(&bombTexture);
+			bombRect.setPosition(pPosition);
+			window.draw(bombRect);
+		}
 		window.draw(player.rect);
 		window.display();
 		window.clear();
