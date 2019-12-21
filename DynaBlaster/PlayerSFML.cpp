@@ -9,7 +9,7 @@ PlayerSFML::PlayerSFML()
 	rect.setSize({ 48,48 });
 	rect.setPosition({ 48,48 });
 	rect.setFillColor(sf::Color::White);
-	rect.setOutlineColor(sf::Color::Black);
+	rect.setOutlineColor(sf::Color::Transparent);
 	rect.setOutlineThickness(1.0f);
 	top = rect.getPosition().y;
 	left = rect.getPosition().x;

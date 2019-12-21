@@ -298,6 +298,9 @@ void DynaBlasterGame::StartWindow()
 
 void DynaBlasterGame::GameWindow()
 {
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
 	sf::RenderWindow window(sf::VideoMode(720, 624), "Dyna Blaster - Bomberman");
 	window.setKeyRepeatEnabled(true);
 	map.Map();
@@ -309,14 +312,14 @@ void DynaBlasterGame::GameWindow()
 	back.SetPosition({ 50,638 });
 
 	sf::Music mapSong;
-	mapSong.openFromFile("MapDisplay.ogg");
-	/*if (!mapSong.openFromFile("MapDisplay.ogg"))
-		logger.Log("Couldn't play the song.", Logger::Level::Error);*/
+	if (!mapSong.openFromFile("MapDisplay.ogg"))
+		logger.Log("Couldn't play the song.", Logger::Level::Error);
 	mapSong.play();
 	mapSong.setLoop(true);
 
 	int contor = 0;
 	bool spacePressed = false;
+	bool bombIsActive = false;
 	sf::Vector2f pPosition;
 	std::chrono::steady_clock::time_point tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 
@@ -345,7 +348,7 @@ void DynaBlasterGame::GameWindow()
 			case sf::Event::MouseButtonPressed:
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
 				{
-					//logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
+					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
 					window.close();
 					StartWindow();
 				}
@@ -367,14 +370,16 @@ void DynaBlasterGame::GameWindow()
 					window.close();
 				if (event.key.code == sf::Keyboard::Space)
 				{
-					pPosition = player.GetPosition();
+					if (bombIsActive == false)
+					{
+						pPosition = player.GetPosition();
+						bombIsActive = true;
+					}
 					spacePressed = true;
 				}
 				break;
-					
 			}
 		}
-		// draw the map
 		window.draw(map);
 		player.Update();
 		player.Movement();
@@ -387,6 +392,12 @@ void DynaBlasterGame::GameWindow()
 			bombRect.setTexture(&bombTexture);
 			bombRect.setPosition(pPosition);
 			window.draw(bombRect);
+		}
+		if (spacePressed == true && std::chrono::steady_clock::now() > tend)
+		{
+			tend = std::chrono::steady_clock::now() + std::chrono::seconds(6);
+			spacePressed = false;
+			bombIsActive = false;
 		}
 		window.draw(player.rect);
 		window.display();
