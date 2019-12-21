@@ -320,6 +320,8 @@ void DynaBlasterGame::GameWindow()
 	int contor = 0;
 	bool spacePressed = false;
 	bool bombIsActive = false;
+	bool bigOrSmall = true;
+	int wait = 100;
 	sf::Vector2f pPosition;
 	std::chrono::steady_clock::time_point tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 
@@ -386,12 +388,29 @@ void DynaBlasterGame::GameWindow()
 		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
 		{
 			sf::Texture bombTexture;
-			if (!bombTexture.loadFromFile("Bomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
-				std::cout << "Error" << std::endl;
+			if (bigOrSmall == true)
+			{
+				if (!bombTexture.loadFromFile("Bomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
+					std::cout << "Error" << std::endl;
+			}
+			else
+			{
+				if (!bombTexture.loadFromFile("BigBomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
+					std::cout << "Error" << std::endl;
+			}
 			bombRect.setSize({ 48,48 });
 			bombRect.setTexture(&bombTexture);
 			bombRect.setPosition(pPosition);
 			window.draw(bombRect);
+			if (wait >= 0)
+			{
+				wait--;
+			}
+			else
+			{
+				bigOrSmall = !bigOrSmall;
+				wait = 100;
+			}
 		}
 		if (spacePressed == true && std::chrono::steady_clock::now() > tend)
 		{

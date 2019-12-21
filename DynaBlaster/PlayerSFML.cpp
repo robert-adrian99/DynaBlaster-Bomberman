@@ -2,7 +2,7 @@
 
 PlayerSFML::PlayerSFML()
 {
-	if (!pTexture.loadFromFile("PlayerSFML.png", { 0 * 48, 0 * 48, 48 , 48 }))
+	if (!pTexture.loadFromFile("TestFront.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
 	playerImage.setTexture(pTexture);
 	rect.setTexture(playerImage.getTexture());
@@ -52,7 +52,7 @@ void PlayerSFML::Movement()
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		if (!pTexture.loadFromFile("PlayerSFML.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		if (!pTexture.loadFromFile("TestFront.png", { 0 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 		playerImage.setTexture(pTexture);
 		rect.setTexture(playerImage.getTexture());
