@@ -293,11 +293,11 @@ void DynaBlasterGame::GameWindow()
 	sf::RenderWindow window(sf::VideoMode(720, 624), "Dyna Blaster - Bomberman");
 	window.setKeyRepeatEnabled(true);
 	map.Map();
-	sf::Font arial;
-	arial.loadFromFile("arial.ttf");
+	sf::Font colleged;
+	colleged.loadFromFile("colleged.ttf");
 	PlayerSFML player;
 	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
-	back.SetFont(arial);
+	back.SetFont(colleged);
 	back.SetPosition({ 50,638 });
 
 	sf::Music mapSong;

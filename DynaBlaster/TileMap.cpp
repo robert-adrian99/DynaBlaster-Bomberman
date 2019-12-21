@@ -18,6 +18,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 
 	// populate the vertex array, with one quad per tile
 	for (unsigned int i = 0; i < width; ++i)
+	{
 		for (unsigned int j = 0; j < height; ++j)
 		{
 			// get the current tile number
@@ -41,41 +42,31 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 			quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
 			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
 			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
-			
+
 			if (tileNumber == 1 || tileNumber == 2)
 			{
-				sf::RectangleShape rect;
-				rect.setPosition(quad[0].position);
-				rect.setFillColor(sf::Color::Transparent);
-				rect.setSize({ 48,48 });
-				rect.setOutlineColor(sf::Color::Red);
-				rectVec.push_back(rect);
+				rectVec.push_back(quad[0].position);
 			}
 		}
-
+	}
 	return true;
 }
 
-std::vector<sf::RectangleShape> TileMap::GetRectVec() const
+std::vector<sf::Vector2f> TileMap::GetRectVec() const
 {
 	return rectVec;
 }
 
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-		// apply the transform
-		states.transform *= getTransform();
+	// apply the transform
+	states.transform *= getTransform();
 
-		// apply the tileset texture
-		states.texture = &m_tileset;
+	// apply the tileset texture
+	states.texture = &m_tileset;
 
-		// draw the vertex array
-		target.draw(m_vertices, states);
-
-		for (const auto& rect : rectVec)
-		{
-			target.draw(rect);
-		}
+	// draw the vertex array
+	target.draw(m_vertices, states);
 }
 
 int TileMap::RandomColumn(int random)
@@ -111,7 +102,7 @@ void TileMap::Map()
 	back.SetPosition({ 50,638 });
 	back.SetFont(colleged);
 
-	
+
 	// define the level with an array of tile indices
 	std::vector<int> level;
 	for (size_t line = 0; line < linesNumber; ++line)
@@ -148,6 +139,4 @@ void TileMap::Map()
 		return;
 
 	logger.Log("Map was loaded.", Logger::Level::Info);
-
-	
 }

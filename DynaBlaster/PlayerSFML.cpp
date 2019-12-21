@@ -16,11 +16,27 @@ PlayerSFML::PlayerSFML()
 	bottom = rect.getPosition().y + 48;
 	right = rect.getPosition().x + 48;
 	std::cout << "TLBR: " << " " << top << " " << left << " " << bottom << " " << right << "\n\n\n";
+	map.Map();
 }
 
 void PlayerSFML::Movement()
 {
 	float speed = 0.2;
+	currentPosition = rect.getPosition();
+
+	for (const auto& wallrect : map.GetRectVec())
+	{
+		if (rect.getPosition().x < wallrect.x + 42 &&
+			rect.getPosition().x + 42 > wallrect.x&&
+			rect.getPosition().y < wallrect.y + 42 &&
+			rect.getPosition().y + 42 > wallrect.y)
+		{
+			currentPosition = lastPosition;
+			rect.setPosition(currentPosition);
+			break;
+		}
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		if (!pTexture.loadFromFile("TestBack.png", { 0 * 48 , 0 * 48, 48, 48 }))
@@ -29,6 +45,7 @@ void PlayerSFML::Movement()
 		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().y > 1 * 48)
 		{
+			lastPosition = rect.getPosition();
 			source.y = Up;
 			rect.move(0, -speed);
 		}
@@ -41,6 +58,7 @@ void PlayerSFML::Movement()
 		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().y < 11 * 48)
 		{
+			lastPosition = rect.getPosition();
 			source.y = Down;
 			rect.move(0, speed);
 		}
@@ -53,6 +71,7 @@ void PlayerSFML::Movement()
 		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().x < 13 * 48)
 		{
+			lastPosition = rect.getPosition();
 			source.y = Right;
 			rect.move(speed, 0);
 		}
@@ -65,6 +84,7 @@ void PlayerSFML::Movement()
 		rect.setTexture(playerImage.getTexture());
 		if (rect.getPosition().x > 1 * 48)
 		{
+			lastPosition = rect.getPosition();
 			source.y = Left;
 			rect.move(-speed, 0);
 		}
@@ -72,7 +92,6 @@ void PlayerSFML::Movement()
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 	{
 		std::cout << "TLBR: " << " " << top << " " << left << " " << bottom << " " << right << "\n\n\n";
-
 	}
 }
 

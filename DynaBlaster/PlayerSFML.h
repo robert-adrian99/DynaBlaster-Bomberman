@@ -9,16 +9,29 @@
 class PlayerSFML
 {
 private:
-	enum Direction { Up = 8, Left, Down, Right };
-	sf::Vector2i source = { 0, Up };
-	sf::Texture pTexture;
-	sf::Sprite playerImage;
-	float bottom, left, right, top;
-	bool ok = true;
+	enum Direction
+	{ 
+		Up = 8,
+		Left,
+		Down,
+		Right
+	};
+
 public:
-	sf::RectangleShape rect;
 	PlayerSFML();
 	void Movement();
 	void Update();
+
+public:
+	sf::RectangleShape rect;
+
+private:
+	sf::Vector2i source = { 0, Up };
+	sf::Vector2f lastPosition;
+	sf::Vector2f currentPosition;
+	sf::Texture pTexture;
+	sf::Sprite playerImage;
+	TileMap map;
+	float bottom, left, right, top;
 };
 
