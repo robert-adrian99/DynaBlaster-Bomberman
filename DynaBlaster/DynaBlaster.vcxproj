@@ -138,7 +138,6 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DynaBlasterGame.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemySFML.cpp" />
     <ClCompile Include="MainTest.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pause.cpp" />
@@ -155,7 +154,6 @@
     <ClInclude Include="DynaBlasterGame.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyGraphics.h" />
-    <ClInclude Include="EnemySFML.h" />
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="GrassGraphics.h" />
     <ClInclude Include="HelpMenu.h" />
@@ -175,7 +173,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Barom.jpg" />
     <Image Include="tileset.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
