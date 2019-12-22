@@ -6,6 +6,7 @@
 #include "../Logging/Logger.h"
 #include "PlayerSFML.h"
 #include <chrono>
+#include "EnemySFML.h"
 
 void DynaBlasterGame::LevelsMenuWindow(sf::RenderWindow& window)
 {
@@ -314,6 +315,7 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 	colleged.loadFromFile("colleged.ttf");
 
 	PlayerSFML player;
+	EnemySFML enemy(EnemyType::Barom);
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(colleged);
@@ -428,6 +430,7 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 			bombIsActive = false;
 		}
 		window.draw(player.player);
+		window.draw(enemy.enemy);
 		window.display();
 		window.clear();
 	}
