@@ -6,8 +6,9 @@
 #include "../Logging/Logger.h"
 #include "PlayerSFML.h"
 #include <chrono>
+#include "EnemySFML.h"
 
-void DynaBlasterGame::LevelsMenuWindow(sf::RenderWindow& window)
+void DynaBlasterGame::LevelsMenuWindow()
 {
 
 	std::ofstream logFile("log.log", std::ios::app);
@@ -308,7 +309,7 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 	colleged.loadFromFile("colleged.ttf");
 
 	PlayerSFML player;
-
+	EnemySFML enemy(EnemyType::Barom);
 	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(colleged);
 	back.SetPosition({ 50,638 });
@@ -387,6 +388,8 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 		window.draw(map);
 		player.Update();
 		player.Movement();
+		enemy.Update();
+		enemy.Movement();
 		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
 		{
 			sf::Texture bombTexture;
@@ -421,6 +424,7 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 			bombIsActive = false;
 		}
 		window.draw(player.rect);
+		window.draw(enemy.rect);
 		window.display();
 		window.clear();
 	}
