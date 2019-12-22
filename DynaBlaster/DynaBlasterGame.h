@@ -7,10 +7,10 @@ public:
 	void Run();
 
 private:
-	void LevelsMenuWindow();
-	void HelpMenuWindow();
-	void StartWindow();
-	void GameWindow();
+	void LevelsMenuWindow(sf::RenderWindow& window);
+	void HelpMenuWindow(sf::RenderWindow& window);
+	void StartWindow(sf::RenderWindow& window);
+	void GameWindow(sf::RenderWindow& window);
 
 private:
 	TileMap map;
