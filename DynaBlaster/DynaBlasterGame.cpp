@@ -5,16 +5,17 @@
 #include "Button.h"
 #include "../Logging/Logger.h"
 #include "PlayerSFML.h"
+#include <iostream>
 #include <chrono>
-#include "EnemySFML.h"
 
-void DynaBlasterGame::LevelsMenuWindow(sf::RenderWindow& window)
+void DynaBlasterGame::LevelsMenuWindow()
 {
 
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	window.create(sf::VideoMode(564, 286), "Levels Menu", sf::Style::Close | sf::Style::Titlebar);
+
+	m_window.setTitle("Levels Menu");
 
 	logger.Log("Levels window was rendered", Logger::Level::Info);
 
@@ -45,7 +46,7 @@ void DynaBlasterGame::LevelsMenuWindow(sf::RenderWindow& window)
 
 	logger.Log("Displayed the levels of the game.", Logger::Level::Info);
 
-	while (window.isOpen())
+	while (m_window.isOpen())
 	{
 		sf::Event event;
 		sf::Texture LevelsImage;
@@ -53,55 +54,53 @@ void DynaBlasterGame::LevelsMenuWindow(sf::RenderWindow& window)
 
 		sf::Sprite sprite(LevelsImage);
 
-		while (window.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				m_window.close();
 				break;
 			case sf::Event::MouseMoved:
 				for (int index = 0; index < 8; index++)
 				{
-					if (levelButtons[index].IsMouseOver(window))
+					if (levelButtons[index].IsMouseOver(m_window))
 					{
-						levelButtons[index].SetBgColor(sf::Color::Blue);
+						levelButtons[index].SetFontSize(23);
 					}
 					else
 					{
-						levelButtons[index].SetBgColor(sf::Color::Transparent);
+						levelButtons[index].SetFontSize(20);
 					}
 				}
-				break;
 			case sf::Event::MouseButtonPressed:
 				for (int index = 0; index < 8; index++)
 				{
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && levelButtons[index].IsMouseOver(window))
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && levelButtons[index].IsMouseOver(m_window))
 					{
 						logger.Log("Level button was pressed. Going back to start page.", Logger::Level::Info);
-						window.close();
-						GameWindow(window);
+						GameWindow();
 					}
 				}
-				break;
 			}
 		}
-		window.clear();
-		window.draw(sprite);
+		m_window.clear();
+		m_window.draw(sprite);
 		for (int index = 0; index < 8; index++)
 		{
-			levelButtons[index].DrawTo(window);
+			levelButtons[index].DrawTo(m_window);
 		}
-		window.display();
+		m_window.display();
 	}
 }
 
-void DynaBlasterGame::HelpMenuWindow(sf::RenderWindow& window)
+void DynaBlasterGame::HelpMenuWindow()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	window.create(sf::VideoMode(850, 700), "Help Menu", sf::Style::Close | sf::Style::Titlebar);
+
+	m_window.setTitle("Help Menu");
 
 	logger.Log("Help window was rendered.", Logger::Level::Info);
 
@@ -114,7 +113,7 @@ void DynaBlasterGame::HelpMenuWindow(sf::RenderWindow& window)
 
 	logger.Log("Displayed the information about the game.", Logger::Level::Info);
 
-	while (window.isOpen())
+	while (m_window.isOpen())
 	{
 		sf::Event event;
 		sf::Texture HelpImage;
@@ -122,15 +121,12 @@ void DynaBlasterGame::HelpMenuWindow(sf::RenderWindow& window)
 
 		sf::Sprite sprite(HelpImage);
 
-		while (window.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
 			{
-			case sf::Event::Closed:
-				window.close();
-				break;
-			case sf::Event::MouseMoved:
-				if (back.IsMouseOver(window))
+			case::sf::Event::MouseMoved:
+				if (back.IsMouseOver(m_window))
 				{
 					back.SetFontSize(23);
 				}
@@ -138,30 +134,25 @@ void DynaBlasterGame::HelpMenuWindow(sf::RenderWindow& window)
 				{
 					back.SetFontSize(20);
 				}
-				break;
 			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(m_window))
 				{
 					logger.Log("Back button was pressed. Going back to the start page.", Logger::Level::Info);
-					window.close();
-					window.create(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
-					StartWindow(window);
+					StartWindow();
 				}
-				break;
 			}
 		}
-		window.clear();
-		window.draw(sprite);
-		back.DrawTo(window);
-		window.display();
+		m_window.clear();
+		m_window.draw(sprite);
+		back.DrawTo(m_window);
+		m_window.display();
 	}
 }
 
-void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
+void DynaBlasterGame::StartWindow()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
-
 
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
@@ -185,28 +176,26 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 	logger.Log("Buttons added to the window.", Logger::Level::Info);
 
 
-	sf::Music startSong;
+	/*sf::Music startSong;
 	if (!startSong.openFromFile("StartSong.ogg"))
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
 	startSong.play();
-	startSong.setLoop(true);
+	startSong.setLoop(true);*/
+
 	int contor = 0;
-	while (window.isOpen())
+	while (m_window.isOpen())
 	{
 		sf::Event event;
 		sf::Texture StartImage;
 		StartImage.loadFromFile("StartPage.png");
 
 		sf::Sprite sprite(StartImage);
-		while (window.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
 			{
-			case sf::Event::Closed:
-				window.close();
-				break;
 			case::sf::Event::MouseMoved:
-				if (help.IsMouseOver(window))
+				if (help.IsMouseOver(m_window))
 				{
 					help.SetFontSize(23);
 				}
@@ -214,7 +203,7 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 				{
 					help.SetFontSize(20);
 				}
-				if (play.IsMouseOver(window))
+				if (play.IsMouseOver(m_window))
 				{
 					play.SetFontSize(23);
 				}
@@ -222,7 +211,7 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 				{
 					play.SetFontSize(20);
 				}
-				if (level.IsMouseOver(window))
+				if (level.IsMouseOver(m_window))
 				{
 					level.SetFontSize(23);
 				}
@@ -230,7 +219,7 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 				{
 					level.SetFontSize(20);
 				}
-				if (battle.IsMouseOver(window))
+				if (battle.IsMouseOver(m_window))
 				{
 					battle.SetFontSize(23);
 				}
@@ -240,33 +229,29 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 				}
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && help.IsMouseOver(m_window))
 				{
 					logger.Log("Help button was pressed.", Logger::Level::Info);
-					startSong.pause();
-					window.close();
-					HelpMenuWindow(window);
+					//startSong.pause();
+					HelpMenuWindow();
 				}
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && play.IsMouseOver(m_window))
 				{
 					logger.Log("Play button was pressed.", Logger::Level::Info);
-					startSong.pause();
-					window.close();
-					GameWindow(window);
+					//startSong.pause();
+					GameWindow();
 				}
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(m_window))
 				{
 					logger.Log("Levels button was pressed.", Logger::Level::Info);
-					startSong.pause();
-					window.close();
-					LevelsMenuWindow(window);
+					//startSong.pause();
+					LevelsMenuWindow();
 				}
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && battle.IsMouseOver(m_window))
 				{
 					logger.Log("Battle button was pressed.", Logger::Level::Info);
-					startSong.pause();
-					window.close();
-					GameWindow(window);
+					//startSong.pause();
+					GameWindow();
 				}
 				break;
 			case sf::Event::KeyPressed:
@@ -275,38 +260,38 @@ void DynaBlasterGame::StartWindow(sf::RenderWindow& window)
 					contor++;
 					if (contor % 2 == 1)
 					{
-						startSong.pause();
+						//startSong.pause();
 					}
 					else
 					{
-						startSong.play();
+						//startSong.play();
 					}
 				}
 				break;
 			}
 		}
-		window.clear();
-		window.draw(sprite);
-		help.DrawTo(window);
-		play.DrawTo(window);
-		level.DrawTo(window);
-		battle.DrawTo(window);
-		window.display();
+		m_window.clear();
+		m_window.draw(sprite);
+		help.DrawTo(m_window);
+		play.DrawTo(m_window);
+		level.DrawTo(m_window);
+		battle.DrawTo(m_window);
+		m_window.display();
 	}
 }
 
-void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
+void DynaBlasterGame::GameWindow()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	window.create(sf::VideoMode(720, 698), "Dyna Blaster - Bomberman");
-	window.setKeyRepeatEnabled(true);
-	sf::Texture scoreBarTexture;
-	if (!scoreBarTexture.loadFromFile("ScoreBar.png"))
-		std::cout << "Error!";
+
+	m_window.setKeyRepeatEnabled(true);
+	sf::Texture scoreBarTxt;
+	scoreBarTxt.loadFromFile("ScoreBar.png");
 	sf::Sprite scoreBar;
-	scoreBar.setTexture(scoreBarTexture);
+	scoreBar.setTexture(scoreBarTxt);
+
 
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
@@ -315,17 +300,17 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 	colleged.loadFromFile("colleged.ttf");
 
 	PlayerSFML player;
-	EnemySFML enemy(EnemyType::Barom);
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
 	back.SetFont(colleged);
 	back.SetPosition({ 50,638 });
 
-	sf::Music mapSong;
+	/*sf::Music mapSong;
+	mapSong.openFromFile("MapDisplay.ogg");
 	if (!mapSong.openFromFile("MapDisplay.ogg"))
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
 	mapSong.play();
-	mapSong.setLoop(true);
+	mapSong.setLoop(true);*/
 
 	int contor = 0;
 	bool spacePressed = false;
@@ -335,20 +320,20 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 	sf::Vector2f pPosition;
 	std::chrono::steady_clock::time_point tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 
-	while (window.isOpen())
+	while (m_window.isOpen())
 	{
 		sf::Event event;
 		sf::RectangleShape bombRect;
 
-		while (window.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				m_window.close();
 				break;
 			case sf::Event::MouseMoved:
-				if (back.IsMouseOver(window))
+				if (back.IsMouseOver(m_window))
 				{
 					back.SetBgColor(sf::Color::Green);
 				}
@@ -358,11 +343,10 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 				}
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(window))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(m_window))
 				{
 					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
-					window.close();
-					StartWindow(window);
+					StartWindow();
 				}
 				break;
 			case sf::Event::KeyPressed:
@@ -371,15 +355,15 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 					contor++;
 					if (contor % 2 == 1)
 					{
-						mapSong.pause();
+						//mapSong.pause();
 					}
 					else
 					{
-						mapSong.play();
+						//mapSong.play();
 					}
 				}
 				if (event.key.code == sf::Keyboard::Escape)
-					window.close();
+					m_window.close();
 				if (event.key.code == sf::Keyboard::Space)
 				{
 					if (bombIsActive == false)
@@ -392,8 +376,8 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 				break;
 			}
 		}
-		window.draw(scoreBar);
-		window.draw(map);
+		m_window.draw(scoreBar);
+		m_window.draw(map);
 		player.Move();
 
 		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
@@ -410,9 +394,9 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 					std::cout << "Error" << std::endl;
 			}
 			bombRect.setSize({ 48,48 });
-			bombRect.setTexture(&bombTexture);
 			bombRect.setPosition(pPosition);
-			window.draw(bombRect);
+			bombRect.setTexture(&bombTexture);
+			m_window.draw(bombRect);
 			if (wait >= 0)
 			{
 				wait--;
@@ -425,14 +409,13 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 		}
 		if (spacePressed == true && std::chrono::steady_clock::now() > tend)
 		{
-			tend = std::chrono::steady_clock::now() + std::chrono::seconds(6);
+			tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 			spacePressed = false;
 			bombIsActive = false;
 		}
-		window.draw(player.player);
-		window.draw(enemy.enemy);
-		window.display();
-		window.clear();
+		m_window.draw(player.player);
+		m_window.display();
+		m_window.clear();
 	}
 }
 
@@ -441,9 +424,9 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	sf::RenderWindow window;
-	window.create(sf::VideoMode(850, 700), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+	m_window.create(sf::VideoMode(720, 698), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 
-	StartWindow(window);
+	StartWindow();
 }
