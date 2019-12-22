@@ -1,10 +1,18 @@
 #include "EnemySFML.h"
 
+int random()
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, 3);
+	return rrandom(rng);
+}
+
 EnemySFML::EnemySFML(EnemyType enemyType)
 {
 	if (enemyType == EnemyType::Barom)
 	{
-		if (!enemyTexture.loadFromFile("Barom.jpg", { 0 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Barom.png", { 0 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Shashakin)
@@ -54,14 +62,70 @@ EnemySFML::EnemySFML(EnemyType enemyType)
 	}
 	enemy.setTexture(&enemyTexture);
 	enemy.setSize({ 48,48 });
-	enemy.setPosition({ 1 *48, 6 * 48 + 50 });
+	enemy.setPosition({ 1 *48, 8 * 48 + 50 });
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
+	m_movement = 0;
 	
+}
+void EnemySFML::Movement()
+{
+	float speed = 0.1;
+	currentPosition = enemy.getPosition();
+	for (const auto& wallrect : map.GetRectVec())
+	{
+		if (enemy.getPosition().x < wallrect.x + 42 &&
+			enemy.getPosition().x + 42 > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + 92 &&
+			enemy.getPosition().y + 42 > wallrect.y + 50)
+		{
+			currentPosition = lastPosition;
+			enemy.setPosition(currentPosition);
+			m_movement = random();
+			break;
+		}
+	}
+
+	switch (m_movement)
+	{
+	case 0:
+		{
+			lastPosition = enemy.getPosition();
+			enemy.move(0, -speed);
+		}
+		break;
+	case 1:
+		
+		{
+			lastPosition = enemy.getPosition();
+			enemy.move(0, speed);
+		}
+		break;
+	case 2:
+		
+		{
+			lastPosition = enemy.getPosition();
+			enemy.move(speed, 0);
+		}
+		break;
+	case 3:
+		
+		{
+			lastPosition = enemy.getPosition();
+			enemy.move(-speed, 0);
+		}
+		break;
+	default:
+		break;
+	}
+}
+sf::Vector2f EnemySFML::GetPosition()
+{
+	return enemy.getPosition();
 }
 void EnemySFML::EnemyDie()
 {
-	//Destroy the enemy.
+	//Destroy the enemy. Work in progress.
 }
 
 

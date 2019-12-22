@@ -23,5 +23,6 @@ private:
 	sf::Vector2f currentPosition;
 	sf::Texture enemyTexture;
 	TileMap map;
+	int m_movement;
 };
 

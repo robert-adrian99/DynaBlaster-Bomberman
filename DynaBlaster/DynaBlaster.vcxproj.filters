@@ -124,5 +124,8 @@
     <Image Include="ScoreBar.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Barom.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
