@@ -8,31 +8,18 @@
 
 class PlayerSFML
 {
-private:
-	enum Direction
-	{ 
-		Up = 8,
-		Left,
-		Down,
-		Right
-	};
-
 public:
 	PlayerSFML();
-	void Movement();
-	void Update();
+	void Move();
 	sf::Vector2f GetPosition();
 
 public:
-	sf::RectangleShape rect;
+	sf::RectangleShape player;
 
 private:
-	sf::Vector2i source = { 0, Up };
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
-	sf::Texture pTexture;
-	sf::Sprite playerImage;
+	sf::Texture playerTexture;
 	TileMap map;
-	float bottom, left, right, top;
 };
 

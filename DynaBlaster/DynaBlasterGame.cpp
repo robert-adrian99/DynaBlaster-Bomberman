@@ -299,10 +299,16 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	window.create(sf::VideoMode(720, 624), "Dyna Blaster - Bomberman");
+	window.create(sf::VideoMode(720, 698), "Dyna Blaster - Bomberman");
 	window.setKeyRepeatEnabled(true);
+	sf::Texture scoreBarTexture;
+	if (!scoreBarTexture.loadFromFile("ScoreBar.png"))
+		std::cout << "Error!";
+	sf::Sprite scoreBar;
+	scoreBar.setTexture(scoreBarTexture);
 
 	map.Map();
+	map.setPosition(0.0f, 50.0f);
 
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
@@ -384,9 +390,10 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 				break;
 			}
 		}
+		window.draw(scoreBar);
 		window.draw(map);
-		player.Update();
-		player.Movement();
+		player.Move();
+
 		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
 		{
 			sf::Texture bombTexture;
@@ -420,7 +427,7 @@ void DynaBlasterGame::GameWindow(sf::RenderWindow& window)
 			spacePressed = false;
 			bombIsActive = false;
 		}
-		window.draw(player.rect);
+		window.draw(player.player);
 		window.display();
 		window.clear();
 	}
