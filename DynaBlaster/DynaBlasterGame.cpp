@@ -158,21 +158,21 @@ void DynaBlasterGame::StartWindow()
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
 
-	Button help("Help", { 200,35 }, 20, sf::Color::Transparent, sf::Color::Black);
-	help.SetPosition({ 315,638 });
-	help.SetFont(colleged);
-
 	Button play("Play", { 265,35 }, 20, sf::Color::Transparent, sf::Color::Black);
-	play.SetPosition({ 280,500 });
+	play.SetPosition({ 275,480 });
 	play.SetFont(colleged);
 
+	Button battle("Battle", { 225,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	battle.SetPosition({ 270,525 });
+	battle.SetFont(colleged);
+
 	Button level("Levels", { 170,35 }, 20, sf::Color::Transparent, sf::Color::Black);
-	level.SetPosition({ 300,590 });
+	level.SetPosition({ 285,570 });
 	level.SetFont(colleged);
 
-	Button battle("Battle", { 225,35 }, 20, sf::Color::Transparent, sf::Color::Black);
-	battle.SetPosition({ 295,550 });
-	battle.SetFont(colleged);
+	Button help("Help", { 200,35 }, 20, sf::Color::Transparent, sf::Color::Black);
+	help.SetPosition({ 290,618 });
+	help.SetFont(colleged);
 
 	logger.Log("Buttons added to the window.", Logger::Level::Info);
 
@@ -303,9 +303,9 @@ void DynaBlasterGame::GameWindow()
 	PlayerSFML player;
 	EnemySFML enemy(EnemyType::Barom);
 
-	Button back("Back", { 100,35 }, 20, sf::Color::Blue, sf::Color::White);
+	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
-	back.SetPosition({ 50,638 });
+	back.SetPosition({ 50, 678 });
 
 	sf::Music mapSong;
 	mapSong.openFromFile("MapDisplay.ogg");
@@ -318,14 +318,17 @@ void DynaBlasterGame::GameWindow()
 	bool spacePressed = false;
 	bool bombIsActive = false;
 	bool bigOrSmall = true;
+	bool explosionReady = false;
 	int wait = 100;
 	sf::Vector2f pPosition;
-	std::chrono::steady_clock::time_point tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
-
+	sf::Vector2f bombPosition;
+	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
+	
 	while (m_window.isOpen())
 	{
 		sf::Event event;
 		sf::RectangleShape bombRect;
+		sf::RectangleShape bombExplosion;
 
 		while (m_window.pollEvent(event))
 		{
@@ -337,11 +340,11 @@ void DynaBlasterGame::GameWindow()
 			case sf::Event::MouseMoved:
 				if (back.IsMouseOver(m_window))
 				{
-					back.SetBgColor(sf::Color::Green);
+					back.SetFontSize(23);
 				}
 				else
 				{
-					back.SetBgColor(sf::Color::Blue);
+					back.SetFontSize(20);
 				}
 				break;
 			case sf::Event::MouseButtonPressed:
@@ -370,8 +373,10 @@ void DynaBlasterGame::GameWindow()
 				{
 					if (bombIsActive == false)
 					{
+						bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 						pPosition = player.GetPosition();
 						bombIsActive = true;
+						explosionReady = false;
 					}
 					spacePressed = true;
 				}
@@ -383,9 +388,13 @@ void DynaBlasterGame::GameWindow()
 		player.Move();
 		enemy.Movement();
 
-		if (spacePressed == true && std::chrono::steady_clock::now() < tend)
+		sf::Texture bombTexture;
+		sf::Texture explosionTexture;
+		if (!explosionTexture.loadFromFile("Explosion1.png", { 0 * 48, 0 * 48, 48 , 48 }))
+			std::cout << "Error" << std::endl;
+
+		if (spacePressed == true && std::chrono::steady_clock::now() < bombTimer - std::chrono::seconds(1))
 		{
-			sf::Texture bombTexture;
 			if (bigOrSmall == true)
 			{
 				if (!bombTexture.loadFromFile("Bomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
@@ -398,6 +407,7 @@ void DynaBlasterGame::GameWindow()
 			}
 			bombRect.setSize({ 48,48 });
 			bombRect.setPosition(pPosition);
+			bombPosition = bombRect.getPosition();
 			bombRect.setTexture(&bombTexture);
 			m_window.draw(bombRect);
 			if (wait >= 0)
@@ -410,14 +420,28 @@ void DynaBlasterGame::GameWindow()
 				wait = 100;
 			}
 		}
-		if (spacePressed == true && std::chrono::steady_clock::now() > tend)
+		if (spacePressed == true && std::chrono::steady_clock::now() > bombTimer - std::chrono::seconds(1))
 		{
-			tend = std::chrono::steady_clock::now() + std::chrono::seconds(5);
 			spacePressed = false;
 			bombIsActive = false;
+			bombRect.setTexture(&bombTexture, true);
+			explosionReady = true;
+		}
+		if (explosionReady == true && std::chrono::steady_clock::now() < bombTimer)
+		{
+			bombExplosion.setSize({ 48,48 });
+			bombExplosion.setPosition(bombPosition);
+			bombExplosion.setTexture(&explosionTexture);
+			m_window.draw(bombExplosion);
+		}
+		if (explosionReady == true && std::chrono::steady_clock::now() > bombTimer)
+		{
+			explosionReady = false;
+			spacePressed = false;
 		}
 		m_window.draw(player.player);
 		m_window.draw(enemy.enemy);
+		back.DrawTo(m_window);
 		m_window.display();
 		m_window.clear();
 	}
