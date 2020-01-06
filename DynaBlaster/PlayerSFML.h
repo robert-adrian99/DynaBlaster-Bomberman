@@ -12,6 +12,10 @@ public:
 	PlayerSFML();
 	void Move();
 	sf::Vector2f GetPosition();
+	void SetMap(TileMap& map);
+	void SetBombRect(const sf::Vector2f& position);
+	bool ok;
+	std::vector<sf::Vector2f> bombRect;
 
 public:
 	sf::RectangleShape player;
@@ -20,6 +24,6 @@ private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
 	sf::Texture playerTexture;
-	TileMap map;
+	TileMap* map;
 };
 

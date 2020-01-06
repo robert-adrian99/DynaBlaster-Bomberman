@@ -7,8 +7,7 @@ PlayerSFML::PlayerSFML()
 	player.setTexture(&playerTexture);
 	player.setSize({ 48,48 });
 	player.setPosition({ 48,98 });
-	map.Map();
-	map.setPosition(0.0f, 50.0f);
+	ok = false;
 }
 
 void PlayerSFML::Move()
@@ -16,7 +15,7 @@ void PlayerSFML::Move()
 	float speed = 0.2;
 	currentPosition = player.getPosition();
 
-	for (const auto& wallrect : map.GetRectVec())
+	for (const auto& wallrect : map->GetRectVec())
 	{
 		if (player.getPosition().x < wallrect.x + 42 &&
 			player.getPosition().x + 42 > wallrect.x&&
@@ -26,6 +25,27 @@ void PlayerSFML::Move()
 			currentPosition = lastPosition;
 			player.setPosition(currentPosition);
 			break;
+		}
+	}
+
+	for (const auto& bombrect : bombRect)
+	{
+		if (player.getPosition().x < bombrect.x + 42 &&
+			player.getPosition().x + 42 > bombrect.x&&
+			player.getPosition().y < bombrect.y + 92 &&
+			player.getPosition().y + 42 > bombrect.y + 50 && ok == false)
+		{
+			currentPosition = lastPosition;
+			player.setPosition(currentPosition);
+			break;
+		}
+
+		if (!(player.getPosition().x < bombrect.x + 42 &&
+			player.getPosition().x + 42 > bombrect.x&&
+			player.getPosition().y < bombrect.y + 92 &&
+			player.getPosition().y + 42 > bombrect.y + 50) && ok == true)
+		{
+			ok = false;
 		}
 	}
 
@@ -66,5 +86,16 @@ void PlayerSFML::Move()
 sf::Vector2f PlayerSFML::GetPosition()
 {
 	return player.getPosition();
+}
+
+
+void PlayerSFML::SetMap(TileMap& map)
+{
+	this->map = &map;
+}
+
+void PlayerSFML::SetBombRect(const sf::Vector2f& position)
+{
+	bombRect.emplace_back(position);
 }
 

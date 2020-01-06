@@ -7,6 +7,7 @@
 #include "PlayerSFML.h"
 #include <iostream>
 #include <chrono>
+#include <array>
 #include "EnemySFML.h"
 
 void DynaBlasterGame::LevelsMenuWindow()
@@ -14,7 +15,6 @@ void DynaBlasterGame::LevelsMenuWindow()
 
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
-
 
 	m_window.setTitle("Levels Menu");
 
@@ -286,22 +286,23 @@ void DynaBlasterGame::GameWindow()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
+	sf::Font colleged;
+	colleged.loadFromFile("colleged.ttf");
 
 	m_window.setKeyRepeatEnabled(true);
+	PlayerSFML player;
+	EnemySFML enemy(EnemyType::Barom);
+
 	sf::Texture scoreBarTxt;
 	scoreBarTxt.loadFromFile("ScoreBar.png");
+
 	sf::Sprite scoreBar;
 	scoreBar.setTexture(scoreBarTxt);
-
 
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
 
-	sf::Font colleged;
-	colleged.loadFromFile("colleged.ttf");
-
-	PlayerSFML player;
-	EnemySFML enemy(EnemyType::Barom);
+	player.SetMap(map);
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
@@ -323,13 +324,10 @@ void DynaBlasterGame::GameWindow()
 	sf::Vector2f pPosition;
 	sf::Vector2f bombPosition;
 	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
-	
+
 	while (m_window.isOpen())
 	{
 		sf::Event event;
-		sf::RectangleShape bombRect;
-		sf::RectangleShape bombExplosion;
-
 		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
@@ -375,6 +373,12 @@ void DynaBlasterGame::GameWindow()
 					{
 						bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 						pPosition = player.GetPosition();
+						player.ok = true;
+						pPosition.y -= 50.f;
+						if (!player.bombRect.empty())
+							player.bombRect.pop_back();
+						player.SetBombRect(pPosition);
+						pPosition.y += 50.f;
 						bombIsActive = true;
 						explosionReady = false;
 					}
@@ -383,8 +387,8 @@ void DynaBlasterGame::GameWindow()
 				break;
 			}
 		}
-		m_window.draw(scoreBar);
 		m_window.draw(map);
+		m_window.draw(scoreBar);
 		player.Move();
 		enemy.Movement();
 
@@ -392,9 +396,9 @@ void DynaBlasterGame::GameWindow()
 		sf::Texture explosionTexture;
 		if (!explosionTexture.loadFromFile("Explosion1.png", { 0 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
-
 		if (spacePressed == true && std::chrono::steady_clock::now() < bombTimer - std::chrono::seconds(1))
 		{
+
 			if (bigOrSmall == true)
 			{
 				if (!bombTexture.loadFromFile("Bomb.png", { 0 * 48, 0 * 48, 48 , 48 }))
@@ -424,7 +428,7 @@ void DynaBlasterGame::GameWindow()
 		{
 			spacePressed = false;
 			bombIsActive = false;
-			bombRect.setTexture(&bombTexture, true);
+			bombRect.setTexture(&bombTexture);
 			explosionReady = true;
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() < bombTimer)
@@ -436,6 +440,9 @@ void DynaBlasterGame::GameWindow()
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() > bombTimer)
 		{
+			if (!player.bombRect.empty())
+				player.bombRect.pop_back();
+
 			explosionReady = false;
 			spacePressed = false;
 		}

@@ -15,5 +15,7 @@ private:
 private:
 	TileMap map;
 	sf::RenderWindow m_window;
+	sf::RectangleShape bombRect;
+	sf::RectangleShape bombExplosion;
 };
 
