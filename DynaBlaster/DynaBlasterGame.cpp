@@ -472,74 +472,88 @@ void DynaBlasterGame::DrawBombExplosion()
 	explosionPositions.push_back(bombRect.getPosition());
 	explosionPositions.push_back({ bombRect.getPosition().x, bombRect.getPosition().y - 48 });
 	int dimensiune = 5;
+	okDown = okLeft = okRight = okUp = true;
 	for (int index = 0; index < dimensiune; index++)
 	{
+		if (okRight == true) {
 
-		tempExplosion.x = bombRect.getPosition().x + 48 * index;
-		tempExplosion.y = bombRect.getPosition().y;
+			tempExplosion.x = bombRect.getPosition().x + 48 * index;
+			tempExplosion.y = bombRect.getPosition().y;
 
-		for (const auto& wallrect : map.GetRectVec())
-		{
-			if (tempExplosion.x < wallrect.x + 48 &&
-				tempExplosion.x + 48 > wallrect.x&&
-				tempExplosion.y < wallrect.y + 98 &&
-				tempExplosion.y + 48 > wallrect.y + 50)
+			for (const auto& wallrect : map.GetRectVec())
 			{
-				break;
+				if (tempExplosion.x < wallrect.x + 48 &&
+					tempExplosion.x + 48 > wallrect.x&&
+					tempExplosion.y < wallrect.y + 98 &&
+					tempExplosion.y + 48 > wallrect.y + 50)
+				{
+					okRight = false;
+					break;
+				}
+				explosionPositions.push_back(tempExplosion);
 			}
-			explosionPositions.push_back(tempExplosion);
 		}
 	}
 	for (int index = 0; index < dimensiune; index++)
 	{
-		tempExplosion.x = bombRect.getPosition().x - 48 * index;
-		tempExplosion.y = bombRect.getPosition().y;
-
-		for (const auto& wallrect : map.GetRectVec())
+		if (okLeft == true)
 		{
-			if (tempExplosion.x < wallrect.x + 48 &&
-				tempExplosion.x + 48 > wallrect.x&&
-				tempExplosion.y < wallrect.y + 98 &&
-				tempExplosion.y + 48 > wallrect.y + 50)
+			tempExplosion.x = bombRect.getPosition().x - 48 * index;
+			tempExplosion.y = bombRect.getPosition().y;
+
+			for (const auto& wallrect : map.GetRectVec())
 			{
-				break;
+				if (tempExplosion.x < wallrect.x + 48 &&
+					tempExplosion.x + 48 > wallrect.x&&
+					tempExplosion.y < wallrect.y + 98 &&
+					tempExplosion.y + 48 > wallrect.y + 50)
+				{
+					okLeft = false;
+				}
+				explosionPositions.push_back(tempExplosion);
 			}
-			explosionPositions.push_back(tempExplosion);
 		}
 	}
 	for (int index = 0; index < dimensiune; index++)
 	{
-
-		tempExplosion.x = bombRect.getPosition().x;
-		tempExplosion.y = bombRect.getPosition().y + 48 * index;
-
-		for (const auto& wallrect : map.GetRectVec())
+		if (okDown == true)
 		{
-			if (tempExplosion.x < wallrect.x + 48 &&
-				tempExplosion.x + 48 > wallrect.x&&
-				tempExplosion.y < wallrect.y + 98 &&
-				tempExplosion.y + 48 > wallrect.y + 50)
+
+			tempExplosion.x = bombRect.getPosition().x;
+			tempExplosion.y = bombRect.getPosition().y + 48 * index;
+
+			for (const auto& wallrect : map.GetRectVec())
 			{
-				break;
+				if (tempExplosion.x < wallrect.x + 48 &&
+					tempExplosion.x + 48 > wallrect.x&&
+					tempExplosion.y < wallrect.y + 98 &&
+					tempExplosion.y + 48 > wallrect.y + 50)
+				{
+					okDown = false;
+					break;
+				}
+				explosionPositions.push_back(tempExplosion);
 			}
-			explosionPositions.push_back(tempExplosion);
 		}
 	}
 	for (int index = 0; index < dimensiune; index++)
 	{
-		tempExplosion.x = bombRect.getPosition().x;
-		tempExplosion.y = bombRect.getPosition().y - 48 * index;
+		if (okUp == true) {
+			tempExplosion.x = bombRect.getPosition().x;
+			tempExplosion.y = bombRect.getPosition().y - 48 * index;
 
-		for (const auto& wallrect : map.GetRectVec())
-		{
-			if (tempExplosion.x < wallrect.x + 48 &&
-				tempExplosion.x + 48 > wallrect.x&&
-				tempExplosion.y < wallrect.y + 98 &&
-				tempExplosion.y + 48 > wallrect.y + 50)
+			for (const auto& wallrect : map.GetRectVec())
 			{
-				break;
+				if (tempExplosion.x < wallrect.x + 48 &&
+					tempExplosion.x + 48 > wallrect.x&&
+					tempExplosion.y < wallrect.y + 98 &&
+					tempExplosion.y + 48 > wallrect.y + 50)
+				{
+					okUp = false;
+					break;
+				}
+				explosionPositions.push_back(tempExplosion);
 			}
-			explosionPositions.push_back(tempExplosion);
 		}
 	}
 	for (auto& explosion : explosionPositions)

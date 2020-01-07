@@ -18,5 +18,11 @@ private:
 	sf::RenderWindow m_window;
 	sf::RectangleShape bombRect;
 	sf::RectangleShape bombExplosion;
+
+private:
+	bool okUp;
+	bool okDown;
+	bool okLeft;
+	bool okRight;
 };
 
