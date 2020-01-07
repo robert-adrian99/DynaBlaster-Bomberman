@@ -373,6 +373,12 @@ void DynaBlasterGame::GameWindow()
 					{
 						bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 						pPosition = player.GetPosition();
+
+						int xP = (pPosition.x + 24.f) / 48.00;
+						pPosition.x = xP * 48;
+						int yP = (pPosition.y - 50.f + 24.f) / 48.f;
+						pPosition.y = (yP * 48) + 50;
+
 						player.ok = true;
 						pPosition.y -= 50.f;
 						if (!player.bombRect.empty())
