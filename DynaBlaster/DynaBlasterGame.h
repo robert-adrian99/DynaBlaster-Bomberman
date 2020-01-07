@@ -11,6 +11,7 @@ private:
 	void HelpMenuWindow();
 	void StartWindow();
 	void GameWindow();
+	void DrawBombExplosion();
 
 private:
 	TileMap map;

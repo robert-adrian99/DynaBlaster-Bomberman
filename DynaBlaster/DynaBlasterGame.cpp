@@ -445,7 +445,7 @@ void DynaBlasterGame::GameWindow()
 			bombExplosion.setSize({ 48,48 });
 			bombExplosion.setPosition(bombPosition);
 			bombExplosion.setTexture(&explosionTexture);
-			m_window.draw(bombExplosion);
+			DrawBombExplosion();
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() > bombTimer)
 		{
@@ -462,6 +462,93 @@ void DynaBlasterGame::GameWindow()
 		m_window.clear();
 	}
 }
+
+void DynaBlasterGame::DrawBombExplosion()
+{
+	//prima pozitie = bomba actual;
+	//pe a 2-a pozitie = bomba.x + 48;
+	std::vector<sf::Vector2f> explosionPositions;
+	sf::Vector2f tempExplosion;
+	explosionPositions.push_back(bombRect.getPosition());
+	explosionPositions.push_back({ bombRect.getPosition().x, bombRect.getPosition().y - 48 });
+	int dimensiune = 5;
+	for (int index = 0; index < dimensiune; index++)
+	{
+
+		tempExplosion.x = bombRect.getPosition().x + 48 * index;
+		tempExplosion.y = bombRect.getPosition().y;
+
+		for (const auto& wallrect : map.GetRectVec())
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
+			{
+				break;
+			}
+			explosionPositions.push_back(tempExplosion);
+		}
+	}
+	for (int index = 0; index < dimensiune; index++)
+	{
+		tempExplosion.x = bombRect.getPosition().x - 48 * index;
+		tempExplosion.y = bombRect.getPosition().y;
+
+		for (const auto& wallrect : map.GetRectVec())
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
+			{
+				break;
+			}
+			explosionPositions.push_back(tempExplosion);
+		}
+	}
+	for (int index = 0; index < dimensiune; index++)
+	{
+
+		tempExplosion.x = bombRect.getPosition().x;
+		tempExplosion.y = bombRect.getPosition().y + 48 * index;
+
+		for (const auto& wallrect : map.GetRectVec())
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
+			{
+				break;
+			}
+			explosionPositions.push_back(tempExplosion);
+		}
+	}
+	for (int index = 0; index < dimensiune; index++)
+	{
+		tempExplosion.x = bombRect.getPosition().x;
+		tempExplosion.y = bombRect.getPosition().y - 48 * index;
+
+		for (const auto& wallrect : map.GetRectVec())
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
+			{
+				break;
+			}
+			explosionPositions.push_back(tempExplosion);
+		}
+	}
+	for (auto& explosion : explosionPositions)
+	{
+		bombExplosion.setPosition(explosion);
+		m_window.draw(bombExplosion);
+	}
+}
+
 
 void DynaBlasterGame::Run()
 {
