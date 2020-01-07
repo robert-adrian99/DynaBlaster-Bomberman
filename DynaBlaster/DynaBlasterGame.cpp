@@ -378,6 +378,9 @@ void DynaBlasterGame::GameWindow()
 						if (!player.bombRect.empty())
 							player.bombRect.pop_back();
 						player.SetBombRect(pPosition);
+						if (!enemy.bombRect.empty())
+							enemy.bombRect.pop_back();
+						enemy.bombRect.push_back(pPosition);
 						pPosition.y += 50.f;
 						bombIsActive = true;
 						explosionReady = false;

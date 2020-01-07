@@ -86,6 +86,28 @@ void EnemySFML::Movement()
 		}
 	}
 
+	for (const auto& wallrect : bombRect)
+	{
+		if (enemy.getPosition().x < wallrect.x + 42 &&
+			enemy.getPosition().x + 42 > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + 92 &&
+			enemy.getPosition().y + 42 > wallrect.y + 50 && ok == false)
+		{
+			currentPosition = lastPosition;
+			enemy.setPosition(currentPosition);
+			m_movement = random();
+			break;
+		}
+
+		if (!(enemy.getPosition().x < wallrect.x + 42 &&
+			enemy.getPosition().x + 42 > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + 92 &&
+			enemy.getPosition().y + 42 > wallrect.y + 50) && ok == true)
+		{
+			ok = false;
+		}
+	}
+
 	switch (m_movement)
 	{
 	case 0:
