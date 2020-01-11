@@ -7,6 +7,11 @@ public:
 	void Map();
 	bool load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height);
 	std::vector<sf::Vector2f> GetRectVec() const;
+	std::vector<sf::Vector2f> GetRectVecTemporar() const;
+	void SetRectVecTemp(const sf::Vector2f& positionRect);
+	void SetRectVec(const sf::Vector2f& positionRect);
+	void SetRectVec(const std::vector<sf::Vector2f> positions);
+	void ResetRectVec();
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -17,4 +22,5 @@ private:
 	sf::VertexArray m_vertices;
 	sf::Texture m_tileset;
 	std::vector<sf::Vector2f> rectVec;
+	std::vector<sf::Vector2f> rectVecTemporar;
 };

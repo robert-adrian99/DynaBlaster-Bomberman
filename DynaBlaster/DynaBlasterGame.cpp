@@ -462,13 +462,27 @@ void DynaBlasterGame::GameWindow()
 		m_window.clear();
 	}
 }
-
+struct TemporarVector
+{
+	std::vector<sf::Vector2f> blocks;
+	std::vector<bool> blocksType;
+};
 void DynaBlasterGame::DrawBombExplosion()
 {
 	//prima pozitie = bomba actual;
 	//pe a 2-a pozitie = bomba.x + 48;
 	std::vector<sf::Vector2f> explosionPositions;
 	sf::Vector2f tempExplosion;
+	TemporarVector blocks;
+	blocks.blocks = map.GetRectVec();
+	for (int index = 0; index < blocks.blocks.size(); index++)
+		blocks.blocksType.push_back(0);
+
+	for (int index = 0; index < map.GetRectVecTemporar().size(); index++)
+	{
+		blocks.blocks.push_back(map.GetRectVecTemporar()[index]);
+		blocks.blocksType.push_back(1);
+	}
 	explosionPositions.push_back(bombRect.getPosition());
 	explosionPositions.push_back({ bombRect.getPosition().x, bombRect.getPosition().y - 48 });
 	int dimensiune = 5;
@@ -480,7 +494,7 @@ void DynaBlasterGame::DrawBombExplosion()
 			tempExplosion.x = bombRect.getPosition().x + 48 * index;
 			tempExplosion.y = bombRect.getPosition().y;
 
-			for (const auto& wallrect : map.GetRectVec())
+			for (const auto& wallrect : blocks.blocks)
 			{
 				if (tempExplosion.x < wallrect.x + 48 &&
 					tempExplosion.x + 48 > wallrect.x&&
@@ -501,7 +515,7 @@ void DynaBlasterGame::DrawBombExplosion()
 			tempExplosion.x = bombRect.getPosition().x - 48 * index;
 			tempExplosion.y = bombRect.getPosition().y;
 
-			for (const auto& wallrect : map.GetRectVec())
+			for (const auto& wallrect : blocks.blocks)
 			{
 				if (tempExplosion.x < wallrect.x + 48 &&
 					tempExplosion.x + 48 > wallrect.x&&
@@ -522,7 +536,7 @@ void DynaBlasterGame::DrawBombExplosion()
 			tempExplosion.x = bombRect.getPosition().x;
 			tempExplosion.y = bombRect.getPosition().y + 48 * index;
 
-			for (const auto& wallrect : map.GetRectVec())
+			for (const auto& wallrect : blocks.blocks)
 			{
 				if (tempExplosion.x < wallrect.x + 48 &&
 					tempExplosion.x + 48 > wallrect.x&&
@@ -542,7 +556,7 @@ void DynaBlasterGame::DrawBombExplosion()
 			tempExplosion.x = bombRect.getPosition().x;
 			tempExplosion.y = bombRect.getPosition().y - 48 * index;
 
-			for (const auto& wallrect : map.GetRectVec())
+			for (const auto& wallrect : blocks.blocks)
 			{
 				if (tempExplosion.x < wallrect.x + 48 &&
 					tempExplosion.x + 48 > wallrect.x&&

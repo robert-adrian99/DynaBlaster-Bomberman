@@ -43,9 +43,14 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
 			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
 
-			if (tileNumber == 1 || tileNumber == 2)
+			if (tileNumber == 1)
 			{
 				rectVec.push_back(quad[0].position);
+			}
+
+			if (tileNumber == 2)
+			{
+				rectVecTemporar.push_back(quad[0].position);
 			}
 		}
 	}
@@ -55,6 +60,11 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 std::vector<sf::Vector2f> TileMap::GetRectVec() const
 {
 	return rectVec;
+}
+
+std::vector<sf::Vector2f> TileMap::GetRectVecTemporar() const
+{
+	return rectVecTemporar;
 }
 
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -69,6 +79,28 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_vertices, states);
 }
 
+void TileMap::SetRectVecTemp(const sf::Vector2f& positionRect)
+{
+	for (int index = 0; index < rectVecTemporar.size(); index++)
+		if (rectVecTemporar[index] == positionRect)
+			rectVecTemporar[index] = { -48,-48 };
+}
+void TileMap::SetRectVec(const sf::Vector2f& positionRect)
+{
+	rectVec.emplace_back(positionRect);
+}
+
+void TileMap::SetRectVec(const std::vector<sf::Vector2f> positions)
+{
+	rectVec.clear();
+	//rectVec = positions;
+	rectVec.assign(positions.begin(), positions.end());
+}
+
+void TileMap::ResetRectVec()
+{
+	rectVec.pop_back();
+}
 int TileMap::RandomColumn(int random)
 {
 	std::random_device dev;

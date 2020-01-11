@@ -62,11 +62,11 @@ EnemySFML::EnemySFML(EnemyType enemyType)
 	}
 	enemy.setTexture(&enemyTexture);
 	enemy.setSize({ 48,48 });
-	enemy.setPosition({ 1 *48, 8 * 48 + 50 });
+	enemy.setPosition({ 1 * 48, 8 * 48 + 50 });
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
 	m_movement = 0;
-	
+
 }
 void EnemySFML::Movement()
 {
@@ -85,7 +85,19 @@ void EnemySFML::Movement()
 			break;
 		}
 	}
-
+	for (const auto& wallrect : map.GetRectVecTemporar())
+	{
+		if (enemy.getPosition().x < wallrect.x + 42 &&
+			enemy.getPosition().x + 42 > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + 92 &&
+			enemy.getPosition().y + 42 > wallrect.y + 50)
+		{
+			currentPosition = lastPosition;
+			enemy.setPosition(currentPosition);
+			m_movement = random();
+			break;
+		}
+	}
 	for (const auto& wallrect : bombRect)
 	{
 		if (enemy.getPosition().x < wallrect.x + 42 &&
@@ -111,32 +123,32 @@ void EnemySFML::Movement()
 	switch (m_movement)
 	{
 	case 0:
-		{
-			lastPosition = enemy.getPosition();
-			enemy.move(0, -speed);
-		}
-		break;
+	{
+		lastPosition = enemy.getPosition();
+		enemy.move(0, -speed);
+	}
+	break;
 	case 1:
-		
-		{
-			lastPosition = enemy.getPosition();
-			enemy.move(0, speed);
-		}
-		break;
+
+	{
+		lastPosition = enemy.getPosition();
+		enemy.move(0, speed);
+	}
+	break;
 	case 2:
-		
-		{
-			lastPosition = enemy.getPosition();
-			enemy.move(speed, 0);
-		}
-		break;
+
+	{
+		lastPosition = enemy.getPosition();
+		enemy.move(speed, 0);
+	}
+	break;
 	case 3:
-		
-		{
-			lastPosition = enemy.getPosition();
-			enemy.move(-speed, 0);
-		}
-		break;
+
+	{
+		lastPosition = enemy.getPosition();
+		enemy.move(-speed, 0);
+	}
+	break;
 	default:
 		break;
 	}

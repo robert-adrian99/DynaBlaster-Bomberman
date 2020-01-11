@@ -27,7 +27,18 @@ void PlayerSFML::Move()
 			break;
 		}
 	}
-
+	for (const auto& wallrect : map->GetRectVecTemporar())
+	{
+		if (player.getPosition().x < wallrect.x + 42 &&
+			player.getPosition().x + 42 > wallrect.x&&
+			player.getPosition().y < wallrect.y + 92 &&
+			player.getPosition().y + 42 > wallrect.y + 50)
+		{
+			currentPosition = lastPosition;
+			player.setPosition(currentPosition);
+			break;
+		}
+	}
 	for (const auto& bombrect : bombRect)
 	{
 		if (player.getPosition().x < bombrect.x + 42 &&
