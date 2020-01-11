@@ -293,8 +293,6 @@ void DynaBlasterGame::GameWindow()
 	colleged.loadFromFile("colleged.ttf");
 
 	m_window.setKeyRepeatEnabled(true);
-	PlayerSFML player;
-	EnemySFML enemy(EnemyType::Barom);
 
 	sf::Texture scoreBarTxt;
 	scoreBarTxt.loadFromFile("ScoreBar.png");
@@ -304,7 +302,8 @@ void DynaBlasterGame::GameWindow()
 
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
-
+	PlayerSFML player;
+	EnemySFML enemy(EnemyType::Barom, map);
 	player.SetMap(map);
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
@@ -486,27 +485,27 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 		blocks.blocksType.push_back(1);
 	}
 	explosionPositions.push_back(bombRect.getPosition());
-	explosionPositions.push_back({ bombRect.getPosition().x, bombRect.getPosition().y - 48 });
-	int dimensiune = 5;
+	int explosionRange = 2;
 	okDown = okLeft = okRight = okUp = true;
-	for (int index = 0; index < dimensiune; index++)
+	for (int index = 0; index < explosionRange; index++)
 	{
-		if (okRight == true)
+
+		tempExplosion.x = bombRect.getPosition().x + 48 * index;
+		tempExplosion.y = bombRect.getPosition().y;
+
+		for (const auto& wallrect : blocks.blocks)
 		{
-
-			tempExplosion.x = bombRect.getPosition().x + 48 * index;
-			tempExplosion.y = bombRect.getPosition().y;
-
-			for (const auto& wallrect : blocks.blocks)
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
 			{
-				if (tempExplosion.x < wallrect.x + 48 &&
-					tempExplosion.x + 48 > wallrect.x&&
-					tempExplosion.y < wallrect.y + 98 &&
-					tempExplosion.y + 48 > wallrect.y + 50)
-				{
-					okRight = false;
-					break;
-				}
+				okRight = false;
+				break;
+			}
+			if (okRight == true)
+			{
+
 				explosionPositions.push_back(tempExplosion);
 			}
 		}
@@ -518,22 +517,23 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 			enemy.EnemyDie();
 		}
 	}
-	for (int index = 0; index < dimensiune; index++)
+	for (int index = 0; index < explosionRange; index++)
 	{
-		if (okLeft == true)
-		{
-			tempExplosion.x = bombRect.getPosition().x - 48 * index;
-			tempExplosion.y = bombRect.getPosition().y;
 
-			for (const auto& wallrect : blocks.blocks)
+		tempExplosion.x = bombRect.getPosition().x - 48 * index;
+		tempExplosion.y = bombRect.getPosition().y;
+
+		for (const auto& wallrect : blocks.blocks)
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
 			{
-				if (tempExplosion.x < wallrect.x + 48 &&
-					tempExplosion.x + 48 > wallrect.x&&
-					tempExplosion.y < wallrect.y + 98 &&
-					tempExplosion.y + 48 > wallrect.y + 50)
-				{
-					okLeft = false;
-				}
+				okLeft = false;
+			}
+			if (okLeft == true)
+			{
 				explosionPositions.push_back(tempExplosion);
 			}
 		}
@@ -545,24 +545,23 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 			enemy.EnemyDie();
 		}
 	}
-	for (int index = 0; index < dimensiune; index++)
+	for (int index = 0; index < explosionRange; index++)
 	{
-		if (okDown == true)
+		tempExplosion.x = bombRect.getPosition().x;
+		tempExplosion.y = bombRect.getPosition().y + 48 * index;
+
+		for (const auto& wallrect : blocks.blocks)
 		{
-
-			tempExplosion.x = bombRect.getPosition().x;
-			tempExplosion.y = bombRect.getPosition().y + 48 * index;
-
-			for (const auto& wallrect : blocks.blocks)
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
 			{
-				if (tempExplosion.x < wallrect.x + 48 &&
-					tempExplosion.x + 48 > wallrect.x&&
-					tempExplosion.y < wallrect.y + 98 &&
-					tempExplosion.y + 48 > wallrect.y + 50)
-				{
-					okDown = false;
-					break;
-				}
+				okDown = false;
+				break;
+			}
+			if (okDown == true)
+			{
 				explosionPositions.push_back(tempExplosion);
 			}
 		}
@@ -575,22 +574,23 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 		}
 	}
 
-	for (int index = 0; index < dimensiune; index++)
+	for (int index = 0; index < explosionRange; index++)
 	{
-		if (okUp == true) {
-			tempExplosion.x = bombRect.getPosition().x;
-			tempExplosion.y = bombRect.getPosition().y - 48 * index;
+		tempExplosion.x = bombRect.getPosition().x;
+		tempExplosion.y = bombRect.getPosition().y - 48 * index;
 
-			for (const auto& wallrect : blocks.blocks)
+		for (const auto& wallrect : blocks.blocks)
+		{
+			if (tempExplosion.x < wallrect.x + 48 &&
+				tempExplosion.x + 48 > wallrect.x&&
+				tempExplosion.y < wallrect.y + 98 &&
+				tempExplosion.y + 48 > wallrect.y + 50)
 			{
-				if (tempExplosion.x < wallrect.x + 48 &&
-					tempExplosion.x + 48 > wallrect.x&&
-					tempExplosion.y < wallrect.y + 98 &&
-					tempExplosion.y + 48 > wallrect.y + 50)
-				{
-					okUp = false;
-					break;
-				}
+				okUp = false;
+				break;
+			}
+			if (okUp == true)
+			{
 				explosionPositions.push_back(tempExplosion);
 			}
 		}

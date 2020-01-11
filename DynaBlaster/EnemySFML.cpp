@@ -1,6 +1,6 @@
 #include "EnemySFML.h"
 
-int random()
+int RandomGeneratorForMovement()
 {
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -8,7 +8,18 @@ int random()
 	return rrandom(rng);
 }
 
-EnemySFML::EnemySFML(EnemyType enemyType)
+std::pair<int, int> RandomGeneratorForPosition()
+{
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, 10);
+	int randomLine = rowRandom(rng);
+	std::uniform_int_distribution<std::mt19937::result_type> columnRandom(1, 12);
+	int randomColumn = columnRandom(rng);
+	return std::make_pair(randomLine, randomColumn);
+}
+
+EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 {
 	if (enemyType == EnemyType::Barom)
 	{
@@ -60,19 +71,44 @@ EnemySFML::EnemySFML(EnemyType enemyType)
 		if (!enemyTexture.loadFromFile("EnemySFML.png", { 9 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
+	this->map = &map;
 	enemy.setTexture(&enemyTexture);
 	enemy.setSize({ 48,48 });
-	enemy.setPosition({ 1 * 48, 8 * 48 + 50 });
-	map.Map();
-	map.setPosition(0.0f, 50.0f);
+	std::vector<sf::Vector2f> rectPositions = this->map->GetRectVec();
+	std::vector<sf::Vector2f> rectTempPositions = this->map->GetRectVecTemporar();
+	std::pair<int, int> randomPosition;
+	bool okPosition = true;
+	do {
+		randomPosition = RandomGeneratorForPosition();
+		for (const auto& rect : rectPositions)
+		{
+			if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48)
+			{
+				okPosition = false;
+				break;
+			}
+		}
+		for (const auto& rect : rectTempPositions)
+		{
+			if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48)
+			{
+				okPosition = false;
+				break;
+			}
+		}
+	} while (okPosition == false);
+	float posY = randomPosition.first * 48 + 50;
+	float posX = randomPosition.second * 48;
+	enemy.setPosition({ posX,posY });
 	m_movement = 0;
-
+	lastPosition = enemy.getPosition();
+	currentPosition = enemy.getPosition();
 }
 void EnemySFML::Movement()
 {
 	float speed = 0.1;
 	currentPosition = enemy.getPosition();
-	for (const auto& wallrect : map.GetRectVec())
+	for (const auto& wallrect : map->GetRectVec())
 	{
 		if (enemy.getPosition().x < wallrect.x + 42 &&
 			enemy.getPosition().x + 42 > wallrect.x&&
@@ -81,11 +117,11 @@ void EnemySFML::Movement()
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
-			m_movement = random();
+			m_movement = RandomGeneratorForMovement();
 			break;
 		}
 	}
-	for (const auto& wallrect : map.GetRectVecTemporar())
+	for (const auto& wallrect : map->GetRectVecTemporar())
 	{
 		if (enemy.getPosition().x < wallrect.x + 42 &&
 			enemy.getPosition().x + 42 > wallrect.x&&
@@ -94,7 +130,7 @@ void EnemySFML::Movement()
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
-			m_movement = random();
+			m_movement = RandomGeneratorForMovement();
 			break;
 		}
 	}
@@ -107,7 +143,7 @@ void EnemySFML::Movement()
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
-			m_movement = random();
+			m_movement = RandomGeneratorForMovement();
 			break;
 		}
 

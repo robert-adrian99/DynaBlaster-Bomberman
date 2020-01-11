@@ -10,7 +10,7 @@
 class EnemySFML
 {
 public:
-	EnemySFML(EnemyType enemyType);
+	EnemySFML(EnemyType enemyType, TileMap& map);
 	void Movement();
 	sf::Vector2f GetPosition();
 	void EnemyDie();
@@ -21,12 +21,11 @@ public:
 	std::vector<sf::Vector2f> bombRect;
 	bool ok;
 
-
 private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
 	sf::Texture enemyTexture;
-	TileMap map;
+	TileMap* map;
 	int m_movement;
 	bool m_active = true;
 };
