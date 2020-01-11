@@ -14,6 +14,7 @@ public:
 	void Movement();
 	sf::Vector2f GetPosition();
 	void EnemyDie();
+	bool GetActive() const;
 
 public:
 	sf::RectangleShape enemy;
@@ -27,5 +28,6 @@ private:
 	sf::Texture enemyTexture;
 	TileMap map;
 	int m_movement;
+	bool m_active = true;
 };
 

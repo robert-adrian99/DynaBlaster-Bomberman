@@ -1,5 +1,6 @@
 #pragma once
 #include "TileMap.h"
+#include "EnemySFML.h"
 
 class DynaBlasterGame
 {
@@ -11,7 +12,7 @@ private:
 	void HelpMenuWindow();
 	void StartWindow();
 	void GameWindow();
-	void DrawBombExplosion();
+	void DrawBombExplosion(EnemySFML& enemy);
 
 private:
 	TileMap map;

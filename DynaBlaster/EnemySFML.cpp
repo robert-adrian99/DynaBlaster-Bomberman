@@ -159,7 +159,11 @@ sf::Vector2f EnemySFML::GetPosition()
 }
 void EnemySFML::EnemyDie()
 {
-	//Destroy the enemy. Work in progress.
+	m_active = false;
+	enemy.setPosition({ 0,0 });
 }
-
+bool EnemySFML::GetActive() const
+{
+	return m_active;
+}
 
