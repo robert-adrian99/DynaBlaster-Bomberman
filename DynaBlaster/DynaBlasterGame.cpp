@@ -8,7 +8,6 @@
 #include <iostream>
 #include <chrono>
 #include <array>
-#include "EnemySFML.h"
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -183,7 +182,7 @@ void DynaBlasterGame::StartWindow()
 	startSong.play();
 	startSong.setLoop(true);
 
-	bool playMusic = false;
+	int contor = 0;
 	while (m_window.isOpen())
 	{
 		sf::Event event;
@@ -195,10 +194,7 @@ void DynaBlasterGame::StartWindow()
 		{
 			switch (event.type)
 			{
-			case sf::Event::Closed:
-				m_window.close();
-				break;
-			case sf::Event::MouseMoved:
+			case::sf::Event::MouseMoved:
 				if (help.IsMouseOver(m_window))
 				{
 					help.SetFontSize(23);
@@ -261,8 +257,8 @@ void DynaBlasterGame::StartWindow()
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::M)
 				{
-					playMusic = !playMusic;
-					if (playMusic == true)
+					contor++;
+					if (contor % 2 == 1)
 					{
 						startSong.pause();
 					}
@@ -289,6 +285,8 @@ void DynaBlasterGame::GameWindow()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
+	std::vector<int> bombVector = { 0, 1, 2, 3 };
+
 	sf::Font colleged;
 	colleged.loadFromFile("colleged.ttf");
 
@@ -306,9 +304,11 @@ void DynaBlasterGame::GameWindow()
 	EnemySFML enemy(EnemyType::Barom, map);
 	player.SetMap(map);
 
+
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
 	back.SetPosition({ 50, 678 });
+
 
 	sf::Music mapSong;
 	mapSong.openFromFile("MapDisplay.ogg");
@@ -316,8 +316,7 @@ void DynaBlasterGame::GameWindow()
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
 	mapSong.play();
 	mapSong.setLoop(true);
-
-	bool playMusic = false;
+	int contor = 0;
 	bool spacePressed = false;
 	bool bombIsActive = false;
 	bool bigOrSmall = true;
@@ -351,14 +350,16 @@ void DynaBlasterGame::GameWindow()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(m_window))
 				{
 					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
+					map.ResetMap();
+					mapSong.stop();
 					StartWindow();
 				}
 				break;
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::M)
 				{
-					playMusic = !playMusic;
-					if (playMusic == true)
+					contor++;
+					if (contor % 2 == 1)
 					{
 						mapSong.pause();
 					}
@@ -367,6 +368,8 @@ void DynaBlasterGame::GameWindow()
 						mapSong.play();
 					}
 				}
+				if (event.key.code == sf::Keyboard::Escape)
+					m_window.close();
 				if (event.key.code == sf::Keyboard::Space)
 				{
 					if (bombIsActive == false)
@@ -396,8 +399,8 @@ void DynaBlasterGame::GameWindow()
 				break;
 			}
 		}
-		m_window.draw(map);
 		m_window.draw(scoreBar);
+		m_window.draw(map);
 		player.Move();
 		enemy.Movement();
 
@@ -445,12 +448,16 @@ void DynaBlasterGame::GameWindow()
 			bombExplosion.setSize({ 48,48 });
 			bombExplosion.setPosition(bombPosition);
 			bombExplosion.setTexture(&explosionTexture);
+			m_window.draw(bombExplosion);
 			DrawBombExplosion(enemy);
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() > bombTimer)
 		{
 			if (!player.bombRect.empty())
 				player.bombRect.pop_back();
+
+			if (!enemy.bombRect.empty())
+				enemy.bombRect.pop_back();
 
 			explosionReady = false;
 			spacePressed = false;
@@ -470,10 +477,9 @@ struct TemporarVector
 };
 void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 {
-	//prima pozitie = bomba actual;
-	//pe a 2-a pozitie = bomba.x + 48;
 	std::vector<sf::Vector2f> explosionPositions;
 	sf::Vector2f tempExplosion;
+
 	TemporarVector blocks;
 	blocks.blocks = map.GetRectVec();
 	for (int index = 0; index < blocks.blocks.size(); index++)
@@ -485,14 +491,15 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 		blocks.blocksType.push_back(1);
 	}
 	explosionPositions.push_back(bombRect.getPosition());
-	int explosionRange = 2;
+	int dimension = 2;
 	okDown = okLeft = okRight = okUp = true;
-	for (int index = 0; index < explosionRange; index++)
-	{
+	tempExplosion.x = bombRect.getPosition().x;
+	tempExplosion.y = bombRect.getPosition().y;
 
+	for (int index = 0; index < dimension; index++)
+	{
 		tempExplosion.x = bombRect.getPosition().x + 48 * index;
 		tempExplosion.y = bombRect.getPosition().y;
-
 		for (const auto& wallrect : blocks.blocks)
 		{
 			if (tempExplosion.x < wallrect.x + 48 &&
@@ -503,12 +510,12 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 				okRight = false;
 				break;
 			}
-			if (okRight == true)
-			{
-
-				explosionPositions.push_back(tempExplosion);
-			}
 		}
+		if (okRight == true)
+		{
+			explosionPositions.push_back(tempExplosion);
+		}
+
 		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
 			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
 			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
@@ -517,12 +524,13 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 			enemy.EnemyDie();
 		}
 	}
-	for (int index = 0; index < explosionRange; index++)
-	{
 
+	tempExplosion.x = bombRect.getPosition().x;
+	tempExplosion.y = bombRect.getPosition().y;
+	for (int index = 0; index < dimension; index++)
+	{
 		tempExplosion.x = bombRect.getPosition().x - 48 * index;
 		tempExplosion.y = bombRect.getPosition().y;
-
 		for (const auto& wallrect : blocks.blocks)
 		{
 			if (tempExplosion.x < wallrect.x + 48 &&
@@ -532,10 +540,11 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 			{
 				okLeft = false;
 			}
-			if (okLeft == true)
-			{
-				explosionPositions.push_back(tempExplosion);
-			}
+		}
+		if (okLeft == true)
+		{
+			explosionPositions.push_back(tempExplosion);
+
 		}
 		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
 			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
@@ -545,11 +554,13 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 			enemy.EnemyDie();
 		}
 	}
-	for (int index = 0; index < explosionRange; index++)
+
+	tempExplosion.x = bombRect.getPosition().x;
+	tempExplosion.y = bombRect.getPosition().y;
+	for (int index = 0; index < dimension; index++)
 	{
 		tempExplosion.x = bombRect.getPosition().x;
 		tempExplosion.y = bombRect.getPosition().y + 48 * index;
-
 		for (const auto& wallrect : blocks.blocks)
 		{
 			if (tempExplosion.x < wallrect.x + 48 &&
@@ -560,10 +571,11 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 				okDown = false;
 				break;
 			}
-			if (okDown == true)
-			{
-				explosionPositions.push_back(tempExplosion);
-			}
+		}
+		if (okDown == true)
+		{
+			explosionPositions.push_back(tempExplosion);
+
 		}
 		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
 			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
@@ -574,11 +586,12 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 		}
 	}
 
-	for (int index = 0; index < explosionRange; index++)
+	tempExplosion.x = bombRect.getPosition().x;
+	tempExplosion.y = bombRect.getPosition().y;
+	for (int index = 0; index < dimension; index++)
 	{
 		tempExplosion.x = bombRect.getPosition().x;
 		tempExplosion.y = bombRect.getPosition().y - 48 * index;
-
 		for (const auto& wallrect : blocks.blocks)
 		{
 			if (tempExplosion.x < wallrect.x + 48 &&
@@ -589,10 +602,10 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 				okUp = false;
 				break;
 			}
-			if (okUp == true)
-			{
-				explosionPositions.push_back(tempExplosion);
-			}
+		}
+		if (okUp == true)
+		{
+			explosionPositions.push_back(tempExplosion);
 		}
 		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
 			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
@@ -608,7 +621,6 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy)
 		m_window.draw(bombExplosion);
 	}
 }
-
 
 void DynaBlasterGame::Run()
 {

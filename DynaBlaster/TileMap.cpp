@@ -2,6 +2,7 @@
 #include "Button.h"
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include <random>
 #include "../Logging/Logger.h"
 #include <SFML/Audio.hpp>
@@ -43,6 +44,15 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
 			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
 
+
+			//De aici am schimbat sa fac 2 tipuri de blocuri.
+			/*Din
+			if (tileNumber == 1 || tileNumber == 2)
+			{
+				rectVec.push_back(quad[0].position);
+			}
+			*/
+
 			if (tileNumber == 1)
 			{
 				rectVec.push_back(quad[0].position);
@@ -52,9 +62,11 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 			{
 				rectVecTemporar.push_back(quad[0].position);
 			}
+
+			//pana aici
+
 		}
 	}
-	return true;
 }
 
 std::vector<sf::Vector2f> TileMap::GetRectVec() const
@@ -62,21 +74,10 @@ std::vector<sf::Vector2f> TileMap::GetRectVec() const
 	return rectVec;
 }
 
+//si asta
 std::vector<sf::Vector2f> TileMap::GetRectVecTemporar() const
 {
 	return rectVecTemporar;
-}
-
-void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	// apply the transform
-	states.transform *= getTransform();
-
-	// apply the tileset texture
-	states.texture = &m_tileset;
-
-	// draw the vertex array
-	target.draw(m_vertices, states);
 }
 
 void TileMap::SetRectVecTemp(const sf::Vector2f& positionRect)
@@ -85,6 +86,17 @@ void TileMap::SetRectVecTemp(const sf::Vector2f& positionRect)
 		if (rectVecTemporar[index] == positionRect)
 			rectVecTemporar[index] = { -48,-48 };
 }
+
+void TileMap::ResetMap()
+{
+	m_vertices.clear();
+	m_tileset.~Texture();
+	rectVec.clear();
+	rectVecTemporar.clear();
+}
+
+//pana aici
+
 void TileMap::SetRectVec(const sf::Vector2f& positionRect)
 {
 	rectVec.emplace_back(positionRect);
@@ -101,6 +113,18 @@ void TileMap::ResetRectVec()
 {
 	rectVec.pop_back();
 }
+
+void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	// apply the transform
+	states.transform *= getTransform();
+	// apply the tileset texture
+	states.texture = &m_tileset;
+
+	// draw the vertex array
+	target.draw(m_vertices, states);
+}
+
 int TileMap::RandomColumn(int random)
 {
 	std::random_device dev;
@@ -134,9 +158,8 @@ void TileMap::Map()
 	back.SetPosition({ 50,638 });
 	back.SetFont(colleged);
 
-
-	// define the level with an array of tile indices
 	std::vector<int> level;
+	// define the level with an array of tile indices
 	for (size_t line = 0; line < linesNumber; ++line)
 	{
 		for (size_t column = 0; column < columnsNumber; ++column)
@@ -153,6 +176,7 @@ void TileMap::Map()
 				level.push_back(0);
 		}
 	}
+
 	int NoWall = 32;
 	srand(time(NULL)); //initialize the random seed
 	int RandIndex = rand() % level.size(); //generates a random number between 0 and 3

@@ -76,24 +76,30 @@ EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 	enemy.setSize({ 48,48 });
 	std::vector<sf::Vector2f> rectPositions = this->map->GetRectVec();
 	std::vector<sf::Vector2f> rectTempPositions = this->map->GetRectVecTemporar();
-	std::pair<int, int> randomPosition;
+	std::pair<int, int> randomPosition = RandomGeneratorForPosition();
 	bool okPosition = true;
 	do {
+		okPosition = true;
 		randomPosition = RandomGeneratorForPosition();
 		for (const auto& rect : rectPositions)
 		{
-			if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48)
+			if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48 ||
+				(rect.x == 48 && rect.y == 98) || (rect.x == 48 && rect.y == 146) || (rect.x == 96 && rect.y == 98))
 			{
 				okPosition = false;
 				break;
 			}
 		}
-		for (const auto& rect : rectTempPositions)
+		if (okPosition)
 		{
-			if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48)
+			for (const auto& rect : rectTempPositions)
 			{
-				okPosition = false;
-				break;
+				if (rect.x == randomPosition.second * 48 && rect.y == randomPosition.first * 48 ||
+					(rect.x == 48 && rect.y == 48) || (rect.x == 48 && rect.y == 96) || (rect.x == 96 && rect.y == 48))
+				{
+					okPosition = false;
+					break;
+				}
 			}
 		}
 	} while (okPosition == false);
@@ -121,6 +127,7 @@ void EnemySFML::Movement()
 			break;
 		}
 	}
+	//si asta
 	for (const auto& wallrect : map->GetRectVecTemporar())
 	{
 		if (enemy.getPosition().x < wallrect.x + 42 &&
@@ -134,6 +141,7 @@ void EnemySFML::Movement()
 			break;
 		}
 	}
+	//pana aici
 	for (const auto& wallrect : bombRect)
 	{
 		if (enemy.getPosition().x < wallrect.x + 42 &&
@@ -198,8 +206,8 @@ void EnemySFML::EnemyDie()
 	m_active = false;
 	enemy.setPosition({ 0,0 });
 }
+
 bool EnemySFML::GetActive() const
 {
 	return m_active;
 }
-
