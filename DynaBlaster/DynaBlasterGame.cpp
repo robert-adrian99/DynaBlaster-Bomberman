@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <array>
+#include <sstream>
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -298,6 +299,30 @@ void DynaBlasterGame::GameWindow()
 	sf::Sprite scoreBar;
 	scoreBar.setTexture(scoreBarTxt);
 
+	lives.setPosition(433, 13);
+	lives.setFont(colleged);
+	lives.setCharacterSize(22);
+	lives.setString("3");
+	lives.setOutlineColor(sf::Color::White);
+
+	score.setPosition(145, 13);
+	score.setFont(colleged);
+	score.setCharacterSize(22);
+	score.setString("0");
+	score.setOutlineColor(sf::Color::White);
+
+	highScore.setPosition(600, 13);
+	highScore.setFont(colleged);
+	highScore.setCharacterSize(22);
+	highScore.setString("0");
+	highScore.setOutlineColor(sf::Color::White);
+
+
+	time.setPosition(310, 13);
+	time.setFont(colleged);
+	time.setCharacterSize(22);
+	time.setOutlineColor(sf::Color::White);
+
 	map.Map();
 	map.setPosition(0.0f, 50.0f);
 	PlayerSFML player;
@@ -326,11 +351,15 @@ void DynaBlasterGame::GameWindow()
 	sf::Vector2f bombPosition;
 	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 
+	m_minutes = 1;
+	m_seconds = 0;
+
 	while (m_window.isOpen())
 	{
 		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
+			
 			switch (event.type)
 			{
 			case sf::Event::Closed:
@@ -399,7 +428,29 @@ void DynaBlasterGame::GameWindow()
 				break;
 			}
 		}
+
+		int timer = clock.getElapsedTime().asSeconds();
+		if (timer > 0)
+		{
+			if (m_seconds == 00) {
+
+				m_minutes--;
+				m_seconds = 60;
+			}
+			m_seconds--;
+			if (m_minutes == 0 && m_seconds == 0)
+				break;
+			if(m_seconds<10)
+				time.setString(std::to_string(m_minutes) + ":" + "0" + std::to_string(m_seconds));
+			else
+				time.setString(std::to_string(m_minutes) + ":" + std::to_string(m_seconds));
+			clock.restart();
+		}
 		m_window.draw(scoreBar);
+		m_window.draw(lives);
+		m_window.draw(score);
+		m_window.draw(time);
+		m_window.draw(highScore);
 		m_window.draw(map);
 		player.Move();
 		enemy.Movement();

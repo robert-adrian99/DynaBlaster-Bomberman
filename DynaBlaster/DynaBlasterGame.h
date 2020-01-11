@@ -25,5 +25,13 @@ private:
 	bool okDown;
 	bool okLeft;
 	bool okRight;
-};
 
+	sf::Text lives;
+	sf::Text score;
+	sf::Text time;
+	sf::Text highScore;
+
+	sf::Clock clock;
+	int m_minutes;
+	int m_seconds;
+};
