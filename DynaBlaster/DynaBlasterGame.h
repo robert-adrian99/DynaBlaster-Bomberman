@@ -12,13 +12,14 @@ private:
 	void HelpMenuWindow();
 	void StartWindow();
 	void GameWindow();
-	void DrawBombExplosion(EnemySFML& enemy);
+	void DrawBombExplosion(EnemySFML& enemy,std::vector<sf::RectangleShape>& grassRectangle);
 
 private:
 	TileMap map;
 	sf::RenderWindow m_window;
 	sf::RectangleShape bombRect;
 	sf::RectangleShape bombExplosion;
+	std::vector<sf::RectangleShape> grassRectangle;
 
 private:
 	bool okUp;
@@ -34,4 +35,10 @@ private:
 	sf::Clock clock;
 	int m_minutes;
 	int m_seconds;
+
+	int m_index;
+	sf::Texture grassTexture;
+	bool isActive = false;
+	std::vector<sf::Vector2f> explosionPositions;
+	bool justExplosion;
 };

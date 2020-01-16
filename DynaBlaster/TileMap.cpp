@@ -190,6 +190,7 @@ void TileMap::Map()
 			--NoWall;
 		}
 	}
+
 	// create the tilemap from the level definition
 	if (load("tileset.png", sf::Vector2u(48, 48), level, 15, 13))
 		return;

@@ -110,16 +110,19 @@ EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 	lastPosition = enemy.getPosition();
 	currentPosition = enemy.getPosition();
 }
+
+const int enemyDimension = 46;
+
 void EnemySFML::Movement()
 {
 	float speed = 0.1;
 	currentPosition = enemy.getPosition();
 	for (const auto& wallrect : map->GetRectVec())
 	{
-		if (enemy.getPosition().x < wallrect.x + 42 &&
-			enemy.getPosition().x + 42 > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + 92 &&
-			enemy.getPosition().y + 42 > wallrect.y + 50)
+		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
+			enemy.getPosition().x + enemyDimension > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + 50 + enemyDimension &&
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50)
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
@@ -130,10 +133,10 @@ void EnemySFML::Movement()
 	//si asta
 	for (const auto& wallrect : map->GetRectVecTemporar())
 	{
-		if (enemy.getPosition().x < wallrect.x + 42 &&
-			enemy.getPosition().x + 42 > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + 92 &&
-			enemy.getPosition().y + 42 > wallrect.y + 50)
+		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
+			enemy.getPosition().x + enemyDimension > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50)
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
@@ -144,10 +147,10 @@ void EnemySFML::Movement()
 	//pana aici
 	for (const auto& wallrect : bombRect)
 	{
-		if (enemy.getPosition().x < wallrect.x + 42 &&
-			enemy.getPosition().x + 42 > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + 92 &&
-			enemy.getPosition().y + 42 > wallrect.y + 50 && ok == false)
+		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
+			enemy.getPosition().x + enemyDimension > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50 && ok == false)
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
@@ -155,10 +158,10 @@ void EnemySFML::Movement()
 			break;
 		}
 
-		if (!(enemy.getPosition().x < wallrect.x + 42 &&
-			enemy.getPosition().x + 42 > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + 92 &&
-			enemy.getPosition().y + 42 > wallrect.y + 50) && ok == true)
+		if (!(enemy.getPosition().x < wallrect.x + enemyDimension &&
+			enemy.getPosition().x + enemyDimension > wallrect.x&&
+			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50) && ok == true)
 		{
 			ok = false;
 		}
