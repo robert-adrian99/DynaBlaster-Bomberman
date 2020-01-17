@@ -613,6 +613,8 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::Rectan
 			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
 		{
 			enemy.EnemyDie();
+			m_score += 200;
+			score.setString(std::to_string(m_score));
 		}
 	}
 
@@ -657,6 +659,8 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::Rectan
 			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
 		{
 			enemy.EnemyDie();
+			m_score += 200;
+			score.setString(std::to_string(m_score));
 		}
 	}
 
@@ -700,6 +704,8 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::Rectan
 			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
 		{
 			enemy.EnemyDie();
+			m_score += 200;
+			score.setString(std::to_string(m_score));
 		}
 	}
 
@@ -742,6 +748,8 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::Rectan
 			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
 		{
 			enemy.EnemyDie();
+			m_score += 200;
+			score.setString(std::to_string(m_score));
 		}
 	}
 

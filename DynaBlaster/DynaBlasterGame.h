@@ -35,6 +35,7 @@ private:
 	sf::Clock clock;
 	int m_minutes;
 	int m_seconds;
+	int m_score;
 
 	int m_index;
 	sf::Texture grassTexture;
