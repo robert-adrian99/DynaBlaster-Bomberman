@@ -2,8 +2,22 @@
 #include "TileMap.h"
 #include "EnemySFML.h"
 
+struct TemporarVector
+{
+	std::vector<sf::Vector2f> blocks;
+	std::vector<bool> blocksType;
+};
 class DynaBlasterGame
 {
+public:
+	enum class Directions
+	{
+		Up,
+		Down,
+		Left,
+		Right
+	};
+
 public:
 	void Run();
 
@@ -13,6 +27,7 @@ private:
 	void StartWindow();
 	void GameWindow();
 	void DrawBombExplosion(EnemySFML& enemy,std::vector<sf::RectangleShape>& grassRectangle);
+	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, EnemySFML& enemy, std::vector<sf::RectangleShape>& grass);
 
 private:
 	TileMap map;

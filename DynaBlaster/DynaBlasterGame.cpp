@@ -126,7 +126,10 @@ void DynaBlasterGame::HelpMenuWindow()
 		{
 			switch (event.type)
 			{
-			case::sf::Event::MouseMoved:
+			case sf::Event::Closed:
+				m_window.close();
+				break;
+			case sf::Event::MouseMoved:
 				if (back.IsMouseOver(m_window))
 				{
 					back.SetFontSize(23);
@@ -195,7 +198,10 @@ void DynaBlasterGame::StartWindow()
 		{
 			switch (event.type)
 			{
-			case::sf::Event::MouseMoved:
+			case sf::Event::Closed:
+				m_window.close();
+				break;
+			case sf::Event::MouseMoved:
 				if (help.IsMouseOver(m_window))
 				{
 					help.SetFontSize(23);
@@ -327,6 +333,7 @@ void DynaBlasterGame::GameWindow()
 	map.setPosition(0.0f, 50.0f);
 	PlayerSFML player;
 	EnemySFML enemy(EnemyType::Barom, map);
+	EnemySFML enemy2(EnemyType::Barom, map);
 	player.SetMap(map);
 
 
@@ -416,7 +423,9 @@ void DynaBlasterGame::GameWindow()
 						int yP = (pPosition.y - 50.f + 24.f) / 48.f;
 						pPosition.y = (yP * 48) + 50;
 
-						player.ok = true;
+						player.allowToMove = true;
+						enemy.allowToMove = true;
+						enemy2.allowToMove = true;
 						pPosition.y -= 50.f;
 						if (!player.bombRect.empty())
 							player.bombRect.pop_back();
@@ -424,6 +433,7 @@ void DynaBlasterGame::GameWindow()
 						if (!enemy.bombRect.empty())
 							enemy.bombRect.pop_back();
 						enemy.bombRect.push_back(pPosition);
+						enemy2.bombRect.push_back(pPosition);
 						pPosition.y += 50.f;
 						bombIsActive = true;
 						explosionReady = false;
@@ -459,6 +469,7 @@ void DynaBlasterGame::GameWindow()
 		m_window.draw(map);
 		player.Move();
 		enemy.Movement();
+		enemy2.Movement();
 		for (auto grass : grassRectangle)
 			m_window.draw(grass);
 
@@ -507,6 +518,7 @@ void DynaBlasterGame::GameWindow()
 			bombExplosion.setTexture(&explosionTexture);
 			m_window.draw(bombExplosion);
 			DrawBombExplosion(enemy, grassRectangle);
+			DrawBombExplosion(enemy2, grassRectangle);
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() < bombTimer)
 		{
@@ -529,6 +541,9 @@ void DynaBlasterGame::GameWindow()
 			if (!enemy.bombRect.empty())
 				enemy.bombRect.pop_back();
 
+			if (!enemy2.bombRect.empty())
+				enemy2.bombRect.pop_back();
+
 			explosionReady = false;
 			spacePressed = false;
 			isActive = false;
@@ -539,16 +554,88 @@ void DynaBlasterGame::GameWindow()
 		m_window.draw(player.player);
 		if (enemy.GetActive())
 			m_window.draw(enemy.enemy);
+		if (enemy2.GetActive())
+			m_window.draw(enemy2.enemy);
 		back.DrawTo(m_window);
 		m_window.display();
 		m_window.clear();
 	}
 }
-struct TemporarVector
+
+void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, EnemySFML& enemy, std::vector<sf::RectangleShape>& grass)
 {
-	std::vector<sf::Vector2f> blocks;
-	std::vector<bool> blocksType;
-};
+	int dimension = 2;
+	sf::Vector2f tempExplosion;
+	sf::RectangleShape grassRectangle;
+	grassRectangle.setSize({ 48,48 });
+	grassRectangle.setTexture(&grassTexture);
+
+	bool okDirection = true;
+	int modifyX = 0;
+	int modifyY = 0;
+	switch (direction)
+	{
+	case DynaBlasterGame::Directions::Up:
+		modifyY = -1;
+		break;
+	case DynaBlasterGame::Directions::Down:
+		modifyY = 1;
+		break;
+	case DynaBlasterGame::Directions::Left:
+		modifyX = -1;
+		break;
+	case DynaBlasterGame::Directions::Right:
+		modifyX = 1;
+		break;
+	default:
+		break;
+	}
+
+	for (int index = 1; index < dimension; index++)
+	{
+		tempExplosion.x = bombRect.getPosition().x + modifyX * (48 * index);
+		tempExplosion.y = bombRect.getPosition().y + modifyY * (48 * index);
+
+		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
+		{
+			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
+				tempExplosion.x + 48 > blocks.blocks[index1].x&&
+				tempExplosion.y < blocks.blocks[index1].y + 98 &&
+				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
+			{
+				okDirection = false;
+				m_index = index1;
+				break;
+			}
+		}
+		if (okDirection == true)
+		{
+			explosionPositions.push_back(tempExplosion);
+		}
+		else
+		{
+			if (blocks.blocksType[m_index] == 1)
+			{
+				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
+				grass.push_back(grassRectangle);
+				map.SetRectVecTemp(blocks.blocks[m_index]);
+				explosionPositions.push_back(tempExplosion);
+			}
+			break;
+		}
+
+		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
+			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
+			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
+			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
+		{
+			enemy.EnemyDie();
+			m_score += 200;
+			score.setString(std::to_string(m_score));
+		}
+	}
+}
+
 void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::RectangleShape>& grass)
 {
 
@@ -574,185 +661,10 @@ void DynaBlasterGame::DrawBombExplosion(EnemySFML& enemy, std::vector<sf::Rectan
 	tempExplosion.x = bombRect.getPosition().x;
 	tempExplosion.y = bombRect.getPosition().y;
 
-	for (int index = 1; index < dimension; index++)
-	{
-		tempExplosion.x = bombRect.getPosition().x + 48 * index;
-		tempExplosion.y = bombRect.getPosition().y;
-
-		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
-		{
-			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
-				tempExplosion.x + 48 > blocks.blocks[index1].x&&
-				tempExplosion.y < blocks.blocks[index1].y + 98 &&
-				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
-			{
-				okRight = false;
-				m_index = index1;
-				break;
-			}
-		}
-		if (okRight == true)
-		{
-			explosionPositions.push_back(tempExplosion);
-		}
-		else
-		{
-			if (blocks.blocksType[m_index] == 1)
-			{
-				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-				grass.push_back(grassRectangle);
-				map.SetRectVecTemp(blocks.blocks[m_index]);
-				explosionPositions.push_back(tempExplosion);
-			}
-			break;
-		}
-
-		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
-			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
-			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
-			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
-		{
-			enemy.EnemyDie();
-			m_score += 200;
-			score.setString(std::to_string(m_score));
-		}
-	}
-
-	tempExplosion.x = bombRect.getPosition().x;
-	tempExplosion.y = bombRect.getPosition().y;
-
-	for (int index = 1; index < dimension; index++)
-	{
-		tempExplosion.x = bombRect.getPosition().x - 48 * index;
-		tempExplosion.y = bombRect.getPosition().y;
-		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
-		{
-			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
-				tempExplosion.x + 48 > blocks.blocks[index1].x&&
-				tempExplosion.y < blocks.blocks[index1].y + 98 &&
-				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
-			{
-				okLeft = false;
-				m_index = index1;
-				break;
-			}
-		}
-		if (okLeft == true)
-		{
-			explosionPositions.push_back(tempExplosion);
-		}
-		else
-		{
-			if (blocks.blocksType[m_index] == 1)
-			{
-				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-				grass.push_back(grassRectangle);
-				map.SetRectVecTemp(blocks.blocks[m_index]);
-				explosionPositions.push_back(tempExplosion);
-			}
-			break;
-		}
-
-		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
-			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
-			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
-			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
-		{
-			enemy.EnemyDie();
-			m_score += 200;
-			score.setString(std::to_string(m_score));
-		}
-	}
-
-	tempExplosion.x = bombRect.getPosition().x;
-	tempExplosion.y = bombRect.getPosition().y;
-	for (int index = 1; index < dimension; index++)
-	{
-		tempExplosion.x = bombRect.getPosition().x;
-		tempExplosion.y = bombRect.getPosition().y + 48 * index;
-
-		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
-		{
-			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
-				tempExplosion.x + 48 > blocks.blocks[index1].x&&
-				tempExplosion.y < blocks.blocks[index1].y + 98 &&
-				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
-			{
-				okDown = false;
-				m_index = index1;
-				break;
-			}
-		}
-		if (okDown == true)
-		{
-			explosionPositions.push_back(tempExplosion);
-		}
-		else
-		{
-			if (blocks.blocksType[m_index] == 1)
-			{
-				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-				grass.push_back(grassRectangle);
-				map.SetRectVecTemp(blocks.blocks[m_index]);
-				explosionPositions.push_back(tempExplosion);
-			}
-			break;
-		}
-		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
-			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
-			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
-			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
-		{
-			enemy.EnemyDie();
-			m_score += 200;
-			score.setString(std::to_string(m_score));
-		}
-	}
-
-	tempExplosion.x = bombRect.getPosition().x;
-	tempExplosion.y = bombRect.getPosition().y;
-	for (int index = 1; index < dimension; index++)
-	{
-		tempExplosion.x = bombRect.getPosition().x;
-		tempExplosion.y = bombRect.getPosition().y - 48 * index;
-		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
-		{
-			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
-				tempExplosion.x + 48 > blocks.blocks[index1].x&&
-				tempExplosion.y < blocks.blocks[index1].y + 98 &&
-				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
-			{
-				okUp = false;
-				m_index = index1;
-				break;
-			}
-		}
-		if (okUp == true)
-		{
-			explosionPositions.push_back(tempExplosion);
-		}
-		else
-		{
-			if (blocks.blocksType[m_index] == 1)
-			{
-				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-				grass.push_back(grassRectangle);
-				map.SetRectVecTemp(blocks.blocks[m_index]);
-				explosionPositions.push_back(tempExplosion);
-			}
-			break;
-		}
-		if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
-			tempExplosion.x + 48 > enemy.enemy.getPosition().x&&
-			tempExplosion.y < enemy.enemy.getPosition().y + 98 &&
-			tempExplosion.y + 48 > enemy.enemy.getPosition().y + 50)
-		{
-			enemy.EnemyDie();
-			m_score += 200;
-			score.setString(std::to_string(m_score));
-		}
-	}
-
+	Collision(Directions::Up, tempExplosion, blocks, enemy, grass);
+	Collision(Directions::Down, tempExplosion, blocks, enemy, grass);
+	Collision(Directions::Left, tempExplosion, blocks, enemy, grass);
+	Collision(Directions::Right, tempExplosion, blocks, enemy, grass);
 }
 
 void DynaBlasterGame::Run()

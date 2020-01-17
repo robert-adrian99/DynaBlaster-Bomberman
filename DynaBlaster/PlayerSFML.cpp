@@ -7,12 +7,12 @@ PlayerSFML::PlayerSFML()
 	player.setTexture(&playerTexture);
 	player.setSize({ 48,48 });
 	player.setPosition({ 48,98 });
-	ok = false;
+	allowToMove = false;
 }
 
 void PlayerSFML::Move()
 {
-	float speed = 0.2;
+	float speed = 0.5;
 	currentPosition = player.getPosition();
 
 	for (const auto& wallrect : map->GetRectVec())
@@ -44,7 +44,7 @@ void PlayerSFML::Move()
 		if (player.getPosition().x < bombrect.x + 42 &&
 			player.getPosition().x + 42 > bombrect.x&&
 			player.getPosition().y < bombrect.y + 92 &&
-			player.getPosition().y + 42 > bombrect.y + 50 && ok == false)
+			player.getPosition().y + 42 > bombrect.y + 50 && allowToMove == false)
 		{
 			currentPosition = lastPosition;
 			player.setPosition(currentPosition);
@@ -54,9 +54,9 @@ void PlayerSFML::Move()
 		if (!(player.getPosition().x < bombrect.x + 42 &&
 			player.getPosition().x + 42 > bombrect.x&&
 			player.getPosition().y < bombrect.y + 92 &&
-			player.getPosition().y + 42 > bombrect.y + 50) && ok == true)
+			player.getPosition().y + 42 > bombrect.y + 50) && allowToMove == true)
 		{
-			ok = false;
+			allowToMove = false;
 		}
 	}
 

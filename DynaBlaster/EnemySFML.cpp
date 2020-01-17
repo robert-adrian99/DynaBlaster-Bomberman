@@ -109,13 +109,14 @@ EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 	m_movement = 0;
 	lastPosition = enemy.getPosition();
 	currentPosition = enemy.getPosition();
+	allowToMove = false;
 }
 
-const int enemyDimension = 46;
+const int enemyDimension = 42;
 
 void EnemySFML::Movement()
 {
-	float speed = 0.1;
+	float speed = 0.3;
 	currentPosition = enemy.getPosition();
 	for (const auto& wallrect : map->GetRectVec())
 	{
@@ -130,7 +131,7 @@ void EnemySFML::Movement()
 			break;
 		}
 	}
-	//si asta
+
 	for (const auto& wallrect : map->GetRectVecTemporar())
 	{
 		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
@@ -144,13 +145,13 @@ void EnemySFML::Movement()
 			break;
 		}
 	}
-	//pana aici
+	
 	for (const auto& wallrect : bombRect)
 	{
 		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
 			enemy.getPosition().x + enemyDimension > wallrect.x&&
 			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50 && ok == false)
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50 && allowToMove == false)
 		{
 			currentPosition = lastPosition;
 			enemy.setPosition(currentPosition);
@@ -161,9 +162,9 @@ void EnemySFML::Movement()
 		if (!(enemy.getPosition().x < wallrect.x + enemyDimension &&
 			enemy.getPosition().x + enemyDimension > wallrect.x&&
 			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50) && ok == true)
+			enemy.getPosition().y + enemyDimension > wallrect.y + 50) && allowToMove == true)
 		{
-			ok = false;
+			allowToMove = false;
 		}
 	}
 

@@ -14,7 +14,7 @@ public:
 	sf::Vector2f GetPosition();
 	void SetMap(TileMap& map);
 	void SetBombRect(const sf::Vector2f& position);
-	bool ok;
+	bool allowToMove;
 	std::vector<sf::Vector2f> bombRect;
 
 public:

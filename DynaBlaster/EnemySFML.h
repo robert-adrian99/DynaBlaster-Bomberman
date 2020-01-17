@@ -19,7 +19,7 @@ public:
 public:
 	sf::RectangleShape enemy;
 	std::vector<sf::Vector2f> bombRect;
-	bool ok;
+	bool allowToMove;
 
 private:
 	sf::Vector2f lastPosition;
