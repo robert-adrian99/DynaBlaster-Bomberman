@@ -7,14 +7,14 @@ int RandomGeneratorForMovement()
 	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, 3);
 	return rrandom(rng);
 }
-
+template <int numberOfLines=10,int numberOfColumns=12>
 std::pair<int, int> RandomGeneratorForPosition()
 {
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, 10);
+	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, numberOfLines);
 	int randomLine = rowRandom(rng);
-	std::uniform_int_distribution<std::mt19937::result_type> columnRandom(1, 12);
+	std::uniform_int_distribution<std::mt19937::result_type> columnRandom(1, numberOfColumns);
 	int randomColumn = columnRandom(rng);
 	return std::make_pair(randomLine, randomColumn);
 }
