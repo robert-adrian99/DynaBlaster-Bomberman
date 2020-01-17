@@ -20,6 +20,7 @@ public:
 	bool GetActive() const;
 	int GetLives() const;
 	void SetLives(int lives);
+	bool Intersects(sf::Vector2f position);
 
 public:
 	sf::RectangleShape player;

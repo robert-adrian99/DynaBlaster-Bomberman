@@ -140,3 +140,14 @@ void PlayerSFML::SetLives(int lives)
 	m_lives = lives;
 }
 
+bool PlayerSFML::Intersects(sf::Vector2f position)
+{
+	if (currentPosition.x < position.x + 48 &&
+		currentPosition.x + 48 > position.x&&
+		currentPosition.y < position.y + 48 &&
+		currentPosition.y + 48 > position.y)
+	{
+		return true;
+	}
+	return false;
+}
