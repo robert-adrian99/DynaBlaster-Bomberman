@@ -29,6 +29,7 @@ private:
 	void GameWindow();
 	void DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerSFML& player, std::vector<sf::RectangleShape>& grassRectangle);
 	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, PlayerSFML& player, std::vector<EnemySFML>& enemies, std::vector<sf::RectangleShape>& grass);
+	sf::View CameraMovement(sf::Vector2f position) const;
 
 private:
 	TileMap map;
@@ -36,6 +37,11 @@ private:
 	sf::RectangleShape bombRect;
 	sf::RectangleShape bombExplosion;
 	std::vector<sf::RectangleShape> grassRectangle;
+	sf::Vector2u m_windowDimensions;
+	uint16_t m_mapNumberOfLines;
+	uint16_t m_mapNumberOfColumns;
+	uint16_t m_tileDimension = 48;
+	uint16_t m_scoreBarDimension = 50;
 
 private:
 	bool okUp;

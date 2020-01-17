@@ -339,7 +339,6 @@ void DynaBlasterGame::GameWindow()
 	enemyVector.push_back(enemy2);
 	player.SetMap(map);
 
-
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
 	back.SetPosition({ 50, 678 });
@@ -369,8 +368,21 @@ void DynaBlasterGame::GameWindow()
 	if (!explosionTexture.loadFromFile("Explosion1.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
 
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, 720, 698));
+	sf::Vector2f cameraPosition(0, 0);
+
 	while (m_window.isOpen())
 	{
+		m_window.draw(scoreBar);
+		m_window.draw(lives);
+		m_window.draw(score);
+		m_window.draw(time);
+		m_window.draw(highScore);
+
+		view.reset(sf::FloatRect(cameraPosition.x, cameraPosition.y, 720, 698));
+		m_window.setView(CameraMovement(player.GetPosition()));
+
 		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
@@ -468,11 +480,6 @@ void DynaBlasterGame::GameWindow()
 				time.setString(std::to_string(m_minutes) + ":" + std::to_string(m_seconds));
 			clock.restart();
 		}
-		m_window.draw(scoreBar);
-		m_window.draw(lives);
-		m_window.draw(score);
-		m_window.draw(time);
-		m_window.draw(highScore);
 		m_window.draw(map);
 		player.Move();
 		for (auto& enemy : enemyVector)
@@ -653,6 +660,33 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 	}
 }
 
+sf::View DynaBlasterGame::CameraMovement(sf::Vector2f position) const
+{
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, m_windowDimensions.x, m_windowDimensions.y));
+	sf::Vector2f cameraPosition(0, 0);
+	cameraPosition.x = position.x + m_tileDimension / 2 - (m_windowDimensions.x / 2);
+	cameraPosition.y = position.y + m_tileDimension / 2 - (m_windowDimensions.y / 2);
+
+	if (cameraPosition.x > m_mapNumberOfColumns * m_tileDimension - m_windowDimensions.x)
+	{
+		cameraPosition.x = m_mapNumberOfColumns * m_tileDimension - m_windowDimensions.x;
+	}
+	if (cameraPosition.y > m_mapNumberOfLines * m_tileDimension - m_windowDimensions.y + m_scoreBarDimension)
+	{
+		cameraPosition.y = m_mapNumberOfLines * m_tileDimension - m_windowDimensions.y + m_scoreBarDimension;
+	}
+	if (cameraPosition.x < 0)
+	{
+		cameraPosition.x = 0;
+	}
+	if (cameraPosition.y < 0)
+	{
+		cameraPosition.y = 0;
+	}
+	return view;
+}
+
 void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerSFML& player, std::vector<sf::RectangleShape>& grass)
 {
 	sf::Vector2f tempExplosion;
@@ -688,7 +722,13 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_window.create(sf::VideoMode(720, 698), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+	m_windowDimensions.x = 720;
+	m_windowDimensions.y = 698;
+
+	m_mapNumberOfLines = 27;
+	m_mapNumberOfColumns = 29;
+
+	m_window.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 

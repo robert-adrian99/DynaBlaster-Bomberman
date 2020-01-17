@@ -11,9 +11,10 @@
 class TileMap :public sf::Drawable, public sf::Transformable
 {
 public:
-	template <int numberOfLines = 13, int numberOfColumns = 15>
+	template <uint16_t numberOfLines = 13, uint16_t numberOfColumns = 15, uint16_t numberOfWalls = 32>
 	void Map()
 	{
+		int noWalls = numberOfWalls;
 		std::ofstream logFile("log.log", std::ios::app);
 		Logger logger(logFile, Logger::Level::Info);
 
@@ -45,21 +46,20 @@ public:
 			}
 		}
 
-		int NoWall = 32;
 		srand(time(NULL));
 		int RandIndex = rand() % level.size();
 		for (int index = 0; index < level.size(); index++)
 		{
 			RandIndex = rand() % level.size();
-			if (level[RandIndex] == 0 && NoWall != 0 && RandIndex != numberOfColumns + 1
+			if (level[RandIndex] == 0 && noWalls != 0 && RandIndex != numberOfColumns + 1
 				&& RandIndex != numberOfColumns + 2 && RandIndex != (numberOfColumns * 2 + 1))
 			{
 				level[RandIndex] = 2;
-				--NoWall;
+				--noWalls;
 			}
 		}
 
-		if (load("tileset.png", sf::Vector2u(48, 48), level, 15, 13))
+		if (load("tileset.png", sf::Vector2u(48, 48), level, numberOfColumns, numberOfLines))
 			return;
 
 		logger.Log("Map was loaded.", Logger::Level::Info);
