@@ -1,6 +1,7 @@
 #pragma once
 #include "TileMap.h"
 #include "EnemySFML.h"
+#include "PlayerSFML.h"
 
 struct TemporarVector
 {
@@ -26,8 +27,8 @@ private:
 	void HelpMenuWindow();
 	void StartWindow();
 	void GameWindow();
-	void DrawBombExplosion(EnemySFML& enemy,std::vector<sf::RectangleShape>& grassRectangle);
-	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, EnemySFML& enemy, std::vector<sf::RectangleShape>& grass);
+	void DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerSFML& player, std::vector<sf::RectangleShape>& grassRectangle);
+	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, PlayerSFML& player, std::vector<EnemySFML>& enemies, std::vector<sf::RectangleShape>& grass);
 
 private:
 	TileMap map;

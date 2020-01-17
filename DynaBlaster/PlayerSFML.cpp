@@ -8,6 +8,8 @@ PlayerSFML::PlayerSFML()
 	player.setSize({ 48,48 });
 	player.setPosition({ 48,98 });
 	allowToMove = false;
+	m_active = true;
+	m_lives = 3;
 }
 
 void PlayerSFML::Move()
@@ -108,5 +110,33 @@ void PlayerSFML::SetMap(TileMap& map)
 void PlayerSFML::SetBombRect(const sf::Vector2f& position)
 {
 	bombRect.emplace_back(position);
+}
+
+void PlayerSFML::PlayerDie()
+{
+	if (m_lives > 0)
+	{
+		--m_lives;
+	}
+	if (m_lives == 0)
+	{
+		m_active = false;
+		player.setPosition({ 0,0 });
+	}
+}
+
+bool PlayerSFML::GetActive() const
+{
+	return m_active;
+}
+
+int PlayerSFML::GetLives() const
+{
+	return m_lives;
+}
+
+void PlayerSFML::SetLives(int lives)
+{
+	m_lives = lives;
 }
 

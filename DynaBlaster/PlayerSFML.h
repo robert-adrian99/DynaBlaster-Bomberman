@@ -16,6 +16,10 @@ public:
 	void SetBombRect(const sf::Vector2f& position);
 	bool allowToMove;
 	std::vector<sf::Vector2f> bombRect;
+	void PlayerDie();
+	bool GetActive() const;
+	int GetLives() const;
+	void SetLives(int lives);
 
 public:
 	sf::RectangleShape player;
@@ -24,6 +28,8 @@ private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
 	sf::Texture playerTexture;
-	TileMap* map;
+	TileMap* map;	
+	bool m_active;
+	int m_lives;
 };
 
