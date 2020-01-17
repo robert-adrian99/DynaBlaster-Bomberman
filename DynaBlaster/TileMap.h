@@ -1,10 +1,69 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Button.h"
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <random>
+#include "../Logging/Logger.h"
+#include <SFML/Audio.hpp>
 
 class TileMap :public sf::Drawable, public sf::Transformable
 {
 public:
-	void Map();
+	template <int numberOfLines = 13, int numberOfColumns = 15>
+	void Map()
+	{
+		std::ofstream logFile("log.log", std::ios::app);
+		Logger logger(logFile, Logger::Level::Info);
+
+		logger.Log("Tilemap window was rendered.", Logger::Level::Info);
+
+		sf::Font colleged;
+		colleged.loadFromFile("colleged.ttf");
+
+		Button back("Back", { 100,35 }, 20, sf::Color::Green, sf::Color::Black);
+		back.SetPosition({ 50,638 });
+		back.SetFont(colleged);
+
+		std::vector<int> level;
+
+		for (size_t line = 0; line < numberOfLines; ++line)
+		{
+			for (size_t column = 0; column < numberOfColumns; ++column)
+			{
+				if (line == 0 || line == numberOfLines - 1 || column == 0 || column == numberOfColumns - 1)
+				{
+					level.push_back(1);
+				}
+				else if (line % 2 == 0 && column % 2 == 0)
+				{
+					level.push_back(1);
+				}
+				else
+					level.push_back(0);
+			}
+		}
+
+		int NoWall = 32;
+		srand(time(NULL));
+		int RandIndex = rand() % level.size();
+		for (int index = 0; index < level.size(); index++)
+		{
+			RandIndex = rand() % level.size();
+			if (level[RandIndex] == 0 && NoWall != 0 && RandIndex != numberOfColumns + 1
+				&& RandIndex != numberOfColumns + 2 && RandIndex != (numberOfColumns * 2 + 1))
+			{
+				level[RandIndex] = 2;
+				--NoWall;
+			}
+		}
+
+		if (load("tileset.png", sf::Vector2u(48, 48), level, 15, 13))
+			return;
+
+		logger.Log("Map was loaded.", Logger::Level::Info);
+	}
 	bool load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height);
 	std::vector<sf::Vector2f> GetRectVec() const;
 	std::vector<sf::Vector2f> GetRectVecTemporar() const;
