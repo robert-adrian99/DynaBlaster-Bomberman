@@ -339,8 +339,6 @@ void DynaBlasterGame::GameWindow()
 	enemyVector.push_back(enemy2);
 	player.SetMap(map);
 
-
-
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, map.GetRectVecTemporar().size() - 1);
@@ -376,14 +374,26 @@ void DynaBlasterGame::GameWindow()
 	if (!explosionTexture.loadFromFile("Explosion1.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
 
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, 720, 698));
+	sf::Vector2f cameraPosition(0, 0);
+
 	if (!rewardTexture.loadFromFile("1-Up.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
 	rewardRectangle.setSize({ 48,48 });
-	//rewardRectangle.setPosition({ 48,98 });
 	rewardRectangle.setTexture(&rewardTexture);
 
 	while (m_window.isOpen())
 	{
+		m_window.draw(scoreBar);
+		m_window.draw(lives);
+		m_window.draw(score);
+		m_window.draw(time);
+		m_window.draw(highScore);
+
+		view.reset(sf::FloatRect(cameraPosition.x, cameraPosition.y, 720, 698));
+		m_window.setView(CameraMovement(player.GetPosition()));
+
 		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
@@ -481,13 +491,7 @@ void DynaBlasterGame::GameWindow()
 				time.setString(std::to_string(m_minutes) + ":" + std::to_string(m_seconds));
 			clock.restart();
 		}
-		m_window.draw(scoreBar);
-		m_window.draw(lives);
-		m_window.draw(score);
-		m_window.draw(time);
-		m_window.draw(highScore);
 		m_window.draw(map);
-		
 		player.Move();
 		for (auto& enemy : enemyVector)
 		{
@@ -543,11 +547,6 @@ void DynaBlasterGame::GameWindow()
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() < bombTimer)
 		{
-			/*bombExplosion.setSize({ 48,48 });
-			bombExplosion.setPosition(bombPosition);
-			bombExplosion.setTexture(&explosionTexture);
-			m_window.draw(bombExplosion);
-			DrawBombExplosion(enemy, grassRectangle);*/
 			for (auto& explosion : explosionPositions)
 			{
 				bombExplosion.setPosition(explosion);
@@ -644,7 +643,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 				map.SetRectVecTemp(blocks.blocks[m_index]);
 				explosionPositions.push_back(tempExplosion);
 			}
-			else 
+			else
 				if (blocks.blocksType[m_index] == 1)
 				{
 					grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
@@ -653,7 +652,6 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 					explosionPositions.push_back(tempExplosion);
 				}
 		}
-
 		for (auto& enemy : enemies)
 		{
 			if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
@@ -677,6 +675,33 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 	}
 }
 
+sf::View DynaBlasterGame::CameraMovement(sf::Vector2f position) const
+{
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, m_windowDimensions.x, m_windowDimensions.y));
+	sf::Vector2f cameraPosition(0, 0);
+	cameraPosition.x = position.x + m_tileDimension / 2 - (m_windowDimensions.x / 2);
+	cameraPosition.y = position.y + m_tileDimension / 2 - (m_windowDimensions.y / 2);
+
+	if (cameraPosition.x > m_mapNumberOfColumns* m_tileDimension - m_windowDimensions.x)
+	{
+		cameraPosition.x = m_mapNumberOfColumns * m_tileDimension - m_windowDimensions.x;
+	}
+	if (cameraPosition.y > m_mapNumberOfLines* m_tileDimension - m_windowDimensions.y + m_scoreBarDimension)
+	{
+		cameraPosition.y = m_mapNumberOfLines * m_tileDimension - m_windowDimensions.y + m_scoreBarDimension;
+	}
+	if (cameraPosition.x < 0)
+	{
+		cameraPosition.x = 0;
+	}
+	if (cameraPosition.y < 0)
+	{
+		cameraPosition.y = 0;
+	}
+	return view;
+}
+
 void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerSFML& player, std::vector<sf::RectangleShape>& grass)
 {
 	sf::Vector2f tempExplosion;
@@ -684,7 +709,7 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerS
 	sf::RectangleShape grassRectangle;
 	grassRectangle.setSize({ 48,48 });
 	grassRectangle.setTexture(&grassTexture);
-	
+
 	rewardRectangle.setSize({ 48,48 });
 	rewardRectangle.setTexture(&rewardTexture);
 
@@ -699,8 +724,6 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerS
 		blocks.blocksType.push_back(1);
 	}
 	explosionPositions.push_back(bombRect.getPosition());
-	
-
 	int dimension = 3;
 	okDown = okLeft = okRight = okUp = true;
 	tempExplosion.x = bombRect.getPosition().x;
@@ -717,7 +740,13 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_window.create(sf::VideoMode(720, 698), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
+	m_windowDimensions.x = 720;
+	m_windowDimensions.y = 698;
+
+	m_mapNumberOfLines = 27;
+	m_mapNumberOfColumns = 29;
+
+	m_window.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 
@@ -725,9 +754,4 @@ void DynaBlasterGame::Run()
 		std::cout << "Error" << std::endl;
 
 	StartWindow();
-}
-
-DynaBlasterGame::DynaBlasterGame()
-{
-	
 }
