@@ -340,6 +340,13 @@ void DynaBlasterGame::GameWindow()
 	player.SetMap(map);
 
 
+
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, map.GetRectVecTemporar().size() - 1);
+	int randomPositionForReward = rowRandom(rng);
+	rewardRectangle.setPosition({ map.GetRectVecTemporar()[randomPositionForReward] });
+
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
 	back.SetPosition({ 50, 678 });
@@ -368,6 +375,12 @@ void DynaBlasterGame::GameWindow()
 	sf::Texture explosionTexture;
 	if (!explosionTexture.loadFromFile("Explosion1.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
+
+	if (!rewardTexture.loadFromFile("1-Up.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		std::cout << "Error" << std::endl;
+	rewardRectangle.setSize({ 48,48 });
+	//rewardRectangle.setPosition({ 48,98 });
+	rewardRectangle.setTexture(&rewardTexture);
 
 	while (m_window.isOpen())
 	{
@@ -474,6 +487,7 @@ void DynaBlasterGame::GameWindow()
 		m_window.draw(time);
 		m_window.draw(highScore);
 		m_window.draw(map);
+		
 		player.Move();
 		for (auto& enemy : enemyVector)
 		{
@@ -622,14 +636,24 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 		}
 		else
 		{
-			if (blocks.blocksType[m_index] == 1)
+			if (blocks.blocksType[m_index] == 1 && blocks.blocks[m_index] == rewardRectangle.getPosition())
 			{
-				grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-				grass.push_back(grassRectangle);
+				rewardRectangle.setPosition({ rewardRectangle.getPosition().x, rewardRectangle.getPosition().y + 50 });
+				rewardRectangle.setTexture(&rewardTexture);
+				grass.push_back(rewardRectangle);
 				map.SetRectVecTemp(blocks.blocks[m_index]);
 				explosionPositions.push_back(tempExplosion);
 			}
+			else 
+				if (blocks.blocksType[m_index] == 1)
+				{
+					grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
+					grass.push_back(grassRectangle);
+					map.SetRectVecTemp(blocks.blocks[m_index]);
+					explosionPositions.push_back(tempExplosion);
+				}
 		}
+
 		for (auto& enemy : enemies)
 		{
 			if (tempExplosion.x < enemy.enemy.getPosition().x + 48 &&
@@ -660,6 +684,9 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerS
 	sf::RectangleShape grassRectangle;
 	grassRectangle.setSize({ 48,48 });
 	grassRectangle.setTexture(&grassTexture);
+	
+	rewardRectangle.setSize({ 48,48 });
+	rewardRectangle.setTexture(&rewardTexture);
 
 	TemporarVector blocks;
 	blocks.blocks = map.GetRectVec();
@@ -672,6 +699,8 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerS
 		blocks.blocksType.push_back(1);
 	}
 	explosionPositions.push_back(bombRect.getPosition());
+	
+
 	int dimension = 3;
 	okDown = okLeft = okRight = okUp = true;
 	tempExplosion.x = bombRect.getPosition().x;
@@ -696,4 +725,9 @@ void DynaBlasterGame::Run()
 		std::cout << "Error" << std::endl;
 
 	StartWindow();
+}
+
+DynaBlasterGame::DynaBlasterGame()
+{
+	
 }

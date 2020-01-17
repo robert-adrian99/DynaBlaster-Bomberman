@@ -21,7 +21,7 @@ public:
 
 public:
 	void Run();
-
+	DynaBlasterGame();
 private:
 	void LevelsMenuWindow();
 	void HelpMenuWindow();
@@ -58,4 +58,7 @@ private:
 	bool isActive = false;
 	std::vector<sf::Vector2f> explosionPositions;
 	bool justExplosion;
+
+	sf::RectangleShape rewardRectangle;
+	sf::Texture rewardTexture;
 };
