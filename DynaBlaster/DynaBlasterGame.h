@@ -31,7 +31,7 @@ private:
 	void StartWindow();
 	void GameWindow();
 	void DrawBombExplosion(std::vector<Enemy>& enemiesVector, Player& player, std::vector<sf::RectangleShape>& grassRectangleVector);
-	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, std::vector<sf::RectangleShape>& grass);
+	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, std::vector<sf::RectangleShape>& grass, Player& player);
 	sf::View CameraMovement(const sf::Vector2f& position) const;
 	void LoadingFromFile();
 

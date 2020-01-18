@@ -256,3 +256,15 @@ void Enemy::SetAllowToMove(bool allowToMove)
 {
 	m_allowToMove = allowToMove;
 }
+
+bool Enemy::Intersects(const sf::Vector2f& position)
+{
+	if (m_currentPosition.x < position.x + 48 &&
+		m_currentPosition.x + 48 > position.x&&
+		m_currentPosition.y < position.y + 48 &&
+		m_currentPosition.y + 48 > position.y)
+	{
+		return true;
+	}
+	return false;
+}

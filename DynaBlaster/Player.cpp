@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Enemy.h"
 
 Player::Player()
 {
@@ -126,6 +127,11 @@ void Player::SetMap(Map& map)
 void Player::SetBombRect(const sf::Vector2f& position)
 {
 	bombRect.emplace_back(position);
+}
+
+void Player::SetPosition(const sf::Vector2f& position)
+{
+	m_rectangle.setPosition(position);
 }
 
 void Player::Die()

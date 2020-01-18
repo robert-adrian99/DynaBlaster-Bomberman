@@ -15,6 +15,7 @@ public:
 	void SetLives(const uint16_t lives);
 	void SetMap(Map& map);
 	void SetBombRect(const sf::Vector2f& position);
+	void SetPosition(const sf::Vector2f& position);
 	void Die();
 	bool Intersects(const sf::Vector2f& position);
 

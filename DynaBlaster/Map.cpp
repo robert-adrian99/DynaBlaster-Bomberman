@@ -65,6 +65,7 @@ void Map::ResetMap()
 	m_tileset.~Texture();
 	m_indestructibleWallVecor.clear();
 	m_destructibleWallVector.clear();
+
 }
 
 void Map::SetIndestructibleWallVector(const sf::Vector2f& positionRect)

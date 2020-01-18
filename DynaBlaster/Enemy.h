@@ -13,6 +13,7 @@ public:
 	bool AllowToMove() const;
 	void SetAllowToMove(const bool allowToMove);
 	void Die();
+	bool Intersects(const sf::Vector2f& position);
 
 public:
 	std::vector<sf::Vector2f> bombRect;
