@@ -10,7 +10,7 @@ namespace DynaBlasterTests
 	{
 	public:
 		
-		TEST_METHOD(Constuctor)
+		TEST_METHOD(Constructor)
 		{
 			Map map;
 			Enemy enemy(EnemyType::Barom,map);

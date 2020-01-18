@@ -360,7 +360,8 @@ void DynaBlasterGame::GameWindow()
 		m_window.draw(m_highScoreText);
 
 		m_view.reset(sf::FloatRect(m_cameraPosition.x, m_cameraPosition.y, m_windowDimensions.x, m_windowDimensions.y));
-		m_window.setView(CameraMovement(m_player.GetPosition()));
+		CameraMovement(m_player.GetPosition());
+		m_window.setView(m_view);
 
 		sf::Event event;
 		while (m_window.pollEvent(event))
@@ -414,7 +415,7 @@ void DynaBlasterGame::GameWindow()
 						bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 						pPosition = m_player.GetPosition();
 
-						int xP = (pPosition.x + 24.f) / 48.00;
+						int xP = (pPosition.x + 24.f) / 48.f;
 						pPosition.x = xP * 48;
 						int yP = (pPosition.y - 50.f + 24.f) / 48.f;
 						pPosition.y = (yP * 48) + 50;
@@ -710,33 +711,33 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 	}
 }
 
-sf::View DynaBlasterGame::CameraMovement(const sf::Vector2f& position) const
+void DynaBlasterGame::CameraMovement(const sf::Vector2f& position)
 {
-	sf::View view;
+	/*sf::View view;
 	view.reset(sf::FloatRect(0, 0, m_windowDimensions.x, m_windowDimensions.y));
 
-	sf::Vector2f cameraPosition(0, 0);
-	cameraPosition.x = position.x + m_tileDimension / 2 - (m_windowDimensions.x / 2);
-	cameraPosition.y = position.y + m_tileDimension / 2 - (m_windowDimensions.y / 2);
+	sf::Vector2f m_cameraPosition(0, 0);*/
+	m_cameraPosition.x = position.x + m_tileDimension / 2 - (m_windowDimensions.x / 2);
+	m_cameraPosition.y = position.y + m_tileDimension / 2 - (m_windowDimensions.y / 2);
 
-	if (cameraPosition.x > m_mapNumberOfColumns* m_tileDimension - m_windowDimensions.x)
+	if (m_cameraPosition.x > m_mapNumberOfColumns* m_tileDimension - m_windowDimensions.x)
 	{
-		cameraPosition.x = m_mapNumberOfColumns * m_tileDimension - m_windowDimensions.x;
+		m_cameraPosition.x = m_mapNumberOfColumns * m_tileDimension - m_windowDimensions.x;
 	}
-	if (cameraPosition.y > m_mapNumberOfLines* m_tileDimension - m_windowDimensions.y + m_scoreBarDimension)
+	if (m_cameraPosition.y > m_mapNumberOfLines* m_tileDimension - m_windowDimensions.y + m_scoreBarDimension)
 	{
-		cameraPosition.y = m_mapNumberOfLines * m_tileDimension - m_windowDimensions.y + m_scoreBarDimension;
+		m_cameraPosition.y = m_mapNumberOfLines * m_tileDimension - m_windowDimensions.y + m_scoreBarDimension;
 	}
-	if (cameraPosition.x < 0)
+	if (m_cameraPosition.x < 0)
 	{
-		cameraPosition.x = 0;
+		m_cameraPosition.x = 0;
 	}
-	if (cameraPosition.y < 0)
+	if (m_cameraPosition.y < 0)
 	{
-		cameraPosition.y = 0;
+		m_cameraPosition.y = 0;
 	}
 
-	return view;
+	//return view;
 }
 
 void DynaBlasterGame::DrawBombExplosion(std::vector<sf::RectangleShape>& grassRectangleVector)
