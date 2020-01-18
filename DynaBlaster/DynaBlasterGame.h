@@ -65,7 +65,9 @@ private:
 	bool justExplosion;
 
 	sf::RectangleShape rewardRectangle;
+	sf::RectangleShape portalRectangle;
 	sf::Texture rewardTexture;
+	sf::Texture portalTexture;
 	sf::RectangleShape wallFlickerRectangle;
 	sf::Texture wallFlickerTexture, wallTexture;
 };

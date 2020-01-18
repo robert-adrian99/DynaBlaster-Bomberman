@@ -334,16 +334,24 @@ void DynaBlasterGame::GameWindow()
 	PlayerSFML player;
 	EnemySFML enemy(EnemyType::Barom, map);
 	EnemySFML enemy2(EnemyType::Barom, map);
+	EnemySFML enemy3(EnemyType::Barom, map);
 	std::vector<EnemySFML> enemyVector;
 	enemyVector.push_back(enemy);
 	enemyVector.push_back(enemy2);
+	enemyVector.push_back(enemy3);
 	player.SetMap(map);
 
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(1, map.GetRectVecTemporar().size() - 1);
+	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(0, map.GetRectVecTemporar().size() - 1);
 	int randomPositionForReward = rowRandom(rng);
 	rewardRectangle.setPosition({ map.GetRectVecTemporar()[randomPositionForReward] });
+	int randomPositionForPortal = rowRandom(rng);
+	while (randomPositionForPortal == randomPositionForReward)
+	{
+		randomPositionForPortal = rowRandom(rng);
+	}
+	portalRectangle.setPosition({ map.GetRectVecTemporar()[randomPositionForPortal] });
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
 	back.SetFont(colleged);
@@ -366,7 +374,7 @@ void DynaBlasterGame::GameWindow()
 	sf::Vector2f bombPosition;
 	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 
-	m_minutes = 3;
+	m_minutes = 4;
 	m_seconds = 0;
 
 	sf::Texture bombTexture;
@@ -382,6 +390,11 @@ void DynaBlasterGame::GameWindow()
 		std::cout << "Error" << std::endl;
 	rewardRectangle.setSize({ 48,48 });
 	rewardRectangle.setTexture(&rewardTexture);
+
+	if (!portalTexture.loadFromFile("Portal.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		std::cout << "Error" << std::endl;
+	portalRectangle.setSize({ 48,48 });
+	portalRectangle.setTexture(&portalTexture);
 
 	int numberOfMonsters = enemyVector.size();
 
@@ -704,6 +717,14 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 				map.SetRectVecTemp(blocks.blocks[m_index]);
 				explosionPositions.push_back(tempExplosion);
 				wallFlickerRectangle.setPosition({ -48,-48 });
+			}
+			else if (blocks.blocksType[m_index] == 1 && blocks.blocks[m_index] == portalRectangle.getPosition())
+			{
+				portalRectangle.setPosition({ portalRectangle.getPosition().x, portalRectangle.getPosition().y + 50 });
+				portalRectangle.setTexture(&portalTexture);
+				grass.push_back(portalRectangle);
+				map.SetRectVecTemp(blocks.blocks[m_index]);
+				explosionPositions.push_back(tempExplosion);
 			}
 			else
 				if (blocks.blocksType[m_index] == 1)
