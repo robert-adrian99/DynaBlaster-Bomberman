@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include <chrono>
+#include <iostream>
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -288,7 +289,7 @@ void DynaBlasterGame::GameWindow()
 	m_livesText.setString(std::to_string(m_player.GetLives()));
 	m_window.setKeyRepeatEnabled(true);
 	m_playerCollideEnemy = false;
-	
+
 	m_scoreBarSprite.setTexture(m_scoreBarTexture);
 
 	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
@@ -315,6 +316,8 @@ void DynaBlasterGame::GameWindow()
 	m_enemyVector.emplace_back(enemy2);
 	m_enemyVector.emplace_back(enemy3);
 
+	int numberOfEnemies = m_enemyVector.size();
+
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(0, m_map.GetDestructibleWallVector().size() - 1);
@@ -339,7 +342,6 @@ void DynaBlasterGame::GameWindow()
 	m_portalRectangle.setSize({ 48,48 });
 	m_portalRectangle.setTexture(&m_portalTexture);
 
-	int numberOfEnemies = m_enemyVector.size();
 	bool musicPlays = true;
 	bool spacePressed = false;
 	bool bombIsActive = false;
@@ -469,9 +471,6 @@ void DynaBlasterGame::GameWindow()
 		{
 			if (m_player.Intersects(enemy.GetPosition()) && m_playerCollideEnemy == false)
 			{
-				//player.PlayerDie();
-				//logger.Log("Enemy died!", Logger::Level::Info);
-				//std::cout << "DA";
 				m_playerCollideEnemy = true;
 				m_player.Die();
 				m_map.ResetMap();
@@ -508,6 +507,7 @@ void DynaBlasterGame::GameWindow()
 				bigOrSmall = !bigOrSmall;
 				waitToFlickerBomb = 25;
 			}
+			m_explosionPositionVector.clear();
 		}
 		if (spacePressed == true && std::chrono::steady_clock::now() > bombTimer - std::chrono::seconds(1))
 		{
@@ -524,7 +524,7 @@ void DynaBlasterGame::GameWindow()
 			m_bombExplosion.setPosition(bombPosition);
 			m_bombExplosion.setTexture(&m_explosionTexture);
 			m_window.draw(m_bombExplosion);
-			DrawBombExplosion(m_enemyVector, m_player, m_grassRectangleVector);
+			DrawBombExplosion(m_grassRectangleVector);
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() < bombTimer)
 		{
@@ -532,6 +532,20 @@ void DynaBlasterGame::GameWindow()
 			{
 				m_bombExplosion.setPosition(explosion);
 				m_window.draw(m_bombExplosion);
+			}
+
+			for (auto tempExplosion : m_explosionPositionVector)
+			{
+				if (m_player.Intersects(tempExplosion))
+				{
+					m_player.Die();
+					m_map.ResetMap();
+					m_map.LoadMap();
+					m_enemyVector.clear();
+					m_explosionPositionVector.clear();
+					m_grassRectangleVector.clear();
+					GameWindow();
+				}
 			}
 			for (auto& enemy : m_enemyVector)
 			{
@@ -561,6 +575,7 @@ void DynaBlasterGame::GameWindow()
 			explosionReady = false;
 			spacePressed = false;
 			m_isActive = false;
+
 			m_explosionPositionVector.clear();
 
 		}
@@ -598,11 +613,11 @@ void DynaBlasterGame::GameWindow()
 	}
 }
 
-void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, std::vector<sf::RectangleShape>& grass, Player& player)
+void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& temporarVec, const AllWalls& allWalls, std::vector<sf::RectangleShape>& replacerForWalls)
 {
 	int dimension = 2;
 	sf::Vector2f tempExplosion;
-	
+
 	m_grassRectangle.setSize({ 48,48 });
 	m_grassRectangle.setTexture(&m_grassTexture);
 
@@ -632,27 +647,17 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 		tempExplosion.x = m_bombRectangle.getPosition().x + modifyX * (48 * index);
 		tempExplosion.y = m_bombRectangle.getPosition().y + modifyY * (48 * index);
 
-		for (int index1 = 0; index1 < blocks.blocks.size(); index1++)
+		for (int index1 = 0; index1 < allWalls.block.size(); index1++)
 		{
-			if (tempExplosion.x < blocks.blocks[index1].x + 48 &&
-				tempExplosion.x + 48 > blocks.blocks[index1].x&&
-				tempExplosion.y < blocks.blocks[index1].y + 98 &&
-				tempExplosion.y + 48 > blocks.blocks[index1].y + 50)
+			if (tempExplosion.x < allWalls.block[index1].x + 48 &&
+				tempExplosion.x + 48 > allWalls.block[index1].x&&
+				tempExplosion.y < allWalls.block[index1].y + 98 &&
+				tempExplosion.y + 48 > allWalls.block[index1].y + 50)
 			{
 				okDirection = false;
 				m_index = index1;
 				break;
 			}
-		}
-		if (player.Intersects(tempExplosion))
-		{
-			player.Die();
-			m_map.ResetMap();
-			m_map.LoadMap();
-			m_enemyVector.clear();
-			m_explosionPositionVector.clear();
-			m_grassRectangleVector.clear();
-			GameWindow();
 		}
 		if (okDirection == true)
 		{
@@ -660,32 +665,32 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 		}
 		else
 		{
-			if (blocks.blocksType[m_index] == 1 && blocks.blocks[m_index] == m_rewardRectangle.getPosition())
+			if (allWalls.blockType[m_index] == 1 && allWalls.block[m_index] == m_rewardRectangle.getPosition())
 			{
 				m_rewardRectangle.setPosition({ m_rewardRectangle.getPosition().x, m_rewardRectangle.getPosition().y + 50 });
 				m_rewardRectangle.setTexture(&m_rewardTexture);
-				grass.push_back(m_rewardRectangle);
-				m_map.SetDestructibleWallVector(blocks.blocks[m_index]);
+				replacerForWalls.push_back(m_rewardRectangle);
+				m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 				m_explosionPositionVector.push_back(tempExplosion);
 				m_wallFlickerRectangle.setPosition({ -48,-48 });
 			}
-			else if (blocks.blocksType[m_index] == 1 && blocks.blocks[m_index] == m_portalRectangle.getPosition())
+			else if (allWalls.blockType[m_index] == 1 && allWalls.block[m_index] == m_portalRectangle.getPosition())
 			{
 				m_portalRectangle.setPosition({ m_portalRectangle.getPosition().x, m_portalRectangle.getPosition().y + 50 });
 				m_portalRectangle.setTexture(&m_portalTexture);
-				grass.push_back(m_portalRectangle);
-				m_map.SetDestructibleWallVector(blocks.blocks[m_index]);
+				replacerForWalls.push_back(m_portalRectangle);
+				m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 				m_explosionPositionVector.push_back(tempExplosion);
 			}
 			else
-				if (blocks.blocksType[m_index] == 1)
+				if (allWalls.blockType[m_index] == 1)
 				{
-					m_grassRectangle.setPosition({ blocks.blocks[m_index].x, blocks.blocks[m_index].y + 50 });
-					grass.push_back(m_grassRectangle);
-					m_map.SetDestructibleWallVector(blocks.blocks[m_index]);
+					m_grassRectangle.setPosition({ allWalls.block[m_index].x, allWalls.block[m_index].y + 50 });
+					replacerForWalls.push_back(m_grassRectangle);
+					m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 					m_explosionPositionVector.push_back(tempExplosion);
 				}
-		}	
+		}
 	}
 }
 
@@ -718,7 +723,7 @@ sf::View DynaBlasterGame::CameraMovement(const sf::Vector2f& position) const
 	return view;
 }
 
-void DynaBlasterGame::DrawBombExplosion(std::vector<Enemy>& enemies, Player& player, std::vector<sf::RectangleShape>& grassRectangleVector)
+void DynaBlasterGame::DrawBombExplosion(std::vector<sf::RectangleShape>& grassRectangleVector)
 {
 	sf::Vector2f tempExplosion;
 
@@ -729,15 +734,15 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<Enemy>& enemies, Player& pla
 	m_rewardRectangle.setSize({ 48,48 });
 	m_rewardRectangle.setTexture(&m_rewardTexture);
 
-	TemporarVector blocks;
-	blocks.blocks = m_map.GetIndestructibleWallVector();
-	for (int index = 0; index < blocks.blocks.size(); index++)
-		blocks.blocksType.push_back(0);
+	AllWalls allWalls;
+	allWalls.block = m_map.GetIndestructibleWallVector();
+	for (int index = 0; index < allWalls.block.size(); index++)
+		allWalls.blockType.push_back(0);
 
 	for (int index = 0; index < m_map.GetDestructibleWallVector().size(); index++)
 	{
-		blocks.blocks.push_back(m_map.GetDestructibleWallVector()[index]);
-		blocks.blocksType.push_back(1);
+		allWalls.block.push_back(m_map.GetDestructibleWallVector()[index]);
+		allWalls.blockType.push_back(1);
 	}
 	m_explosionPositionVector.push_back(m_bombRectangle.getPosition());
 	int dimension = 3;
@@ -745,10 +750,10 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<Enemy>& enemies, Player& pla
 	tempExplosion.x = m_bombRectangle.getPosition().x;
 	tempExplosion.y = m_bombRectangle.getPosition().y;
 
-	Collision(Directions::Up, tempExplosion, blocks, grassRectangleVector, player);
-	Collision(Directions::Down, tempExplosion, blocks, grassRectangleVector, player);
-	Collision(Directions::Left, tempExplosion, blocks, grassRectangleVector, player);
-	Collision(Directions::Right, tempExplosion, blocks, grassRectangleVector, player);
+	Collision(Directions::Up, tempExplosion, allWalls, grassRectangleVector);
+	Collision(Directions::Down, tempExplosion, allWalls, grassRectangleVector);
+	Collision(Directions::Left, tempExplosion, allWalls, grassRectangleVector);
+	Collision(Directions::Right, tempExplosion, allWalls, grassRectangleVector);
 }
 
 void DynaBlasterGame::Run()
@@ -831,7 +836,7 @@ void DynaBlasterGame::LoadingFromFile()
 
 	if (!m_rewardTexture.loadFromFile("FireUp.png"))
 		logger.Log("Error loading BigBombTexture from file!", Logger::Level::Error);
-	
+
 	if (!m_portalTexture.loadFromFile("Portal.png"))
 		logger.Log("Error loading BigBombTexture from file!", Logger::Level::Error);
 

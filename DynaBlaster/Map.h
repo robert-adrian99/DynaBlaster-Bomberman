@@ -50,6 +50,17 @@ public:
 			}
 		}
 
+		int k = 0;
+		for (int index = 0; index < numberOfLines; index++)
+		{
+			std::vector<int> tempVect;
+			for (int index1 = 0; index1 < numberOfColumns; index1++)
+			{
+				tempVect.push_back(level[k++]);
+			}
+			maps.push_back(tempVect);
+		}
+
 		if (load("tileset.png", sf::Vector2u(48, 48), level, numberOfColumns, numberOfLines))
 			return;
 
@@ -68,6 +79,7 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	int RandomColumn(int random);
 	int RandomLine(int random);
+	std::vector<std::vector<int>> maps;
 
 private:
 	sf::VertexArray m_vertices;

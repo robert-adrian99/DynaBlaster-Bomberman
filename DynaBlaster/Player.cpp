@@ -174,10 +174,10 @@ void Player::SetLives(uint16_t lives)
 
 bool Player::Intersects(const sf::Vector2f& position)
 {
-	if (m_currentPosition.x < position.x + 48 &&
-		m_currentPosition.x + 48 > position.x&&
-		m_currentPosition.y < position.y + 48 &&
-		m_currentPosition.y + 48 > position.y)
+	if (m_currentPosition.x < position.x + 24 &&
+		m_currentPosition.x + 24 > position.x&&
+		m_currentPosition.y < position.y + 24 &&
+		m_currentPosition.y + 24 > position.y)
 	{
 		return true;
 	}

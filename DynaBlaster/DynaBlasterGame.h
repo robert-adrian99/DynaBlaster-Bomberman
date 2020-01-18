@@ -4,10 +4,10 @@
 #include "Player.h"
 #include <SFML/Audio.hpp>
 
-struct TemporarVector
+struct AllWalls
 {
-	std::vector<sf::Vector2f> blocks;
-	std::vector<bool> blocksType;
+	std::vector<sf::Vector2f> block;
+	std::vector<bool> blockType;
 };
 
 class DynaBlasterGame
@@ -30,8 +30,8 @@ private:
 	void HelpMenuWindow();
 	void StartWindow();
 	void GameWindow();
-	void DrawBombExplosion(std::vector<Enemy>& enemiesVector, Player& player, std::vector<sf::RectangleShape>& grassRectangleVector);
-	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const TemporarVector& blocks, std::vector<sf::RectangleShape>& grass, Player& player);
+	void DrawBombExplosion(std::vector<sf::RectangleShape>& grassRectangleVector);
+	void Collision(const Directions direction, const sf::Vector2f& temporarVec, const AllWalls& blocks, std::vector<sf::RectangleShape>& grass);
 	sf::View CameraMovement(const sf::Vector2f& position) const;
 	void LoadingFromFile();
 
