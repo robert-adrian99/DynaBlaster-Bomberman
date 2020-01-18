@@ -378,10 +378,22 @@ void DynaBlasterGame::GameWindow()
 	view.reset(sf::FloatRect(0, 0, 720, 698));
 	sf::Vector2f cameraPosition(0, 0);
 
-	if (!rewardTexture.loadFromFile("1-Up.png", { 0 * 48, 0 * 48, 48 , 48 }))
+	if (!rewardTexture.loadFromFile("FireUp.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
 	rewardRectangle.setSize({ 48,48 });
 	rewardRectangle.setTexture(&rewardTexture);
+
+	int numberOfMonsters = enemyVector.size();
+
+	if (!wallFlickerTexture.loadFromFile("WallFlicker.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		std::cout << "Error" << std::endl;
+
+	if (!wallTexture.loadFromFile("Wall.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		std::cout << "Error" << std::endl;
+	bool flickerOrNot = true;
+	int waitToFlicker = 100;
+	wallFlickerRectangle.setSize({ 48,48 });
+	wallFlickerRectangle.setPosition({ rewardRectangle.getPosition().x,rewardRectangle.getPosition().y + 50 });
 
 	while (m_window.isOpen())
 	{
@@ -569,6 +581,7 @@ void DynaBlasterGame::GameWindow()
 						enemy.EnemyDie();
 						m_score += 200;
 						score.setString(std::to_string(m_score));
+						--numberOfMonsters;
 					}
 				}
 			}
@@ -598,6 +611,26 @@ void DynaBlasterGame::GameWindow()
 			explosionPositions.clear();
 
 		}
+
+		if (numberOfMonsters == 0 && flickerOrNot == true)
+		{
+			wallFlickerRectangle.setTexture(&wallFlickerTexture);
+		}
+		else
+		{
+			wallFlickerRectangle.setTexture(&wallTexture);
+		}
+		m_window.draw(wallFlickerRectangle);
+		if (waitToFlicker >= 0)
+		{
+			waitToFlicker--;
+		}
+		else
+		{
+			flickerOrNot = !flickerOrNot;
+			waitToFlicker = 100;
+		}
+
 		if (player.GetActive())
 			m_window.draw(player.player);
 		for (auto& enemy : enemyVector)
@@ -670,6 +703,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 				grass.push_back(rewardRectangle);
 				map.SetRectVecTemp(blocks.blocks[m_index]);
 				explosionPositions.push_back(tempExplosion);
+				wallFlickerRectangle.setPosition({ -48,-48 });
 			}
 			else
 				if (blocks.blocksType[m_index] == 1)

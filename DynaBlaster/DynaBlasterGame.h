@@ -66,4 +66,6 @@ private:
 
 	sf::RectangleShape rewardRectangle;
 	sf::Texture rewardTexture;
+	sf::RectangleShape wallFlickerRectangle;
+	sf::Texture wallFlickerTexture, wallTexture;
 };
