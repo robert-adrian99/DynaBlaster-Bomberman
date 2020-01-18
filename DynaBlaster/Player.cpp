@@ -16,6 +16,7 @@ Player::Player()
 	m_allowToMove = false;
 	m_active = true;
 	m_lives = 3;
+	m_bombExplosionRange = 2;
 }
 
 void Player::Move()
@@ -182,4 +183,12 @@ bool Player::Intersects(const sf::Vector2f& position)
 		return true;
 	}
 	return false;
+}
+void Player::IncreaseBombExplosionRange()
+{
+	++m_bombExplosionRange;
+}
+uint16_t Player::GetBombExplosionRange() const
+{
+	return m_bombExplosionRange;
 }

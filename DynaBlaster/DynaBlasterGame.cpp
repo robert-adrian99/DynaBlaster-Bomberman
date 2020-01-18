@@ -463,6 +463,23 @@ void DynaBlasterGame::GameWindow()
 		}
 		m_window.draw(m_map);
 		m_player.Move();
+		if (!m_grassRectangleVector.empty() && m_player.Intersects(m_rewardRectangle.getPosition()))
+		{
+			auto rewardRectangle = m_rewardRectangle;
+			auto index = std::find_if(m_grassRectangleVector.begin(), m_grassRectangleVector.end(),
+				[rewardRectangle](sf::RectangleShape grassRectangle) {
+					return rewardRectangle.getPosition() == grassRectangle.getPosition();
+				});
+			if (index < m_grassRectangleVector.end())
+			{
+				m_grassRectangle.setPosition({ m_rewardRectangle.getPosition().x, m_rewardRectangle.getPosition().y });
+				m_grassRectangle.setTexture(&m_grassTexture);
+				m_grassRectangleVector.erase(index);
+				m_grassRectangleVector.push_back(m_grassRectangle);
+				m_rewardRectangle.setPosition(-48, -48);
+				m_player.IncreaseBombExplosionRange();
+			}
+		}
 		for (auto& enemy : m_enemyVector)
 		{
 			enemy.Move();
@@ -615,7 +632,6 @@ void DynaBlasterGame::GameWindow()
 
 void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& temporarVec, const AllWalls& allWalls, std::vector<sf::RectangleShape>& replacerForWalls)
 {
-	int dimension = 2;
 	sf::Vector2f tempExplosion;
 
 	m_grassRectangle.setSize({ 48,48 });
@@ -642,7 +658,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 		break;
 	}
 
-	for (int index = 1; index < dimension; index++)
+	for (int index = 1; index < m_player.GetBombExplosionRange(); index++)
 	{
 		tempExplosion.x = m_bombRectangle.getPosition().x + modifyX * (48 * index);
 		tempExplosion.y = m_bombRectangle.getPosition().y + modifyY * (48 * index);

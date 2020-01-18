@@ -18,6 +18,8 @@ public:
 	void SetPosition(const sf::Vector2f& position);
 	void Die();
 	bool Intersects(const sf::Vector2f& position);
+	void IncreaseBombExplosionRange();
+	uint16_t GetBombExplosionRange() const;
 
 public:
 	std::vector<sf::Vector2f> bombRect;
@@ -31,5 +33,6 @@ private:
 	bool m_active;
 	uint16_t m_lives;
 	bool m_allowToMove;
+	uint16_t m_bombExplosionRange;
 };
 
