@@ -17,7 +17,7 @@ void PlayerSFML::Move()
 	float speed = 0.5;
 	currentPosition = player.getPosition();
 
-	for (const auto& wallrect : map->GetRectVec())
+	for (const auto& wallrect : m_map->GetRectVec())
 	{
 		if (player.getPosition().x < wallrect.x + 42 &&
 			player.getPosition().x + 42 > wallrect.x&&
@@ -29,7 +29,7 @@ void PlayerSFML::Move()
 			break;
 		}
 	}
-	for (const auto& wallrect : map->GetRectVecTemporar())
+	for (const auto& wallrect : m_map->GetRectVecTemporar())
 	{
 		if (player.getPosition().x < wallrect.x + 42 &&
 			player.getPosition().x + 42 > wallrect.x&&
@@ -104,7 +104,7 @@ sf::Vector2f PlayerSFML::GetPosition()
 
 void PlayerSFML::SetMap(TileMap& map)
 {
-	this->map = &map;
+	this->m_map = &map;
 }
 
 void PlayerSFML::SetBombRect(const sf::Vector2f& position)

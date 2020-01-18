@@ -29,7 +29,7 @@ private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
 	sf::Texture playerTexture;
-	TileMap* map;	
+	TileMap* m_map;	
 	bool m_active;
 	int m_lives;
 };
