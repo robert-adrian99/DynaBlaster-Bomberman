@@ -136,28 +136,20 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DynaBlasterGame.cpp" />
-    <ClCompile Include="EnemySFML.cpp" />
-    <ClCompile Include="MainTest.cpp" />
-    <ClCompile Include="PlayerSFML.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Map.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BombGraphics.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="DestructibleWallGraphics.h" />
     <ClInclude Include="DynaBlasterGame.h" />
-    <ClInclude Include="EnemyGraphics.h" />
-    <ClInclude Include="EnemySFML.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyType.h" />
-    <ClInclude Include="GrassGraphics.h" />
     <ClInclude Include="HelpMenu.h" />
-    <ClInclude Include="MainTest.h" />
-    <ClInclude Include="PlayerGraphics.h" />
-    <ClInclude Include="PlayerSFML.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUps.h" />
-    <ClInclude Include="TileMap.h" />
-    <ClInclude Include="UndestructibleWallGraphics.h" />
+    <ClInclude Include="Map.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.vcxproj">

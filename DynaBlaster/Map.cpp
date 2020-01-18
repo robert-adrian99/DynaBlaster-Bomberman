@@ -1,6 +1,6 @@
-#include "TileMap.h"
+#include "Map.h"
 
-bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height)
+bool Map::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height)
 {
 	if (!m_tileset.loadFromFile(tileset))
 		return false;
@@ -42,24 +42,24 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, std::vecto
 	}
 }
 
-std::vector<sf::Vector2f> TileMap::GetRectVec() const
+std::vector<sf::Vector2f> Map::GetRectVec() const
 {
 	return rectVec;
 }
 
-std::vector<sf::Vector2f> TileMap::GetRectVecTemporar() const
+std::vector<sf::Vector2f> Map::GetRectVecTemporar() const
 {
 	return rectVecTemporar;
 }
 
-void TileMap::SetRectVecTemp(const sf::Vector2f& positionRect)
+void Map::SetRectVecTemp(const sf::Vector2f& positionRect)
 {
 	for (int index = 0; index < rectVecTemporar.size(); index++)
 		if (rectVecTemporar[index] == positionRect)
 			rectVecTemporar[index] = { -48,-48 };
 }
 
-void TileMap::ResetMap()
+void Map::ResetMap()
 {
 	m_vertices.clear();
 	m_tileset.~Texture();
@@ -67,23 +67,23 @@ void TileMap::ResetMap()
 	rectVecTemporar.clear();
 }
 
-void TileMap::SetRectVec(const sf::Vector2f& positionRect)
+void Map::SetRectVec(const sf::Vector2f& positionRect)
 {
 	rectVec.emplace_back(positionRect);
 }
 
-void TileMap::SetRectVec(const std::vector<sf::Vector2f> positions)
+void Map::SetRectVec(const std::vector<sf::Vector2f> positions)
 {
 	rectVec.clear();
 	rectVec.assign(positions.begin(), positions.end());
 }
 
-void TileMap::ResetRectVec()
+void Map::ResetRectVec()
 {
 	rectVec.pop_back();
 }
 
-void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	states.texture = &m_tileset;
@@ -91,7 +91,7 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_vertices, states);
 }
 
-int TileMap::RandomColumn(int random)
+int Map::RandomColumn(int random)
 {
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -99,7 +99,7 @@ int TileMap::RandomColumn(int random)
 	return rrandomColumn(rng);
 }
 
-int TileMap::RandomLine(int random)
+int Map::RandomLine(int random)
 {
 	std::random_device dev;
 	std::mt19937 rng(dev());

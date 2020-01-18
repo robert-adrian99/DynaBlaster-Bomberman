@@ -4,7 +4,6 @@
 #include <fstream>
 #include "Button.h"
 #include "../Logging/Logger.h"
-#include "PlayerSFML.h"
 #include <iostream>
 #include <chrono>
 #include <array>
@@ -284,8 +283,8 @@ void DynaBlasterGame::GameWindow()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_map.Map();
-	m_map.setPosition(0.0f, 50.0f);
+	m_map.LoadMap();
+	m_map.setPosition(0.0f, m_scoreBarDimension);
 	m_player.SetMap(m_map);
 
 	m_window.setKeyRepeatEnabled(true);
@@ -308,13 +307,37 @@ void DynaBlasterGame::GameWindow()
 	m_minutes = 4;
 	m_seconds = 0;
 
-	EnemySFML enemy(EnemyType::Barom, m_map);
-	EnemySFML enemy2(EnemyType::Barom, m_map);
-	EnemySFML enemy3(EnemyType::Barom, m_map);
+	Enemy enemy(EnemyType::Barom, m_map);
+	Enemy enemy2(EnemyType::Barom, m_map);
+	Enemy enemy3(EnemyType::Barom, m_map);
 
 	m_enemyVector.emplace_back(enemy);
 	m_enemyVector.emplace_back(enemy2);
 	m_enemyVector.emplace_back(enemy3);
+
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(0, m_map.GetRectVecTemporar().size() - 1);
+	int randomPositionForReward = rowRandom(rng);
+
+	m_rewardRectangle.setPosition({ m_map.GetRectVecTemporar()[randomPositionForReward] });
+
+	m_wallFlickerRectangle.setSize({ 48,48 });
+	m_wallFlickerRectangle.setPosition({ m_rewardRectangle.getPosition().x,m_rewardRectangle.getPosition().y + 50 });
+
+	int randomPositionForPortal = rowRandom(rng);
+	while (randomPositionForPortal == randomPositionForReward)
+	{
+		randomPositionForPortal = rowRandom(rng);
+	}
+
+	m_portalRectangle.setPosition({ m_map.GetRectVecTemporar()[randomPositionForPortal] });
+
+	m_rewardRectangle.setSize({ 48,48 });
+	m_rewardRectangle.setTexture(&m_rewardTexture);
+
+	m_portalRectangle.setSize({ 48,48 });
+	m_portalRectangle.setTexture(&m_portalTexture);
 
 	int numberOfEnemies = m_enemyVector.size();
 	bool musicPlays = true;
@@ -685,7 +708,7 @@ sf::View DynaBlasterGame::CameraMovement(const sf::Vector2f& position) const
 	return view;
 }
 
-void DynaBlasterGame::DrawBombExplosion(std::vector<EnemySFML>& enemies, PlayerSFML& player, std::vector<sf::RectangleShape>& grassRectangleVector)
+void DynaBlasterGame::DrawBombExplosion(std::vector<Enemy>& enemies, Player& player, std::vector<sf::RectangleShape>& grassRectangleVector)
 {
 	sf::Vector2f tempExplosion;
 
@@ -744,9 +767,6 @@ DynaBlasterGame::DynaBlasterGame()
 
 	m_scoreBarDimension = 50.0f;
 
-	m_map.Map();
-	m_map.setPosition(0.0f, m_scoreBarDimension);
-
 	m_view.reset(sf::FloatRect(0, 0, m_windowDimensions.x, m_windowDimensions.y));
 	m_cameraPosition = { 0,0 };
 
@@ -774,33 +794,6 @@ DynaBlasterGame::DynaBlasterGame()
 	m_timeText.setFont(m_collegedFont);
 	m_timeText.setCharacterSize(22);
 	m_timeText.setOutlineColor(sf::Color::White);
-
-	m_player.SetMap(m_map);
-
-
-	std::random_device dev;
-	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> rowRandom(0, m_map.GetRectVecTemporar().size() - 1);
-	int randomPositionForReward = rowRandom(rng);
-
-	m_rewardRectangle.setPosition({ m_map.GetRectVecTemporar()[randomPositionForReward] });
-
-	m_wallFlickerRectangle.setSize({ 48,48 });
-	m_wallFlickerRectangle.setPosition({ m_rewardRectangle.getPosition().x,m_rewardRectangle.getPosition().y + 50 });
-
-	int randomPositionForPortal = rowRandom(rng);
-	while (randomPositionForPortal == randomPositionForReward)
-	{
-		randomPositionForPortal = rowRandom(rng);
-	}
-
-	m_portalRectangle.setPosition({ m_map.GetRectVecTemporar()[randomPositionForPortal] });
-
-	m_rewardRectangle.setSize({ 48,48 });
-	m_rewardRectangle.setTexture(&m_rewardTexture);
-
-	m_portalRectangle.setSize({ 48,48 });
-	m_portalRectangle.setTexture(&m_portalTexture);
 }
 
 void DynaBlasterGame::LoadingFromFile()

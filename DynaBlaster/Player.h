@@ -2,17 +2,17 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
-#include "TileMap.h"
+#include "Map.h"
 #include <random>
 #include <math.h>
 
-class PlayerSFML
+class Player
 {
 public:
-	PlayerSFML();
+	Player();
 	void Move();
 	sf::Vector2f GetPosition();
-	void SetMap(TileMap& map);
+	void SetMap(Map& map);
 	void SetBombRect(const sf::Vector2f& position);
 	bool allowToMove;
 	std::vector<sf::Vector2f> bombRect;
@@ -29,7 +29,7 @@ private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f currentPosition;
 	sf::Texture playerTexture;
-	TileMap* m_map;	
+	Map* m_map;	
 	bool m_active;
 	int m_lives;
 };

@@ -8,11 +8,11 @@
 #include "../Logging/Logger.h"
 #include <SFML/Audio.hpp>
 
-class TileMap :public sf::Drawable, public sf::Transformable
+class Map :public sf::Drawable, public sf::Transformable
 {
 public:
 	template <uint16_t numberOfLines = 13, uint16_t numberOfColumns = 15, uint16_t numberOfWalls = 32>
-	void Map()
+	void LoadMap()
 	{
 		int noWalls = numberOfWalls;
 		std::ofstream logFile("log.log", std::ios::app);

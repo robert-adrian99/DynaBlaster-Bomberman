@@ -13,19 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="TestingSFML">
-      <UniqueIdentifier>{2e86f038-9918-4abc-9c10-d9441f855153}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainTest.cpp">
-      <Filter>TestingSFML</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
@@ -33,10 +24,13 @@
     <ClCompile Include="DynaBlasterGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerSFML.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySFML.cpp">
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,40 +44,19 @@
     <ClInclude Include="HelpMenu.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BombGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DestructibleWallGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GrassGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UndestructibleWallGraphics.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainTest.h">
-      <Filter>TestingSFML</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DynaBlasterGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSFML.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySFML.h">
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

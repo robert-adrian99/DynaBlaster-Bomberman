@@ -1,4 +1,4 @@
-#include "EnemySFML.h"
+#include "Enemy.h"
 
 int RandomGeneratorForMovement()
 {
@@ -19,7 +19,7 @@ std::pair<int, int> RandomGeneratorForPosition()
 	return std::make_pair(randomLine, randomColumn);
 }
 
-EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
+Enemy::Enemy(EnemyType enemyType, Map& map)
 {
 	if (enemyType == EnemyType::Barom)
 	{
@@ -28,47 +28,47 @@ EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 	}
 	else if (enemyType == EnemyType::Shashakin)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 1 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 1 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Nagacham)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 2 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 2 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Ojin)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 3 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 3 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Pontan)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 4 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 4 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Boyon)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 5 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 5 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Telpio)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 6 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 6 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Parce)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 7 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 7 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::BigBoss)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 8 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 8 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	else if (enemyType == EnemyType::Arion)
 	{
-		if (!enemyTexture.loadFromFile("EnemySFML.png", { 9 * 48, 0 * 48, 48 , 48 }))
+		if (!enemyTexture.loadFromFile("Enemy.png", { 9 * 48, 0 * 48, 48 , 48 }))
 			std::cout << "Error" << std::endl;
 	}
 	this->map = &map;
@@ -114,7 +114,7 @@ EnemySFML::EnemySFML(EnemyType enemyType, TileMap& map)
 
 const int enemyDimension = 42;
 
-void EnemySFML::Movement()
+void Enemy::Movement()
 {
 	float speed = 0.3;
 	currentPosition = enemy.getPosition();
@@ -201,17 +201,17 @@ void EnemySFML::Movement()
 		break;
 	}
 }
-sf::Vector2f EnemySFML::GetPosition()
+sf::Vector2f Enemy::GetPosition()
 {
 	return enemy.getPosition();
 }
-void EnemySFML::EnemyDie()
+void Enemy::EnemyDie()
 {
 	m_active = false;
 	enemy.setPosition({ 0,0 });
 }
 
-bool EnemySFML::GetActive() const
+bool Enemy::GetActive() const
 {
 	return m_active;
 }

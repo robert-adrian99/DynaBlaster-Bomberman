@@ -1,6 +1,6 @@
-#include "PlayerSFML.h"
+#include "Player.h"
 
-PlayerSFML::PlayerSFML()
+Player::Player()
 {
 	if (!playerTexture.loadFromFile("TestFront.png", { 0 * 48, 0 * 48, 48 , 48 }))
 		std::cout << "Error" << std::endl;
@@ -12,7 +12,7 @@ PlayerSFML::PlayerSFML()
 	m_lives = 3;
 }
 
-void PlayerSFML::Move()
+void Player::Move()
 {
 	float speed = 0.5;
 	currentPosition = player.getPosition();
@@ -96,23 +96,23 @@ void PlayerSFML::Move()
 	}
 }
 
-sf::Vector2f PlayerSFML::GetPosition()
+sf::Vector2f Player::GetPosition()
 {
 	return player.getPosition();
 }
 
 
-void PlayerSFML::SetMap(TileMap& map)
+void Player::SetMap(Map& map)
 {
 	this->m_map = &map;
 }
 
-void PlayerSFML::SetBombRect(const sf::Vector2f& position)
+void Player::SetBombRect(const sf::Vector2f& position)
 {
 	bombRect.emplace_back(position);
 }
 
-void PlayerSFML::PlayerDie()
+void Player::PlayerDie()
 {
 	if (m_lives > 0)
 	{
@@ -125,22 +125,22 @@ void PlayerSFML::PlayerDie()
 	}
 }
 
-bool PlayerSFML::GetActive() const
+bool Player::GetActive() const
 {
 	return m_active;
 }
 
-int PlayerSFML::GetLives() const
+int Player::GetLives() const
 {
 	return m_lives;
 }
 
-void PlayerSFML::SetLives(int lives)
+void Player::SetLives(int lives)
 {
 	m_lives = lives;
 }
 
-bool PlayerSFML::Intersects(sf::Vector2f position)
+bool Player::Intersects(sf::Vector2f position)
 {
 	if (currentPosition.x < position.x + 48 &&
 		currentPosition.x + 48 > position.x&&
