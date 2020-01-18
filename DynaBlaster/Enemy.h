@@ -1,31 +1,29 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <iostream>
 #include "Map.h"
-#include <random>
-#include <math.h>
 #include "EnemyType.h"
 
 class Enemy
 {
 public:
 	Enemy(EnemyType enemyType, Map& map);
-	void Movement();
-	sf::Vector2f GetPosition();
-	void EnemyDie();
-	bool GetActive() const;
+	void Move();
+	sf::Vector2f GetPosition() const;
+	sf::RectangleShape GetRectangle() const;
+	bool IsActive() const;
+	bool AllowToMove() const;
+	void SetAllowToMove(const bool allowToMove);
+	void Die();
 
 public:
-	sf::RectangleShape enemy;
 	std::vector<sf::Vector2f> bombRect;
-	bool allowToMove;
 
 private:
-	sf::Vector2f lastPosition;
-	sf::Vector2f currentPosition;
-	sf::Texture enemyTexture;
-	Map* map;
+	sf::RectangleShape m_rectangle;
+	sf::Vector2f m_lastPosition;
+	sf::Vector2f m_currentPosition;
+	sf::Texture m_enemyTexture;
+	Map* m_map;
 	int m_movement;
-	bool m_active = true;
+	bool m_active;
+	bool m_allowToMove;
 };

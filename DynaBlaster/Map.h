@@ -1,12 +1,10 @@
 #pragma once
+#include "../Logging/Logger.h"
 #include <SFML/Graphics.hpp>
-#include "Button.h"
 #include <vector>
 #include <fstream>
-#include <iostream>
 #include <random>
-#include "../Logging/Logger.h"
-#include <SFML/Audio.hpp>
+#include <string>
 
 class Map :public sf::Drawable, public sf::Transformable
 {
@@ -19,13 +17,6 @@ public:
 		Logger logger(logFile, Logger::Level::Info);
 
 		logger.Log("Tilemap window was rendered.", Logger::Level::Info);
-
-		sf::Font colleged;
-		colleged.loadFromFile("colleged.ttf");
-
-		Button back("Back", { 100,35 }, 20, sf::Color::Green, sf::Color::Black);
-		back.SetPosition({ 50,638 });
-		back.SetFont(colleged);
 
 		std::vector<int> level;
 
@@ -65,13 +56,12 @@ public:
 		logger.Log("Map was loaded.", Logger::Level::Info);
 	}
 	bool load(const std::string& tileset, sf::Vector2u tileSize, std::vector<int> tiles, unsigned int width, unsigned int height);
-	std::vector<sf::Vector2f> GetRectVec() const;
-	std::vector<sf::Vector2f> GetRectVecTemporar() const;
-	std::vector<int> GetLevelVector() const;
-	void SetRectVec(const sf::Vector2f& positionRect);
-	void SetRectVec(const std::vector<sf::Vector2f> positions);
-	void ResetRectVec();
-	void SetRectVecTemp(const sf::Vector2f& positionRect);
+	std::vector<sf::Vector2f> GetIndestructibleWallVector() const;
+	std::vector<sf::Vector2f> GetDestructibleWallVector() const;
+	void SetIndestructibleWallVector(const sf::Vector2f& positionRect);
+	void SetIndestructibleWallVector(const std::vector<sf::Vector2f> positions);
+	void ResetIndestructibleWallVector();
+	void SetDestructibleWallVector(const sf::Vector2f& positionRect);
 	void ResetMap();
 
 private:
@@ -82,6 +72,6 @@ private:
 private:
 	sf::VertexArray m_vertices;
 	sf::Texture m_tileset;
-	std::vector<sf::Vector2f> rectVec;
-	std::vector<sf::Vector2f> rectVecTemporar;
+	std::vector<sf::Vector2f> m_indestructibleWallVecor;
+	std::vector<sf::Vector2f> m_destructibleWallVector;
 };

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <ostream>
 
 #ifdef LOGGING_EXPORTS

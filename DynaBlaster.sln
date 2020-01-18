@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynaBlaster", "DynaBlaster\DynaBlaster.vcxproj", "{35F67561-10AC-449C-867B-9B039E38CD23}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynaBlasterTests", "DynaBlasterTests\DynaBlasterTests.vcxproj", "{F2908381-DB68-48CE-963B-AC9FD7C2DCB0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{35F67561-10AC-449C-867B-9B039E38CD23} = {35F67561-10AC-449C-867B-9B039E38CD23}
+		{859332AE-C688-42F7-9CCD-15A02BA480B7} = {859332AE-C688-42F7-9CCD-15A02BA480B7}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Logging", "Logging\Logging.vcxproj", "{859332AE-C688-42F7-9CCD-15A02BA480B7}"
 EndProject

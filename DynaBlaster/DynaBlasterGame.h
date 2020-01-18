@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Enemy.h"
 #include "Player.h"
+#include <SFML/Audio.hpp>
 
 struct TemporarVector
 {

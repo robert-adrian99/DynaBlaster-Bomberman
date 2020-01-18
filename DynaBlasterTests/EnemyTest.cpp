@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DynaBlasterTests
 {
-	TEST_CLASS(EnemySFMLTest)
+	TEST_CLASS(EnemyTest)
 	{
 	public:
 		
@@ -14,16 +14,16 @@ namespace DynaBlasterTests
 		{
 			Map map;
 			Enemy enemy(EnemyType::Barom,map);
-			Assert::IsTrue(enemy.allowToMove == false);
-			Assert::IsTrue(enemy.enemy.getSize() == sf::Vector2f(48,48));
-			Assert::IsTrue(enemy.GetActive() == true);
+			Assert::IsTrue(enemy.AllowToMove() == false);
+			Assert::IsTrue(enemy.GetRectangle().getSize() == sf::Vector2f(48,48));
+			Assert::IsTrue(enemy.IsActive() == true);
 		}
 		TEST_METHOD(Die)
 		{
 			Map map;
 			Enemy enemy(EnemyType::Barom,map);
-			enemy.EnemyDie();
-			Assert::IsTrue(enemy.GetActive() == false);
+			enemy.Die();
+			Assert::IsTrue(enemy.IsActive() == false);
 			Assert::IsTrue(enemy.GetPosition() == sf::Vector2f(0, 0));
 		}
 	};

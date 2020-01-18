@@ -1,36 +1,34 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <iostream>
 #include "Map.h"
-#include <random>
-#include <math.h>
+#include <SFML/Graphics.hpp>
 
 class Player
 {
 public:
 	Player();
 	void Move();
-	sf::Vector2f GetPosition();
+	sf::Vector2f GetPosition() const;
+	bool GetActive() const;
+	uint16_t GetLives() const;
+	bool AllowToMove() const;
+	void SetAllowToMove(const bool allowToMove);
+	void SetLives(const uint16_t lives);
 	void SetMap(Map& map);
 	void SetBombRect(const sf::Vector2f& position);
-	bool allowToMove;
-	std::vector<sf::Vector2f> bombRect;
-	void PlayerDie();
-	bool GetActive() const;
-	int GetLives() const;
-	void SetLives(int lives);
-	bool Intersects(sf::Vector2f position);
+	void Die();
+	bool Intersects(const sf::Vector2f& position);
 
 public:
-	sf::RectangleShape player;
+	std::vector<sf::Vector2f> bombRect;
+	sf::RectangleShape m_rectangle;
 
 private:
-	sf::Vector2f lastPosition;
-	sf::Vector2f currentPosition;
-	sf::Texture playerTexture;
-	Map* m_map;	
+	sf::Vector2f m_lastPosition;
+	sf::Vector2f m_currentPosition;
+	sf::Texture m_playerTexture;
+	Map* m_map;
 	bool m_active;
-	int m_lives;
+	uint16_t m_lives;
+	bool m_allowToMove;
 };
 

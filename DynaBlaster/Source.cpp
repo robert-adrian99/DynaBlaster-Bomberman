@@ -1,7 +1,6 @@
-#include <fstream>
-#include <SFML/Graphics.hpp>
 #include "../Logging/Logger.h"
 #include "DynaBlasterGame.h"
+#include <fstream>
 
 int main()
 {

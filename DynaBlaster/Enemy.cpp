@@ -7,6 +7,7 @@ int RandomGeneratorForMovement()
 	std::uniform_int_distribution<std::mt19937::result_type> rrandom(0, 3);
 	return rrandom(rng);
 }
+
 template <int numberOfLines=10,int numberOfColumns=12>
 std::pair<int, int> RandomGeneratorForPosition()
 {
@@ -21,61 +22,84 @@ std::pair<int, int> RandomGeneratorForPosition()
 
 Enemy::Enemy(EnemyType enemyType, Map& map)
 {
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
 	if (enemyType == EnemyType::Barom)
 	{
-		if (!enemyTexture.loadFromFile("Barom.png", { 0 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Barom.png", { 0 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading BaromTexture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Shashakin)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 1 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 1 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Shashaking Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Nagacham)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 2 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 2 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Nagacham Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Ojin)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 3 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 3 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Ojin Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Pontan)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 4 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 4 * 48, 0 * 48, 48 , 48 }))
+		{ 
+			logger.Log("Error loading Pontan Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Boyon)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 5 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 5 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Boyon Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Telpio)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 6 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 6 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Telpio Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Parce)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 7 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 7 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Parce Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::BigBoss)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 8 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 8 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading BigBoss Texture from file!", Logger::Level::Error);
+		}
 	}
 	else if (enemyType == EnemyType::Arion)
 	{
-		if (!enemyTexture.loadFromFile("Enemy.png", { 9 * 48, 0 * 48, 48 , 48 }))
-			std::cout << "Error" << std::endl;
+		if (!m_enemyTexture.loadFromFile("Enemy.png", { 9 * 48, 0 * 48, 48 , 48 }))
+		{
+			logger.Log("Error loading Arion Texture from file!", Logger::Level::Error);
+		}
 	}
-	this->map = &map;
-	enemy.setTexture(&enemyTexture);
-	enemy.setSize({ 48,48 });
-	std::vector<sf::Vector2f> rectPositions = this->map->GetRectVec();
-	std::vector<sf::Vector2f> rectTempPositions = this->map->GetRectVecTemporar();
+	this->m_map = &map;
+	m_rectangle.setTexture(&m_enemyTexture);
+	m_rectangle.setSize({ 48,48 });
+	std::vector<sf::Vector2f> rectPositions = this->m_map->GetIndestructibleWallVector();
+	std::vector<sf::Vector2f> rectTempPositions = this->m_map->GetDestructibleWallVector();
 	std::pair<int, int> randomPosition = RandomGeneratorForPosition();
 	bool okPosition = true;
 	do {
@@ -105,42 +129,42 @@ Enemy::Enemy(EnemyType enemyType, Map& map)
 	} while (okPosition == false);
 	float posY = randomPosition.first * 48 + 50;
 	float posX = randomPosition.second * 48;
-	enemy.setPosition({ posX,posY });
+	m_rectangle.setPosition({ posX,posY });
 	m_movement = 0;
-	lastPosition = enemy.getPosition();
-	currentPosition = enemy.getPosition();
-	allowToMove = false;
+	m_lastPosition = m_rectangle.getPosition();
+	m_currentPosition = m_rectangle.getPosition();
+	m_allowToMove = false;
+	m_active = true;
 }
 
-const int enemyDimension = 42;
-
-void Enemy::Movement()
+void Enemy::Move()
 {
+	const int enemyDimension = 42;
 	float speed = 0.3;
-	currentPosition = enemy.getPosition();
-	for (const auto& wallrect : map->GetRectVec())
+	m_currentPosition = m_rectangle.getPosition();
+	for (const auto& wallrect : m_map->GetIndestructibleWallVector())
 	{
-		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
-			enemy.getPosition().x + enemyDimension > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + 50 + enemyDimension &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50)
+		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
+			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + 50 + enemyDimension &&
+			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50)
 		{
-			currentPosition = lastPosition;
-			enemy.setPosition(currentPosition);
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
 			m_movement = RandomGeneratorForMovement();
 			break;
 		}
 	}
 
-	for (const auto& wallrect : map->GetRectVecTemporar())
+	for (const auto& wallrect : m_map->GetDestructibleWallVector())
 	{
-		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
-			enemy.getPosition().x + enemyDimension > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50)
+		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
+			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50)
 		{
-			currentPosition = lastPosition;
-			enemy.setPosition(currentPosition);
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
 			m_movement = RandomGeneratorForMovement();
 			break;
 		}
@@ -148,23 +172,23 @@ void Enemy::Movement()
 	
 	for (const auto& wallrect : bombRect)
 	{
-		if (enemy.getPosition().x < wallrect.x + enemyDimension &&
-			enemy.getPosition().x + enemyDimension > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50 && allowToMove == false)
+		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
+			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50 && m_allowToMove == false)
 		{
-			currentPosition = lastPosition;
-			enemy.setPosition(currentPosition);
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
 			m_movement = RandomGeneratorForMovement();
 			break;
 		}
 
-		if (!(enemy.getPosition().x < wallrect.x + enemyDimension &&
-			enemy.getPosition().x + enemyDimension > wallrect.x&&
-			enemy.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			enemy.getPosition().y + enemyDimension > wallrect.y + 50) && allowToMove == true)
+		if (!(m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
+			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
+			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50) && m_allowToMove == true)
 		{
-			allowToMove = false;
+			m_allowToMove = false;
 		}
 	}
 
@@ -172,46 +196,63 @@ void Enemy::Movement()
 	{
 	case 0:
 	{
-		lastPosition = enemy.getPosition();
-		enemy.move(0, -speed);
+		m_lastPosition = m_rectangle.getPosition();
+		m_rectangle.move(0, -speed);
 	}
 	break;
 	case 1:
 
 	{
-		lastPosition = enemy.getPosition();
-		enemy.move(0, speed);
+		m_lastPosition = m_rectangle.getPosition();
+		m_rectangle.move(0, speed);
 	}
 	break;
 	case 2:
 
 	{
-		lastPosition = enemy.getPosition();
-		enemy.move(speed, 0);
+		m_lastPosition = m_rectangle.getPosition();
+		m_rectangle.move(speed, 0);
 	}
 	break;
 	case 3:
 
 	{
-		lastPosition = enemy.getPosition();
-		enemy.move(-speed, 0);
+		m_lastPosition = m_rectangle.getPosition();
+		m_rectangle.move(-speed, 0);
 	}
 	break;
 	default:
 		break;
 	}
 }
-sf::Vector2f Enemy::GetPosition()
+
+sf::Vector2f Enemy::GetPosition() const
 {
-	return enemy.getPosition();
-}
-void Enemy::EnemyDie()
-{
-	m_active = false;
-	enemy.setPosition({ 0,0 });
+	return m_rectangle.getPosition();
 }
 
-bool Enemy::GetActive() const
+sf::RectangleShape Enemy::GetRectangle() const
+{
+	return m_rectangle;
+}
+
+void Enemy::Die()
+{
+	m_active = false;
+	m_rectangle.setPosition({ 0,0 });
+}
+
+bool Enemy::IsActive() const
 {
 	return m_active;
+}
+
+bool Enemy::AllowToMove() const
+{
+	return m_allowToMove;
+}
+
+void Enemy::SetAllowToMove(bool allowToMove)
+{
+	m_allowToMove = allowToMove;
 }

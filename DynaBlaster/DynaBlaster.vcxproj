@@ -146,7 +146,6 @@
     <ClInclude Include="DynaBlasterGame.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyType.h" />
-    <ClInclude Include="HelpMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUps.h" />
     <ClInclude Include="Map.h" />

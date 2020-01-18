@@ -31,56 +31,56 @@ bool Map::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<in
 
 			if (tileNumber == 1)
 			{
-				rectVec.push_back(quad[0].position);
+				m_indestructibleWallVecor.push_back(quad[0].position);
 			}
 
 			if (tileNumber == 2)
 			{
-				rectVecTemporar.push_back(quad[0].position);
+				m_destructibleWallVector.push_back(quad[0].position);
 			}
 		}
 	}
 }
 
-std::vector<sf::Vector2f> Map::GetRectVec() const
+std::vector<sf::Vector2f> Map::GetIndestructibleWallVector() const
 {
-	return rectVec;
+	return m_indestructibleWallVecor;
 }
 
-std::vector<sf::Vector2f> Map::GetRectVecTemporar() const
+std::vector<sf::Vector2f> Map::GetDestructibleWallVector() const
 {
-	return rectVecTemporar;
+	return m_destructibleWallVector;
 }
 
-void Map::SetRectVecTemp(const sf::Vector2f& positionRect)
+void Map::SetDestructibleWallVector(const sf::Vector2f& positionRect)
 {
-	for (int index = 0; index < rectVecTemporar.size(); index++)
-		if (rectVecTemporar[index] == positionRect)
-			rectVecTemporar[index] = { -48,-48 };
+	for (int index = 0; index < m_destructibleWallVector.size(); index++)
+		if (m_destructibleWallVector[index] == positionRect)
+			m_destructibleWallVector[index] = { -48,-48 };
 }
 
 void Map::ResetMap()
 {
 	m_vertices.clear();
 	m_tileset.~Texture();
-	rectVec.clear();
-	rectVecTemporar.clear();
+	m_indestructibleWallVecor.clear();
+	m_destructibleWallVector.clear();
 }
 
-void Map::SetRectVec(const sf::Vector2f& positionRect)
+void Map::SetIndestructibleWallVector(const sf::Vector2f& positionRect)
 {
-	rectVec.emplace_back(positionRect);
+	m_indestructibleWallVecor.emplace_back(positionRect);
 }
 
-void Map::SetRectVec(const std::vector<sf::Vector2f> positions)
+void Map::SetIndestructibleWallVector(const std::vector<sf::Vector2f> positions)
 {
-	rectVec.clear();
-	rectVec.assign(positions.begin(), positions.end());
+	m_indestructibleWallVecor.clear();
+	m_indestructibleWallVecor.assign(positions.begin(), positions.end());
 }
 
-void Map::ResetRectVec()
+void Map::ResetIndestructibleWallVector()
 {
-	rectVec.pop_back();
+	m_indestructibleWallVecor.pop_back();
 }
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
