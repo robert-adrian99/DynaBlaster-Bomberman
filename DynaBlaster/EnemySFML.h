@@ -29,4 +29,3 @@ private:
 	int m_movement;
 	bool m_active = true;
 };
-
