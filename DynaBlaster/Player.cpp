@@ -23,7 +23,7 @@ void Player::Move()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	float speed = 0.5;
+	float speed = 2.f;
 	m_currentPosition = m_rectangle.getPosition();
 
 	for (const auto& wallrect : m_map->GetIndestructibleWallVector())

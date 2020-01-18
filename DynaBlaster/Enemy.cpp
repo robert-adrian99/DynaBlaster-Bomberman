@@ -140,7 +140,7 @@ Enemy::Enemy(EnemyType enemyType, Map& map)
 void Enemy::Move()
 {
 	const int enemyDimension = 42;
-	float speed = 0.3;
+	float speed = 1.f;
 	m_currentPosition = m_rectangle.getPosition();
 	for (const auto& wallrect : m_map->GetIndestructibleWallVector())
 	{

@@ -92,4 +92,5 @@ private:
 	int m_index;
 	bool m_isActive = false;
 	bool m_justExplosion;
+	bool m_playerCollideEnemy;
 };

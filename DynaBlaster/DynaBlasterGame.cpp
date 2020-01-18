@@ -287,6 +287,7 @@ void DynaBlasterGame::GameWindow()
 	m_player.SetPosition({ 48,98 });
 	m_livesText.setString(std::to_string(m_player.GetLives()));
 	m_window.setKeyRepeatEnabled(true);
+	m_playerCollideEnemy = false;
 	
 	m_scoreBarSprite.setTexture(m_scoreBarTexture);
 
@@ -345,8 +346,8 @@ void DynaBlasterGame::GameWindow()
 	bool explosionReady = false;
 	bool bigOrSmall = true;
 	bool flickerOrNot = true;
-	int waitToFlickerBomb = 100;
-	int waitToFlickerWall = 100;
+	int waitToFlickerBomb = 50;
+	int waitToFlickerWall = 50;
 
 	while (m_window.isOpen())
 	{
@@ -463,13 +464,19 @@ void DynaBlasterGame::GameWindow()
 		for (auto& enemy : m_enemyVector)
 		{
 			enemy.Move();
-			if (m_player.Intersects(enemy.GetPosition()))
+		}
+		for (auto enemy : m_enemyVector)
+		{
+			if (m_player.Intersects(enemy.GetPosition()) && m_playerCollideEnemy == false)
 			{
+				//player.PlayerDie();
+				//logger.Log("Enemy died!", Logger::Level::Info);
+				//std::cout << "DA";
+				m_playerCollideEnemy = true;
 				m_player.Die();
 				m_map.ResetMap();
 				m_map.LoadMap();
 				m_enemyVector.clear();
-				m_explosionPositionVector.clear();
 				m_grassRectangleVector.clear();
 				GameWindow();
 			}
@@ -499,7 +506,7 @@ void DynaBlasterGame::GameWindow()
 			else
 			{
 				bigOrSmall = !bigOrSmall;
-				waitToFlickerBomb = 100;
+				waitToFlickerBomb = 25;
 			}
 		}
 		if (spacePressed == true && std::chrono::steady_clock::now() > bombTimer - std::chrono::seconds(1))
@@ -574,7 +581,7 @@ void DynaBlasterGame::GameWindow()
 		else
 		{
 			flickerOrNot = !flickerOrNot;
-			waitToFlickerWall = 100;
+			waitToFlickerWall = 25;
 		}
 
 		if (m_player.GetActive())
@@ -756,7 +763,7 @@ void DynaBlasterGame::Run()
 
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 
-	m_window.setFramerateLimit(500);
+	m_window.setVerticalSyncEnabled(true);
 
 	StartWindow();
 }
