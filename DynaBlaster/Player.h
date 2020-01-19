@@ -20,9 +20,11 @@ public:
 	bool Intersects(const sf::Vector2f& position);
 	void IncreaseBombExplosionRange();
 	uint16_t GetBombExplosionRange() const;
+	void CollisionWithWalls(const std::vector<sf::Vector2f>& walls);
+	void CollisionWithBomb(const std::vector<sf::Vector2f>& bombsVector);
 
 public:
-	std::vector<sf::Vector2f> bombRect;
+	std::vector<sf::Vector2f> m_bombsVector;
 	sf::RectangleShape m_rectangle;
 
 private:

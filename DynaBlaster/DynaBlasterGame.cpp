@@ -281,7 +281,7 @@ void DynaBlasterGame::GameWindow()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_player.bombRect.clear();
+	m_player.m_bombsVector.clear();
 	m_map.setPosition(0.0f, m_scoreBarDimension);
 
 	m_player.SetMap(m_map);
@@ -423,14 +423,14 @@ void DynaBlasterGame::GameWindow()
 							enemy.SetAllowToMove(true);
 						}
 						pPosition.y -= 50.f;
-						if (!m_player.bombRect.empty())
-							m_player.bombRect.pop_back();
+						if (!m_player.m_bombsVector.empty())
+							m_player.m_bombsVector.pop_back();
 						m_player.SetBombRect(pPosition);
 						for (auto& enemy : m_enemyVector)
 						{
-							if (!enemy.bombRect.empty())
-								enemy.bombRect.pop_back();
-							enemy.bombRect.push_back(pPosition);
+							if (!enemy.m_bombsVector.empty())
+								enemy.m_bombsVector.pop_back();
+							enemy.m_bombsVector.push_back(pPosition);
 						}
 						pPosition.y += 50.f;
 						bombIsActive = true;
@@ -580,13 +580,13 @@ void DynaBlasterGame::GameWindow()
 		}
 		if (explosionReady == true && std::chrono::steady_clock::now() > bombTimer)
 		{
-			if (!m_player.bombRect.empty())
-				m_player.bombRect.pop_back();
+			if (!m_player.m_bombsVector.empty())
+				m_player.m_bombsVector.pop_back();
 
 			for (auto& enemy : m_enemyVector)
 			{
-				if (!enemy.bombRect.empty())
-					enemy.bombRect.pop_back();
+				if (!enemy.m_bombsVector.empty())
+					enemy.m_bombsVector.pop_back();
 			}
 
 			explosionReady = false;
@@ -791,15 +791,15 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_mapNumberOfLines = 27;
-	m_mapNumberOfColumns = 29;
+	m_mapNumberOfLines = 13;
+	m_mapNumberOfColumns = 15;
 
 	m_window.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 
 	m_window.setVerticalSyncEnabled(true);
-	m_map.LoadMap<27, 29>();
+	m_map.LoadMap();
 
 	StartWindow();
 }

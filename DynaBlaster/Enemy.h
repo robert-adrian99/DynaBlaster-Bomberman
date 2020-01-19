@@ -15,9 +15,11 @@ public:
 	void Die();
 	uint64_t GetScore() const;
 	bool Intersects(const sf::Vector2f& position);
+	void CollisionWithWalls(const std::vector<sf::Vector2f>& walls);
+	void CollisionWithBomb(const std::vector<sf::Vector2f>& bombsVector);
 
 public:
-	std::vector<sf::Vector2f> bombRect;
+	std::vector<sf::Vector2f> m_bombsVector;
 
 private:
 	sf::RectangleShape m_rectangle;
@@ -29,4 +31,5 @@ private:
 	bool m_active;
 	bool m_allowToMove;
 	EnemyType m_enemyType;
+	const int m_enemyDimension = 42;
 };

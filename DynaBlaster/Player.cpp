@@ -27,50 +27,10 @@ void Player::Move()
 	float speed = 2.f;
 	m_currentPosition = m_rectangle.getPosition();
 
-	for (const auto& wallrect : m_map->GetIndestructibleWallVector())
-	{
-		if (m_rectangle.getPosition().x < wallrect.x + 42 &&
-			m_rectangle.getPosition().x + 42 > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + 92 &&
-			m_rectangle.getPosition().y + 42 > wallrect.y + 50)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			break;
-		}
-	}
-	for (const auto& wallrect : m_map->GetDestructibleWallVector())
-	{
-		if (m_rectangle.getPosition().x < wallrect.x + 42 &&
-			m_rectangle.getPosition().x + 42 > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + 92 &&
-			m_rectangle.getPosition().y + 42 > wallrect.y + 50)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			break;
-		}
-	}
-	for (const auto& bombrect : bombRect)
-	{
-		if (m_rectangle.getPosition().x < bombrect.x + 42 &&
-			m_rectangle.getPosition().x + 42 > bombrect.x&&
-			m_rectangle.getPosition().y < bombrect.y + 92 &&
-			m_rectangle.getPosition().y + 42 > bombrect.y + 50 && m_allowToMove == false)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			break;
-		}
+	CollisionWithWalls(m_map->GetDestructibleWallVector());
+	CollisionWithWalls(m_map->GetIndestructibleWallVector());
 
-		if (!(m_rectangle.getPosition().x < bombrect.x + 42 &&
-			m_rectangle.getPosition().x + 42 > bombrect.x&&
-			m_rectangle.getPosition().y < bombrect.y + 92 &&
-			m_rectangle.getPosition().y + 42 > bombrect.y + 50) && m_allowToMove == true)
-		{
-			m_allowToMove = false;
-		}
-	}
+	CollisionWithBomb(m_bombsVector);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
@@ -127,7 +87,7 @@ void Player::SetMap(Map& map)
 
 void Player::SetBombRect(const sf::Vector2f& position)
 {
-	bombRect.emplace_back(position);
+	m_bombsVector.emplace_back(position);
 }
 
 void Player::SetPosition(const sf::Vector2f& position)
@@ -191,4 +151,44 @@ void Player::IncreaseBombExplosionRange()
 uint16_t Player::GetBombExplosionRange() const
 {
 	return m_bombExplosionRange;
+}
+
+void Player::CollisionWithWalls(const std::vector<sf::Vector2f>& walls)
+{
+	for (const auto& wallrect : walls)
+	{
+		if (m_rectangle.getPosition().x < wallrect.x + 42 &&
+			m_rectangle.getPosition().x + 42 > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + 92 &&
+			m_rectangle.getPosition().y + 42 > wallrect.y + 50)
+		{
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
+			break;
+		}
+	}
+}
+
+void Player::CollisionWithBomb(const std::vector<sf::Vector2f>& bombVector)
+{
+	for (const auto& bombrect : bombVector)
+	{
+		if (m_rectangle.getPosition().x < bombrect.x + 42 &&
+			m_rectangle.getPosition().x + 42 > bombrect.x&&
+			m_rectangle.getPosition().y < bombrect.y + 92 &&
+			m_rectangle.getPosition().y + 42 > bombrect.y + 50 && m_allowToMove == false)
+		{
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
+			break;
+		}
+
+		if (!(m_rectangle.getPosition().x < bombrect.x + 42 &&
+			m_rectangle.getPosition().x + 42 > bombrect.x&&
+			m_rectangle.getPosition().y < bombrect.y + 92 &&
+			m_rectangle.getPosition().y + 42 > bombrect.y + 50) && m_allowToMove == true)
+		{
+			m_allowToMove = false;
+		}
+	}
 }

@@ -140,59 +140,14 @@ Enemy::Enemy(EnemyType enemyType, Map& map)
 
 void Enemy::Move()
 {
-	const int enemyDimension = 42;
 	float speed = 1.f;
 	m_currentPosition = m_rectangle.getPosition();
-	for (const auto& wallrect : m_map->GetIndestructibleWallVector())
-	{
-		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
-			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + 50 + enemyDimension &&
-			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			m_movement = RandomGeneratorForMovement();
-			break;
-		}
-	}
-
-	for (const auto& wallrect : m_map->GetDestructibleWallVector())
-	{
-		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
-			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			m_movement = RandomGeneratorForMovement();
-			break;
-		}
-	}
 	
-	for (const auto& wallrect : bombRect)
-	{
-		if (m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
-			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50 && m_allowToMove == false)
-		{
-			m_currentPosition = m_lastPosition;
-			m_rectangle.setPosition(m_currentPosition);
-			m_movement = RandomGeneratorForMovement();
-			break;
-		}
-
-		if (!(m_rectangle.getPosition().x < wallrect.x + enemyDimension &&
-			m_rectangle.getPosition().x + enemyDimension > wallrect.x&&
-			m_rectangle.getPosition().y < wallrect.y + enemyDimension + 50 &&
-			m_rectangle.getPosition().y + enemyDimension > wallrect.y + 50) && m_allowToMove == true)
-		{
-			m_allowToMove = false;
-		}
-	}
-
+	CollisionWithWalls(m_map->GetDestructibleWallVector());
+	CollisionWithWalls(m_map->GetIndestructibleWallVector());
+	
+	CollisionWithBomb(m_bombsVector);
+	
 	switch (m_movement)
 	{
 	case 0:
@@ -297,4 +252,46 @@ bool Enemy::Intersects(const sf::Vector2f& position)
 		return true;
 	}
 	return false;
+}
+
+void Enemy::CollisionWithWalls(const std::vector<sf::Vector2f>& walls)
+{ 
+	for (const auto& wallrect : walls)
+	{
+		if (m_rectangle.getPosition().x < wallrect.x + m_enemyDimension &&
+			m_rectangle.getPosition().x + m_enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + 50 + m_enemyDimension &&
+			m_rectangle.getPosition().y + m_enemyDimension > wallrect.y + 50)
+		{
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
+			m_movement = RandomGeneratorForMovement();
+			break;
+		}
+	}
+}
+
+void Enemy::CollisionWithBomb(const std::vector<sf::Vector2f>& bombsVector)
+{
+	for (const auto& wallrect : bombsVector)
+	{
+		if (m_rectangle.getPosition().x < wallrect.x + m_enemyDimension &&
+			m_rectangle.getPosition().x + m_enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + m_enemyDimension + 50 &&
+			m_rectangle.getPosition().y + m_enemyDimension > wallrect.y + 50 && m_allowToMove == false)
+		{
+			m_currentPosition = m_lastPosition;
+			m_rectangle.setPosition(m_currentPosition);
+			m_movement = RandomGeneratorForMovement();
+			break;
+		}
+
+		if (!(m_rectangle.getPosition().x < wallrect.x + m_enemyDimension &&
+			m_rectangle.getPosition().x + m_enemyDimension > wallrect.x&&
+			m_rectangle.getPosition().y < wallrect.y + m_enemyDimension + 50 &&
+			m_rectangle.getPosition().y + m_enemyDimension > wallrect.y + 50) && m_allowToMove == true)
+		{
+			m_allowToMove = false;
+		}
+	}
 }

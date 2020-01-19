@@ -33,7 +33,7 @@ namespace DynaBlasterTests
 			Enemy enemy2(EnemyType::Barom, map);
 			Assert::IsTrue(enemy1.AllowToMove() == enemy2.AllowToMove());
 			Assert::IsTrue(enemy1.GetPosition() != enemy2.GetPosition());
-			Assert::IsTrue(enemy1.bombRect == enemy2.bombRect);
+			Assert::IsTrue(enemy1.m_bombsVector == enemy2.m_bombsVector);
 			Assert::IsTrue(enemy1.GetRectangle().getPosition() != enemy2.GetRectangle().getPosition());
 			Assert::IsTrue(enemy1.IsActive() == enemy2.IsActive());
 		}

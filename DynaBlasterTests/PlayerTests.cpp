@@ -27,5 +27,11 @@ namespace DynaBlasterTests
 			Assert::IsTrue(player.GetPosition().y < 15 * 48);
 		}
 
+		TEST_METHOD(GetBombRange)
+		{
+			Player player;
+			Assert::IsTrue(player.GetBombExplosionRange() != 0);
+		}
+
 	};
 }
