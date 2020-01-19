@@ -70,6 +70,7 @@ void DynaBlasterGame::LevelsMenuWindow()
 						levelButtons[index].SetFontSize(m_fontSize);
 					}
 				}
+				break;
 			case sf::Event::MouseButtonPressed:
 				for (int index = 0; index < 8; index++)
 				{
@@ -79,6 +80,18 @@ void DynaBlasterGame::LevelsMenuWindow()
 						GameWindow();
 					}
 				}
+				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					m_map.ResetMap();
+					m_enemyVector.clear();
+					m_music.stop();
+					if (!m_music.openFromFile("StartSong.ogg"))
+						logger.Log("Couldn't play the song.", Logger::Level::Error);
+					StartWindow();
+				}
+				break;
 			}
 		}
 		m_window.clear();
@@ -283,6 +296,7 @@ void DynaBlasterGame::GameWindow()
 	Logger logger(logFile, Logger::Level::Info);
 
 	m_player.m_bombsVector.clear();
+	m_map.LoadMap();
 	m_map.setPosition(0.0f, m_scoreBarDimension);
 
 	if (m_player.GetLives() == 0)
@@ -298,10 +312,6 @@ void DynaBlasterGame::GameWindow()
 	m_playerCollideEnemy = false;
 
 	m_scoreBarSprite.setTexture(m_scoreBarTexture);
-
-	Button back("Back", { 100,35 }, 20, sf::Color::Transparent, sf::Color::White);
-	back.SetFont(m_collegedFont);
-	back.SetPosition({ 50, 678 });
 
 	if (!m_music.openFromFile("MapDisplay.ogg"))
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
@@ -364,7 +374,6 @@ void DynaBlasterGame::GameWindow()
 
 	while (m_window.isOpen())
 	{
-		//m_view.reset(sf::FloatRect(m_cameraPosition.x, m_cameraPosition.y, m_windowDimensions.x, m_windowDimensions.y));
 		CameraMovement(m_player.GetPosition());
 		m_window.setView(m_view);
 
@@ -375,28 +384,6 @@ void DynaBlasterGame::GameWindow()
 			{
 			case sf::Event::Closed:
 				m_window.close();
-				break;
-			case sf::Event::MouseMoved:
-				if (back.IsMouseOver(m_window))
-				{
-					back.SetFontSize(m_fontSize + 3);
-				}
-				else
-				{
-					back.SetFontSize(m_fontSize);
-				}
-				break;
-			case sf::Event::MouseButtonPressed:
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.IsMouseOver(m_window))
-				{
-					logger.Log("Back button was pressed. Going back to start page.", Logger::Level::Info);
-					m_map.ResetMap();
-					m_enemyVector.clear();
-					m_music.stop();
-					if (!m_music.openFromFile("StartSong.ogg"))
-						logger.Log("Couldn't play the song.", Logger::Level::Error);
-					StartWindow();
-				}
 				break;
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::M)
@@ -412,7 +399,14 @@ void DynaBlasterGame::GameWindow()
 					}
 				}
 				if (event.key.code == sf::Keyboard::Escape)
-					m_window.close();
+				{
+					m_map.ResetMap();
+					m_enemyVector.clear();
+					m_music.stop();
+					if (!m_music.openFromFile("StartSong.ogg"))
+						logger.Log("Couldn't play the song.", Logger::Level::Error);
+					StartWindow();
+				}
 				if (event.key.code == sf::Keyboard::Space)
 				{
 					if (bombIsActive == false)
@@ -503,12 +497,6 @@ void DynaBlasterGame::GameWindow()
 				m_enemyVector.clear();
 				m_grassRectangleVector.clear();
 				GameWindow();
-				/*m_grassRectangle.setPosition({ m_portalRectangle.getPosition().x, m_portalRectangle.getPosition().y });
-				m_grassRectangle.setTexture(&m_grassTexture);
-				m_grassRectangleVector.erase(index);
-				m_grassRectangleVector.push_back(m_grassRectangle);
-				m_rewardRectangle.setPosition(-48, -48);
-				m_player.IncreaseBombExplosionRange();*/
 			}
 		}
 		for (auto& enemy : m_enemyVector)
@@ -529,10 +517,13 @@ void DynaBlasterGame::GameWindow()
 				else
 				{
 					m_map.ResetMap();
-					m_map.LoadMap();
 					Sleep(1000);
-					m_enemyVector.clear();
 					m_explosionPositionVector.clear();
+					m_player.m_bombsVector.clear();
+					std::for_each(m_enemyVector.begin(), m_enemyVector.end(), [](Enemy enemy) {
+						enemy.m_bombsVector.clear();
+					});
+					m_enemyVector.clear();
 					m_grassRectangleVector.clear();
 					--lives;
 					GameWindow();
@@ -606,8 +597,11 @@ void DynaBlasterGame::GameWindow()
 					else
 					{
 						m_map.ResetMap();
-						m_map.LoadMap();
 						Sleep(1000);
+						m_player.m_bombsVector.clear();
+						std::for_each(m_enemyVector.begin(), m_enemyVector.end(), [](Enemy enemy) {
+							enemy.m_bombsVector.clear();
+						});
 						m_enemyVector.clear();
 						m_explosionPositionVector.clear();
 						m_grassRectangleVector.clear();
@@ -676,7 +670,6 @@ void DynaBlasterGame::GameWindow()
 			if (enemy.IsActive())
 				m_window.draw(enemy.GetRectangle());
 		}
-		back.DrawTo(m_window);
 
 		m_window.draw(m_scoreBarSprite);
 		m_window.draw(m_livesText);
@@ -889,7 +882,6 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<sf::RectangleShape>& grassRe
 		allWalls.blockType.push_back(1);
 	}
 	m_explosionPositionVector.push_back(m_bombRectangle.getPosition());
-	//int dimension = 3;
 
 	tempExplosion.x = m_bombRectangle.getPosition().x;
 	tempExplosion.y = m_bombRectangle.getPosition().y;
