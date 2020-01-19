@@ -85,6 +85,7 @@ void DynaBlasterGame::LevelsMenuWindow()
 				if (event.key.code == sf::Keyboard::Escape)
 				{
 					m_map.ResetMap();
+					m_map.LoadMap();
 					m_enemyVector.clear();
 					m_music.stop();
 					if (!m_music.openFromFile("StartSong.ogg"))
@@ -165,6 +166,8 @@ void DynaBlasterGame::StartWindow()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
+
+	m_window.setTitle("Dyna Blaster - Bomberman");
 
 	Button play("Play", { 265,35 }, m_fontSize, sf::Color::Transparent, sf::Color::Black);
 	play.SetPosition({ 275,480 });
@@ -294,9 +297,12 @@ void DynaBlasterGame::GameWindow()
 {
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
+	m_minutes = 4;
+	m_seconds = 0;
+
+	m_window.setTitle("Dyna Blaster - Bomberman");
 
 	m_player.m_bombsVector.clear();
-	m_map.LoadMap();
 	m_map.setPosition(0.0f, m_scoreBarDimension);
 
 	if (m_player.GetLives() == 0)
@@ -320,10 +326,8 @@ void DynaBlasterGame::GameWindow()
 
 	sf::Vector2f pPosition;
 	sf::Vector2f bombPosition;
-	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 
-	m_minutes = 4;
-	m_seconds = 0;
+	std::chrono::steady_clock::time_point bombTimer = std::chrono::steady_clock::now() + std::chrono::seconds(6);
 
 	Enemy enemy(EnemyType::Barom, m_map);
 	Enemy enemy2(EnemyType::Barom, m_map);
@@ -401,6 +405,7 @@ void DynaBlasterGame::GameWindow()
 				if (event.key.code == sf::Keyboard::Escape)
 				{
 					m_map.ResetMap();
+					m_map.LoadMap();
 					m_enemyVector.clear();
 					m_music.stop();
 					if (!m_music.openFromFile("StartSong.ogg"))
@@ -517,6 +522,7 @@ void DynaBlasterGame::GameWindow()
 				else
 				{
 					m_map.ResetMap();
+					m_map.LoadMap();
 					Sleep(1000);
 					m_explosionPositionVector.clear();
 					m_player.m_bombsVector.clear();
@@ -597,6 +603,7 @@ void DynaBlasterGame::GameWindow()
 					else
 					{
 						m_map.ResetMap();
+						m_map.LoadMap();
 						Sleep(1000);
 						m_player.m_bombsVector.clear();
 						std::for_each(m_enemyVector.begin(), m_enemyVector.end(), [](Enemy enemy) {
@@ -897,8 +904,8 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_mapNumberOfLines = 13;
-	m_mapNumberOfColumns = 15;
+	m_mapNumberOfLines = 27;
+	m_mapNumberOfColumns = 29;
 
 	m_window.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 

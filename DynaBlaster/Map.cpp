@@ -8,26 +8,26 @@ bool Map::load(const std::string& tileset, sf::Vector2u tileSize, std::vector<in
 	m_vertices.setPrimitiveType(sf::Quads);
 	m_vertices.resize(width * height * 4);
 
-	for (unsigned int i = 0; i < width; ++i)
+	for (unsigned int line = 0; line < width; ++line)
 	{
-		for (unsigned int j = 0; j < height; ++j)
+		for (unsigned int column = 0; column < height; ++column)
 		{
-			int tileNumber = tiles[i + j * width];
+			int tileNumber = tiles[line + column * width];
 
-			int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
-			int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+			int textureCoordX = tileNumber % (m_tileset.getSize().x / tileSize.x);
+			int textureCoordY = tileNumber / (m_tileset.getSize().x / tileSize.x);
 
-			sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
+			sf::Vertex* quad = &m_vertices[(line + column * width) * 4];
 
-			quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
-			quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
-			quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
-			quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+			quad[0].position = sf::Vector2f(line * tileSize.x, column * tileSize.y);
+			quad[1].position = sf::Vector2f((line + 1) * tileSize.x, column * tileSize.y);
+			quad[2].position = sf::Vector2f((line + 1) * tileSize.x, (column + 1) * tileSize.y);
+			quad[3].position = sf::Vector2f(line * tileSize.x, (column + 1) * tileSize.y);
 
-			quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-			quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-			quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
-			quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+			quad[0].texCoords = sf::Vector2f(textureCoordX * tileSize.x, textureCoordY * tileSize.y);
+			quad[1].texCoords = sf::Vector2f((textureCoordX + 1) * tileSize.x, textureCoordY * tileSize.y);
+			quad[2].texCoords = sf::Vector2f((textureCoordX + 1) * tileSize.x, (textureCoordY + 1) * tileSize.y);
+			quad[3].texCoords = sf::Vector2f(textureCoordX * tileSize.x, (textureCoordY + 1) * tileSize.y);
 
 			if (tileNumber == 1)
 			{

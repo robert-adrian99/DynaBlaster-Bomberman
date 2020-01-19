@@ -9,7 +9,7 @@
 class Map :public sf::Drawable, public sf::Transformable
 {
 public:
-	template <uint16_t numberOfLines = 13, uint16_t numberOfColumns = 15, uint16_t numberOfWalls = 32>
+	template <uint16_t numberOfLines = 27, uint16_t numberOfColumns = 29, uint16_t numberOfWalls = 50>
 	void LoadMap()
 	{
 		int noWalls = numberOfWalls;
