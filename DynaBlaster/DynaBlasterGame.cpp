@@ -486,6 +486,31 @@ void DynaBlasterGame::GameWindow()
 				m_player.IncreaseBombExplosionRange();
 			}
 		}
+		if (!m_grassRectangleVector.empty() && m_player.Intersects(m_portalRectangle.getPosition()) && numberOfEnemies <= 0)
+		{
+			auto portalRectangle = m_portalRectangle;
+			auto index = std::find_if(m_grassRectangleVector.begin(), m_grassRectangleVector.end(),
+				[portalRectangle](sf::RectangleShape grassRectangle) {
+					return portalRectangle.getPosition() == grassRectangle.getPosition();
+				});
+			if (index < m_grassRectangleVector.end())
+			{
+				m_map.ResetMap();
+				m_mapNumberOfLines = 27;
+				m_mapNumberOfColumns = 29;
+				m_map.LoadMap<27, 29>();
+				Sleep(1000);
+				m_enemyVector.clear();
+				m_grassRectangleVector.clear();
+				GameWindow();
+				/*m_grassRectangle.setPosition({ m_portalRectangle.getPosition().x, m_portalRectangle.getPosition().y });
+				m_grassRectangle.setTexture(&m_grassTexture);
+				m_grassRectangleVector.erase(index);
+				m_grassRectangleVector.push_back(m_grassRectangle);
+				m_rewardRectangle.setPosition(-48, -48);
+				m_player.IncreaseBombExplosionRange();*/
+			}
+		}
 		for (auto& enemy : m_enemyVector)
 		{
 			enemy.Move();
