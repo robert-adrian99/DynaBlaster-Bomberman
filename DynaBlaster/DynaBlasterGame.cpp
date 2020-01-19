@@ -460,7 +460,7 @@ void DynaBlasterGame::GameWindow()
 			}
 			m_seconds--;
 			if (m_minutes == 0 && m_seconds == 0)
-				break;
+				GameOverWindow();
 			if (m_seconds < 10)
 				m_timeText.setString(std::to_string(m_minutes) + ":" + "0" + std::to_string(m_seconds));
 			else
@@ -669,6 +669,12 @@ void DynaBlasterGame::GameOverWindow()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
+	m_map.ResetMap();
+	m_map.LoadMap();
+	m_enemyVector.clear();
+	m_explosionPositionVector.clear();
+	m_grassRectangleVector.clear();
+
 	sf::RenderWindow GameOverWindow;
 	GameOverWindow.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Game over!", sf::Style::Close | sf::Style::Titlebar);
 	
@@ -776,6 +782,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 				m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 				m_explosionPositionVector.push_back(tempExplosion);
 				m_wallFlickerRectangle.setPosition({ -48,-48 });
+				return;
 			}
 			else if (allWalls.blockType[m_index] == 1 && allWalls.block[m_index] == m_portalRectangle.getPosition())
 			{
@@ -784,6 +791,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 				replacerForWalls.push_back(m_portalRectangle);
 				m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 				m_explosionPositionVector.push_back(tempExplosion);
+				return;
 			}
 			else
 				if (allWalls.blockType[m_index] == 1)
@@ -792,6 +800,7 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 					replacerForWalls.push_back(m_grassRectangle);
 					m_map.SetDestructibleWallVector(allWalls.block[m_index]);
 					m_explosionPositionVector.push_back(tempExplosion);
+					return;
 				}
 		}
 	}
@@ -855,7 +864,7 @@ void DynaBlasterGame::DrawBombExplosion(std::vector<sf::RectangleShape>& grassRe
 		allWalls.blockType.push_back(1);
 	}
 	m_explosionPositionVector.push_back(m_bombRectangle.getPosition());
-	int dimension = 3;
+	//int dimension = 3;
 
 	tempExplosion.x = m_bombRectangle.getPosition().x;
 	tempExplosion.y = m_bombRectangle.getPosition().y;
