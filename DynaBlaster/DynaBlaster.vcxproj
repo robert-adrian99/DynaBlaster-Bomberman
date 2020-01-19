@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Barom.png" />
+    <Image Include="gameover.png" />
     <Image Include="ScoreBar.png" />
     <Image Include="tileset.png" />
   </ItemGroup>

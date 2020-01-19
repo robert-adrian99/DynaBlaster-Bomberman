@@ -235,6 +235,7 @@ void DynaBlasterGame::StartWindow()
 				{
 					logger.Log("Play button was pressed.", Logger::Level::Info);
 					m_music.pause();
+					m_enemyVector.clear();
 					GameWindow();
 				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level.IsMouseOver(m_window))
@@ -284,6 +285,12 @@ void DynaBlasterGame::GameWindow()
 	m_player.m_bombsVector.clear();
 	m_map.setPosition(0.0f, m_scoreBarDimension);
 
+	if (m_player.GetLives() == 0)
+	{
+		m_player.SetLives(3);
+		m_player.SetActive(true);
+	}
+
 	m_player.SetMap(m_map);
 	m_player.SetPosition({ 48,98 });
 	m_livesText.setString(std::to_string(m_player.GetLives()));
@@ -299,7 +306,7 @@ void DynaBlasterGame::GameWindow()
 	if (!m_music.openFromFile("MapDisplay.ogg"))
 		logger.Log("Couldn't play the song.", Logger::Level::Error);
 	m_music.play();
-	m_music.setLoop(true);
+	m_music.setLoop(false);
 
 	sf::Vector2f pPosition;
 	sf::Vector2f bombPosition;
@@ -350,6 +357,7 @@ void DynaBlasterGame::GameWindow()
 	bool flickerOrNot = true;
 	int waitToFlickerBomb = 50;
 	int waitToFlickerWall = 50;
+	int lives = 3;
 
 	m_view.reset(sf::FloatRect(0, 0, 720, 698));
 	m_cameraPosition = { 0, 0 };
@@ -488,12 +496,22 @@ void DynaBlasterGame::GameWindow()
 			{
 				m_playerCollideEnemy = true;
 				m_player.Die();
-				m_map.ResetMap();
-				m_map.LoadMap();
-				Sleep(1000);
-				m_enemyVector.clear();
-				m_grassRectangleVector.clear();
-				GameWindow();
+				if (m_player.GetLives() == 0)
+				{
+					GameOverWindow();
+					break;
+				}
+				else
+				{
+					m_map.ResetMap();
+					m_map.LoadMap();
+					Sleep(1000);
+					m_enemyVector.clear();
+					m_explosionPositionVector.clear();
+					m_grassRectangleVector.clear();
+					--lives;
+					GameWindow();
+				}
 			}
 		}
 		for (auto grass : m_grassRectangleVector)
@@ -555,13 +573,22 @@ void DynaBlasterGame::GameWindow()
 				if (m_player.Intersects(tempExplosion))
 				{
 					m_player.Die();
-					m_map.ResetMap();
-					m_map.LoadMap();
-					Sleep(1000);
-					m_enemyVector.clear();
-					m_explosionPositionVector.clear();
-					m_grassRectangleVector.clear();
-					GameWindow();
+					if (m_player.GetLives() == 0)
+					{
+						GameOverWindow();
+						break;
+					}
+					else
+					{
+						m_map.ResetMap();
+						m_map.LoadMap();
+						Sleep(1000);
+						m_enemyVector.clear();
+						m_explosionPositionVector.clear();
+						m_grassRectangleVector.clear();
+						--lives;
+						GameWindow();
+					}
 				}
 			}
 			for (auto& enemy : m_enemyVector)
@@ -635,6 +662,59 @@ void DynaBlasterGame::GameWindow()
 		m_window.display();
 		m_window.clear();
 	}
+}
+
+void DynaBlasterGame::GameOverWindow()
+{
+	std::ofstream logFile("log.log", std::ios::app);
+	Logger logger(logFile, Logger::Level::Info);
+
+	sf::RenderWindow GameOverWindow;
+	GameOverWindow.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Game over!", sf::Style::Close | sf::Style::Titlebar);
+	
+	logger.Log("Gameover window was rendered.", Logger::Level::Info);
+
+	Button okButton("Ok", { 100,35 }, m_fontSize, sf::Color::Blue, sf::Color::Black);
+	okButton.SetPosition({ 230,630 });
+	okButton.SetFont(m_collegedFont);
+	while (GameOverWindow.isOpen())
+	{
+		sf::Event event;
+		sf::Texture GameOverImage;
+		GameOverImage.loadFromFile("gameover.png");
+		sf::Sprite sprite(GameOverImage);
+
+		while (GameOverWindow.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				GameOverWindow.close();
+				break;
+			case sf::Event::MouseMoved:
+				if (okButton.IsMouseOver(GameOverWindow))
+				{
+					okButton.SetFontSize(m_fontSize + 3);
+				}
+				else
+				{
+					okButton.SetFontSize(m_fontSize);
+				}
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && okButton.IsMouseOver(GameOverWindow))
+				{
+					logger.Log("Back button was pressed. Going back to the start page.", Logger::Level::Info);
+					GameOverWindow.close();
+					StartWindow();
+				}
+			}
+		}
+		GameOverWindow.clear();
+		GameOverWindow.draw(sprite);
+		okButton.DrawTo(GameOverWindow);
+		GameOverWindow.display();
+	}
+
 }
 
 void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& temporarVec, const AllWalls& allWalls, std::vector<sf::RectangleShape>& replacerForWalls)
@@ -840,6 +920,7 @@ DynaBlasterGame::DynaBlasterGame()
 	m_timeText.setFont(m_collegedFont);
 	m_timeText.setCharacterSize(22);
 	m_timeText.setOutlineColor(sf::Color::White);
+
 }
 
 void DynaBlasterGame::LoadingFromFile()

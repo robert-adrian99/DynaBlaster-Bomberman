@@ -192,3 +192,8 @@ void Player::CollisionWithBomb(const std::vector<sf::Vector2f>& bombVector)
 		}
 	}
 }
+
+void Player::SetActive(const bool active)
+{
+	m_active = active;
+}

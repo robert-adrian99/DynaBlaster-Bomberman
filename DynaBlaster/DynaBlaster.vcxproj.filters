@@ -67,5 +67,8 @@
     <Image Include="Barom.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="gameover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -22,6 +22,7 @@ public:
 	uint16_t GetBombExplosionRange() const;
 	void CollisionWithWalls(const std::vector<sf::Vector2f>& walls);
 	void CollisionWithBomb(const std::vector<sf::Vector2f>& bombsVector);
+	void SetActive(const bool active);
 
 public:
 	std::vector<sf::Vector2f> m_bombsVector;
