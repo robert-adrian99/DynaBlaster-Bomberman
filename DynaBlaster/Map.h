@@ -74,6 +74,7 @@ public:
 	void ResetIndestructibleWallVector();
 	void SetDestructibleWallVector(const sf::Vector2f& positionRect);
 	void ResetMap();
+	uint16_t x = 5;
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

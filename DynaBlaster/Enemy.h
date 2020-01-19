@@ -13,6 +13,7 @@ public:
 	bool AllowToMove() const;
 	void SetAllowToMove(const bool allowToMove);
 	void Die();
+	uint64_t GetScore() const;
 	bool Intersects(const sf::Vector2f& position);
 
 public:
@@ -27,4 +28,5 @@ private:
 	int m_movement;
 	bool m_active;
 	bool m_allowToMove;
+	EnemyType m_enemyType;
 };

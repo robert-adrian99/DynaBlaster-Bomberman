@@ -135,6 +135,7 @@ Enemy::Enemy(EnemyType enemyType, Map& map)
 	m_currentPosition = m_rectangle.getPosition();
 	m_allowToMove = false;
 	m_active = true;
+	m_enemyType = enemyType;
 }
 
 void Enemy::Move()
@@ -240,6 +241,35 @@ void Enemy::Die()
 {
 	m_active = false;
 	m_rectangle.setPosition({ 0,0 });
+}
+
+uint64_t Enemy::GetScore() const
+{
+	switch (m_enemyType)
+	{
+	case EnemyType::Barom:
+		return 100;
+	case EnemyType::Shashakin:
+		return 400;
+	case EnemyType::Nagacham:
+		return 100;
+	case EnemyType::Ojin:
+		return 400;
+	case EnemyType::Pontan:
+		return 200;
+	case EnemyType::Boyon:
+		return 1000;
+	case EnemyType::Telpio:
+		return 1000;
+	case EnemyType::Parce:
+		return 2000;
+	case EnemyType::BigBoss:
+		return 20000;
+	case EnemyType::Arion:
+		return 20000;
+	default:
+		break;
+	}
 }
 
 bool Enemy::IsActive() const

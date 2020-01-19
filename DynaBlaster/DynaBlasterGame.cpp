@@ -5,6 +5,7 @@
 #include <fstream>
 #include <chrono>
 #include <iostream>
+#include <Windows.h>
 
 void DynaBlasterGame::LevelsMenuWindow()
 {
@@ -281,7 +282,6 @@ void DynaBlasterGame::GameWindow()
 	Logger logger(logFile, Logger::Level::Info);
 
 	m_player.bombRect.clear();
-	m_map.LoadMap();
 	m_map.setPosition(0.0f, m_scoreBarDimension);
 
 	m_player.SetMap(m_map);
@@ -351,15 +351,12 @@ void DynaBlasterGame::GameWindow()
 	int waitToFlickerBomb = 50;
 	int waitToFlickerWall = 50;
 
+	m_view.reset(sf::FloatRect(0, 0, 720, 698));
+	m_cameraPosition = { 0, 0 };
+
 	while (m_window.isOpen())
 	{
-		m_window.draw(m_scoreBarSprite);
-		m_window.draw(m_livesText);
-		m_window.draw(m_scoreText);
-		m_window.draw(m_timeText);
-		m_window.draw(m_highScoreText);
-
-		m_view.reset(sf::FloatRect(m_cameraPosition.x, m_cameraPosition.y, m_windowDimensions.x, m_windowDimensions.y));
+		//m_view.reset(sf::FloatRect(m_cameraPosition.x, m_cameraPosition.y, m_windowDimensions.x, m_windowDimensions.y));
 		CameraMovement(m_player.GetPosition());
 		m_window.setView(m_view);
 
@@ -493,6 +490,7 @@ void DynaBlasterGame::GameWindow()
 				m_player.Die();
 				m_map.ResetMap();
 				m_map.LoadMap();
+				Sleep(1000);
 				m_enemyVector.clear();
 				m_grassRectangleVector.clear();
 				GameWindow();
@@ -559,6 +557,7 @@ void DynaBlasterGame::GameWindow()
 					m_player.Die();
 					m_map.ResetMap();
 					m_map.LoadMap();
+					Sleep(1000);
 					m_enemyVector.clear();
 					m_explosionPositionVector.clear();
 					m_grassRectangleVector.clear();
@@ -572,7 +571,7 @@ void DynaBlasterGame::GameWindow()
 					if (enemy.Intersects(tempExplosion))
 					{
 						enemy.Die();
-						m_score += 200;
+						m_score += enemy.GetScore();
 						m_scoreText.setString(std::to_string(m_score));
 						--numberOfEnemies;
 					}
@@ -626,6 +625,13 @@ void DynaBlasterGame::GameWindow()
 				m_window.draw(enemy.GetRectangle());
 		}
 		back.DrawTo(m_window);
+
+		m_window.draw(m_scoreBarSprite);
+		m_window.draw(m_livesText);
+		m_window.draw(m_scoreText);
+		m_window.draw(m_timeText);
+		m_window.draw(m_highScoreText);
+
 		m_window.display();
 		m_window.clear();
 	}
@@ -713,10 +719,12 @@ void DynaBlasterGame::Collision(const Directions direction, const sf::Vector2f& 
 
 void DynaBlasterGame::CameraMovement(const sf::Vector2f& position)
 {
-	/*sf::View view;
-	view.reset(sf::FloatRect(0, 0, m_windowDimensions.x, m_windowDimensions.y));
+	if (m_mapNumberOfColumns < 20)
+	{
+		return;
+		m_cameraPosition = { 0,0 };
+	}
 
-	sf::Vector2f m_cameraPosition(0, 0);*/
 	m_cameraPosition.x = position.x + m_tileDimension / 2 - (m_windowDimensions.x / 2);
 	m_cameraPosition.y = position.y + m_tileDimension / 2 - (m_windowDimensions.y / 2);
 
@@ -737,7 +745,12 @@ void DynaBlasterGame::CameraMovement(const sf::Vector2f& position)
 		m_cameraPosition.y = 0;
 	}
 
-	//return view;
+	m_view.reset(sf::FloatRect(m_cameraPosition.x, m_cameraPosition.y, m_windowDimensions.x, m_windowDimensions.y));
+	m_scoreBarSprite.setPosition({ m_cameraPosition.x , m_cameraPosition.y });
+	m_scoreText.setPosition({ m_cameraPosition.x + 145, m_cameraPosition.y + 13 });
+	m_livesText.setPosition({ m_cameraPosition.x + 433, m_cameraPosition.y + 13 });
+	m_highScoreText.setPosition({ m_cameraPosition.x + 600, m_cameraPosition.y + 13 });
+	m_timeText.setPosition({ m_cameraPosition.x + 310, m_cameraPosition.y + 13 });
 }
 
 void DynaBlasterGame::DrawBombExplosion(std::vector<sf::RectangleShape>& grassRectangleVector)
@@ -786,6 +799,7 @@ void DynaBlasterGame::Run()
 	logger.Log("Start window was rendered.", Logger::Level::Info);
 
 	m_window.setVerticalSyncEnabled(true);
+	m_map.LoadMap<27, 29>();
 
 	StartWindow();
 }
