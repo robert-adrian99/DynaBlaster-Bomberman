@@ -904,8 +904,8 @@ void DynaBlasterGame::Run()
 	std::ofstream logFile("log.log", std::ios::app);
 	Logger logger(logFile, Logger::Level::Info);
 
-	m_mapNumberOfLines = 27;
-	m_mapNumberOfColumns = 29;
+	m_mapNumberOfLines = 13;
+	m_mapNumberOfColumns = 15;
 
 	m_window.create(sf::VideoMode(m_windowDimensions.x, m_windowDimensions.y), "Dyna Blaster - Bomberman", sf::Style::Close | sf::Style::Titlebar);
 
