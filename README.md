@@ -16,19 +16,17 @@
 
 - In the game window we have the original score bar with a timer, a life counter, a score and a high score. The walls, the player and the enemies are just like in the original game.
 
-![](images/GameWindow.jpg)
-
 - When the user presses space a bomb is placed.
 
-![](images/Bomb.jpg)
+| ![](images/GameWindow.jpg) | ![](images/Bomb.jpg) |
+|:---:|:---:|
 
 - When the bomb timer expires, the explosion is triggered.
 
-![](images/BombExplosion.jpg)
-
 - Under a wall is hidden a power up.
 
-![](images/PowerUp.jpg)
+| ![](images/PowerUp.jpg) | ![](images/BombExplosion.jpg) | 
+|:---:|:---:|
 
 - The first power up is Explosion Increaser which increases the range of the explosion.
 
