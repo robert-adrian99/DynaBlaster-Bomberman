@@ -31,3 +31,24 @@
 - The first power up is Explosion Increaser which increases the range of the explosion.
 
 ![](images/ExplosionIncreased.jpg)
+
+## Running with Docker (cross-platform)
+
+The project can be built and run in a Linux container without installing a
+toolchain or SFML locally:
+
+```bash
+./run-docker.sh
+```
+
+This builds the image (Ubuntu 24.04 + SFML 2.6) and launches the game,
+forwarding the GUI to your host's X11 display. See [DOCKER.md](DOCKER.md) for
+per-OS setup (Linux / macOS via XQuartz / Windows via WSLg).
+
+Building natively with CMake (macOS/Linux) is also supported:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j4
+cd DynaBlaster && ../build/DynaBlaster
+```

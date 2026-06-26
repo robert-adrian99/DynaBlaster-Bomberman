@@ -5,7 +5,12 @@
 #include <fstream>
 #include <chrono>
 #include <iostream>
-#include <Windows.h>
+#ifdef _WIN32
+	#include <Windows.h>
+#else
+	#include <thread>
+	inline void Sleep(unsigned int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
+#endif
 
 void DynaBlasterGame::LevelsMenuWindow()
 {

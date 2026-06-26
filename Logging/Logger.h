@@ -1,10 +1,14 @@
 #pragma once
 #include <ostream>
 
-#ifdef LOGGING_EXPORTS
-	#define API_LOG __declspec(dllexport)
+#ifdef _WIN32
+	#ifdef LOGGING_EXPORTS
+		#define API_LOG __declspec(dllexport)
+	#else
+		#define API_LOG __declspec(dllimport)
+	#endif
 #else
-	#define API_LOG __declspec(dllimport)
+	#define API_LOG
 #endif
 
 class API_LOG Logger
