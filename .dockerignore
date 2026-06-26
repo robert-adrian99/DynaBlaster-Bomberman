@@ -1,0 +1,12 @@
+# Build artifacts
+build/
+DynaBlaster/DynaBlaster
+
+# Large demo video, not needed to build/run
+DynaBlasterDemo.mp4
+
+# Windows-only prebuilt SFML (Linux build uses the system libsfml-dev)
+ThirdParty/
+
+# Git metadata
+.git/

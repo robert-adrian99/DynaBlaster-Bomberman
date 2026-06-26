@@ -1,0 +1,11 @@
+services:
+  dynablaster:
+    build: .
+    image: dynablaster
+    environment:
+      # Set by run-docker.sh: ":0" on Linux, "host.docker.internal:0" on macOS.
+      - DISPLAY=${DISPLAY}
+    volumes:
+      # X11 socket (Linux). Harmless if absent on macOS/XQuartz TCP mode.
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    network_mode: host
